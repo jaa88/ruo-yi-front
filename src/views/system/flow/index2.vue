@@ -13,17 +13,24 @@
       :link-desc="linkDesc">
       <template v-slot:node="{meta}">
         <div :class="`flow-node flow-node-${meta.prop}`">
-          <header class="ellipsis">
+         <!-- <header class="ellipsis">
             {{ meta.name }}
-          </header>
-          <section>
-            {{meta.chargePerson}}
-          </section>
-
-
-          <section>
+          </header>-->
+   <!--       <section>
             {{ meta.desc }}
-          </section>
+          </section>-->
+
+
+          <el-popover v-if="meta.desc !=null && meta.desc !=''"
+            placement="top-start"
+            title="标题"
+            width="200"
+            trigger="hover"
+            :content="meta.desc">
+            <span slot="reference">查看详情</span>
+          </el-popover>
+
+
         </div>
       </template>
     </super-flow>
@@ -39,53 +46,21 @@
         v-show="drawerConf.type === drawerType.node"
         ref="nodeSetting"
         :model="nodeSetting">
-
         <el-form-item
-          label="任务名称"
+          label="节点名称"
           prop="name">
           <el-input
             v-model="nodeSetting.name"
-            placeholder="任务名称"
+            placeholder="请输入节点名称"
             maxlength="30">
           </el-input>
         </el-form-item>
-
         <el-form-item
-          label="任务备注"
+          label="节点描述"
           prop="desc">
           <el-input
             v-model="nodeSetting.desc"
-            placeholder="备注"
-            maxlength="30">
-          </el-input>
-        </el-form-item>
-
-        <el-form-item
-          label="负责人"
-          prop="desc">
-          <el-input
-            v-model="nodeSetting.chargePerson"
-            placeholder="负责人"
-            maxlength="30">
-          </el-input>
-        </el-form-item>
-
-        <el-form-item
-          label="开始时间"
-          prop="desc">
-          <el-input
-            v-model="nodeSetting.startDateStr"
-            placeholder="截止时间"
-            maxlength="30">
-          </el-input>
-        </el-form-item>
-
-        <el-form-item
-          label="截止时间"
-          prop="desc">
-          <el-input
-            v-model="nodeSetting.endDateStr"
-            placeholder="截止时间"
+            placeholder="请输入节点描述"
             maxlength="30">
           </el-input>
         </el-form-item>
@@ -149,9 +124,6 @@
               if (this.$refs.nodeSetting) this.$refs.nodeSetting.resetFields()
               this.$set(this.nodeSetting, 'name', info.meta.name)
               this.$set(this.nodeSetting, 'desc', info.meta.desc)
-              this.$set(this.nodeSetting, 'chargePerson', info.meta.chargePerson)
-              this.$set(this.nodeSetting, 'startDateStr', info.meta.startDateStr)
-              this.$set(this.nodeSetting, 'endDateStr', info.meta.endDateStr)
             } else {
               conf.title = '连线'
               if (this.$refs.linkSetting) this.$refs.linkSetting.resetFields()
@@ -247,21 +219,6 @@
               }
             },
             {
-              label: '自定义节点',
-              disable: false,
-              selected: (graph, coordinate) => {
-                graph.addNode({
-                  width: 160,
-                  height: 80,
-                  coordinate: coordinate,
-                  meta: {
-                    prop: 'ziDingYi',
-                    name: '自定义节点',
-                  }
-                })
-              }
-            },
-            {
               label: '结束节点',
               disable (graph) {
                 return !!graph.nodeList.find(point => point.meta.prop === 'end')
@@ -341,199 +298,265 @@
     created () {
       const nodeList = [
         {
-          'id': 'nodeS3WgFnzCI15X58Qw',
-          'width': 100,
-          'height': 80,
-          'coordinate': [-844, -148],
-          'meta': {
-            'prop': 'start',
-            'name': '开始节点'
+          "id": "nodeS3WgFnzCI15X58Qw",
+          "width": 100,
+          "height": 80,
+          "coordinate": [
+            -844,
+            -148
+          ],
+          "meta": {
+            "prop": "start",
+            "name": "开始节点",
+            "desc": "项目启动，这是必要的好贵好贵好回购啊更换"
           }
         },
         {
-          'id': 'nodefHsy9uJObPtdHZv1',
-          'width': 160,
-          'height': 80,
-          'coordinate': [-200, -148],
-          'meta': {
-            'prop': 'approval',
-            'name': '审批节点',
-            'desc': '111111',
-            'chargePerson':"季安安",
-            'endDateStr':'2025-07-09',
-            'startDateStr':'2025-07-03',
-            'status':"notStart"
+          "id": "nodefHsy9uJObPtdHZv1",
+          "width": 160,
+          "height": 80,
+          "coordinate": [
+            -200,
+            -148
+          ],
+          "meta": {
+            "prop": "approval",
+            "name": "审批节点",
+            "desc": "111111"
+          }
+        },
+
+        {
+          "id": "nodeni9QOqT3mI7hsMau",
+          "width": 160,
+          "height": 80,
+          "coordinate": [
+            -442,
+            -275
+          ],
+          "meta": {
+            "prop": "condition",
+            "name": "条件节点"
           }
         },
         {
-          'id': 'nodeni9QOqT3mI7hsMau',
-          'width': 160,
-          'height': 80,
-          'coordinate': [-442, -275],
-          'meta': {
-            'prop': 'condition',
-            'name': '条件节点'
+          "id": "nodeZBK0ZPpgMe1exezE",
+          "width": 160,
+          "height": 80,
+          "coordinate": [
+            -200,
+            -275
+          ],
+          "meta": {
+            "prop": "approval",
+            "name": "审批节点"
           }
         },
         {
-          'id': 'nodeZBK0ZPpgMe1exezE',
-          'width': 160,
-          'height': 80,
-          'coordinate': [-200, -275],
-          'meta': {
-            'prop': 'approval',
-            'name': '审批节点'
+          "id": "nodeqkK9zjcDz53xKRlK",
+          "width": 160,
+          "height": 80,
+          "coordinate": [
+            34,
+            -209
+          ],
+          "meta": {
+            "prop": "cc",
+            "name": "抄送节点"
           }
         },
         {
-          'id': 'nodeqkK9zjcDz53xKRlK',
-          'width': 160,
-          'height': 80,
-          'coordinate': [34, -209],
-          'meta': {
-            'prop': 'cc',
-            'name': '抄送节点'
+          "id": "node0aiA9VuhjkiAdZCs",
+          "width": 160,
+          "height": 80,
+          "coordinate": [
+            -200,
+            -2
+          ],
+          "meta": {
+            "prop": "approval",
+            "name": "审批节点"
           }
         },
         {
-          'id': 'nodeDhVU6w2KbEnJCjZs',
-          'width': 80,
-          'height': 50,
-          'coordinate': [286, -133],
-          'meta': {
-            'prop': 'end',
-            'name': '结束节点'
+          "id": "nodeG3WeFnzCI15X58Qw",
+          "width": 160,
+          "height": 80,
+          "coordinate": [
+            -442,
+            -2
+          ],
+          "meta": {
+            "prop": "condition",
+            "name": "条件节点"
           }
         },
         {
-          'id': 'nodesyxisLH1hJDdPsxx',
-          'width': 160,
-          'height': 80,
-          'coordinate': [34, -75],
-          'meta': {
-            'prop': 'cc',
-            'name': '抄送节点'
+          "id": "node7WXbwOR6kSFD53Hf",
+          "width": 160,
+          "height": 80,
+          "coordinate": [
+            -442,
+            -148
+          ],
+          "meta": {
+            "prop": "condition",
+            "name": "条件节点"
           }
         },
         {
-          'id': 'node0aiA9VuhjkiAdZCs',
-          'width': 160,
-          'height': 80,
-          'coordinate': [-200, -2],
-          'meta': {
-            'prop': 'approval',
-            'name': '审批节点'
+          "id": "nodeDhVU6w2KbEnJCjZs",
+          "width": 80,
+          "height": 50,
+          "coordinate": [
+            -116,
+            339
+          ],
+          "meta": {
+            "prop": "end",
+            "name": "结束节点"
           }
         },
         {
-          'id': 'nodeG3WeFnzCI15X58Qw',
-          'width': 160,
-          'height': 80,
-          'coordinate': [-442, -2],
-          'meta': {
-            'prop': 'condition',
-            'name': '条件节点'
-          }
-        },
-        {
-          'id': 'node7WXbwOR6kSFD53Hf',
-          'width': 160,
-          'height': 80,
-          'coordinate': [-442, -148],
-          'meta': {
-            'prop': 'condition',
-            'name': '条件节点'
+          "id": "nodesyxisLH1hJDdPsxx",
+          "width": 160,
+          "height": 80,
+          "coordinate": [
+            -414,
+            228
+          ],
+          "meta": {
+            "prop": "cc",
+            "name": "抄送节点"
           }
         }
       ]
       const linkList = [
         {
-          'id': 'linkcs9ZhumWeTHrtUy8',
-          'startId': 'nodeS3WgFnzCI15X58Qw',
-          'endId': 'nodeni9QOqT3mI7hsMau',
-          'startAt': [100, 40],
-          'endAt': [0, 40],
-          'meta': null
+          "id": "linkFDGJmyXteCzryL1H",
+          "startId": "nodeS3WgFnzCI15X58Qw",
+          "endId": "nodeni9QOqT3mI7hsMau",
+          "startAt": [
+            100,
+            40
+          ],
+          "endAt": [
+            0,
+            40
+          ],
+          "meta": null
         },
         {
-          'id': 'linkBDld5rDBw4C6kiva',
-          'startId': 'nodefHsy9uJObPtdHZv1',
-          'endId': 'nodeqkK9zjcDz53xKRlK',
-          'startAt': [160, 40],
-          'endAt': [0, 40],
-          'meta': null
+          "id": "linkd0YbAyCa9fInFrlO",
+          "startId": "nodefHsy9uJObPtdHZv1",
+          "endId": "nodeqkK9zjcDz53xKRlK",
+          "startAt": [
+            160,
+            40
+          ],
+          "endAt": [
+            0,
+            40
+          ],
+          "meta": null
         },
         {
-          'id': 'linkA0ZZxRlDI9AOonuq',
-          'startId': 'node7WXbwOR6kSFD53Hf',
-          'endId': 'nodefHsy9uJObPtdHZv1',
-          'startAt': [160, 40],
-          'endAt': [0, 40],
-          'meta': null
+          "id": "linkARaGQadhqr3zETCE",
+          "startId": "node7WXbwOR6kSFD53Hf",
+          "endId": "nodefHsy9uJObPtdHZv1",
+          "startAt": [
+            160,
+            40
+          ],
+          "endAt": [
+            0,
+            40
+          ],
+          "meta": null
         },
         {
-          'id': 'linkhCKTpRAf89gcujGS',
-          'startId': 'nodeni9QOqT3mI7hsMau',
-          'endId': 'nodeZBK0ZPpgMe1exezE',
-          'startAt': [160, 40],
-          'endAt': [0, 40],
-          'meta': null
+          "id": "linkKsYEpCgQH2anWTCr",
+          "startId": "nodeS3WgFnzCI15X58Qw",
+          "endId": "nodeG3WeFnzCI15X58Qw",
+          "startAt": [
+            100,
+            40
+          ],
+          "endAt": [
+            0,
+            40
+          ],
+          "meta": null
         },
         {
-          'id': 'link2o7VZ7DRaSFKtB0g',
-          'startId': 'nodeqkK9zjcDz53xKRlK',
-          'endId': 'nodeDhVU6w2KbEnJCjZs',
-          'startAt': [160, 40],
-          'endAt': [0, 25],
-          'meta': null
+          "id": "linkNAhWxDck6ahukhCU",
+          "startId": "nodeZBK0ZPpgMe1exezE",
+          "endId": "nodeqkK9zjcDz53xKRlK",
+          "startAt": [
+            160,
+            40
+          ],
+          "endAt": [
+            0,
+            40
+          ],
+          "meta": null
         },
         {
-          'id': 'linkII013ovDctUDuPLu',
-          'startId': 'nodeS3WgFnzCI15X58Qw',
-          'endId': 'nodeG3WeFnzCI15X58Qw',
-          'startAt': [100, 40],
-          'endAt': [0, 40],
-          'meta': null
+          "id": "linkgbdcckNQ0MMtagkE",
+          "startId": "nodeG3WeFnzCI15X58Qw",
+          "endId": "node0aiA9VuhjkiAdZCs",
+          "startAt": [
+            160,
+            40
+          ],
+          "endAt": [
+            0,
+            40
+          ],
+          "meta": null
         },
         {
-          'id': 'link6MOmsq1EqzlWcG1n',
-          'startId': 'nodeZBK0ZPpgMe1exezE',
-          'endId': 'nodeqkK9zjcDz53xKRlK',
-          'startAt': [160, 40],
-          'endAt': [0, 40],
-          'meta': null
+          "id": "linkoVf8jP6TYdoDRrrT",
+          "startId": "nodeS3WgFnzCI15X58Qw",
+          "endId": "node7WXbwOR6kSFD53Hf",
+          "startAt": [
+            100,
+            40
+          ],
+          "endAt": [
+            0,
+            40
+          ],
+          "meta": null
         },
         {
-          'id': 'link52SczSXHmuyKDzRU',
-          'startId': 'nodesyxisLH1hJDdPsxx',
-          'endId': 'nodeDhVU6w2KbEnJCjZs',
-          'startAt': [160, 40],
-          'endAt': [0, 25],
-          'meta': null
+          "id": "link3xuHmsoUOuNo1qUj",
+          "startId": "node0aiA9VuhjkiAdZCs",
+          "endId": "nodesyxisLH1hJDdPsxx",
+          "startAt": [
+            160,
+            40
+          ],
+          "endAt": [
+            0,
+            40
+          ],
+          "meta": null
         },
         {
-          'id': 'link2hBQDTuIG4ZFYyE0',
-          'startId': 'node0aiA9VuhjkiAdZCs',
-          'endId': 'nodesyxisLH1hJDdPsxx',
-          'startAt': [160, 40],
-          'endAt': [0, 40],
-          'meta': null
-        },
-        {
-          'id': 'linkrwdW87FmOma5rPVo',
-          'startId': 'nodeG3WeFnzCI15X58Qw',
-          'endId': 'node0aiA9VuhjkiAdZCs',
-          'startAt': [160, 40],
-          'endAt': [0, 40],
-          'meta': null
-        },
-        {
-          'id': 'linknL75dQV0AWZA85sq',
-          'startId': 'nodeS3WgFnzCI15X58Qw',
-          'endId': 'node7WXbwOR6kSFD53Hf',
-          'startAt': [100, 40],
-          'endAt': [0, 40],
-          'meta': null
+          "id": "linkWPHgxcUj1XYGVnTp",
+          "startId": "nodeni9QOqT3mI7hsMau",
+          "endId": "nodeZBK0ZPpgMe1exezE",
+          "startAt": [
+            160,
+            40
+          ],
+          "endAt": [
+            0,
+            40
+          ],
+          "meta": null
         }
       ]
 
