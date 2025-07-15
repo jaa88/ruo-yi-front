@@ -1,5 +1,5 @@
 <template>
-  <div id="coverCot" style="width: 100vw; height: 100vh; overflow: hidden">
+  <div id="coverCot" style="width: 100%;height: 830px;overflow: hidden">
     <section class="section-cot" style="width: 100%; height: 100%">
       <div id="container" @click.stop="hideFn">
         <MenuBar
@@ -90,6 +90,7 @@
     </section>
     <DialogCondition ref="dialogCondition"></DialogCondition>
     <DialogMysql ref="dialogMysql"></DialogMysql>
+    <EditTaskInfoDialog ref="editTaskInfoDialog"></EditTaskInfoDialog>
   </div>
 </template>
 
@@ -106,6 +107,7 @@ import MenuBar from "./components/menuBar";
 import Drawer from "./components/drawer";
 import DialogCondition from "./components/dialog/condition.vue";
 import DialogMysql from "./components/dialog/mysql.vue";
+import EditTaskInfoDialog from "./components/dialog/editTaskInfoDialog.vue";
 
 const nodeStatusList = [
   [
@@ -184,7 +186,7 @@ const nodeStatusList = [
 
 export default {
   name: "App",
-  components: { MenuBar, Drawer, DialogCondition, DialogMysql },
+  components: { MenuBar, Drawer, DialogCondition, DialogMysql,EditTaskInfoDialog },
   data() {
     return {
       graph: "",
@@ -518,6 +520,7 @@ export default {
         });
       });
 
+      //这儿是鼠标右键后的事件
       graph.on("node:contextmenu", ({ e, x, y, node, view }) => {
         console.log(e, x, y, view);
         this.showContextMenu = true;
@@ -698,6 +701,8 @@ export default {
         this.graph.disableKeyboard();
       }
     },
+
+    //这是右键菜单的回调函数
     contextMenuFn(type, node) {
       switch (type) {
         case "remove":
@@ -711,6 +716,9 @@ export default {
           this.$refs.dialogMysql.visible = true;
           this.$refs.dialogMysql.init(node);
           break;
+        case "editTask":
+          this.$refs.editTaskInfoDialog.visible=true;
+          this.$refs.editTaskInfoDialog.init(node);
       }
 
       this.showContextMenu = false;

@@ -6,13 +6,8 @@
     @click.stop=""
     style="padding: 0"
   >
-    <div
-      class="text item"
-      @click.stop="callBack('source')"
-      v-if="item.type !== 'edge'"
-    >
-      配置数据源
-    </div>
+    <div class="text item" @click.stop="callBack('editTask')" v-if="item.type !== 'edge'">编辑任务</div>
+    <!--<div class="text item" @click.stop="callBack('source')" v-if="item.type !== 'edge'">配置数据源</div>-->
     <div class="text item" @click.stop="callBack('remove')">删除</div>
   </el-card>
 </template>
