@@ -1,54 +1,29 @@
 <template>
-  <div class="node" :class="status">
+  <div class="node">
     <div>
-      <img :src="imgCot.logo" alt="" />
-      <span class="label">{{ label }}</span>
-      <span class="status">
-      <img :src="imgCot[status]" alt="" />
-    </span>
-    </div>
-
-    <div>
-      sfaf
-    </div>
-    <div>
-      hohoh
-    </div>
-    <div>
-      fe
+      <span class="label">{{ taskName }}</span>
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: "DatabaseCom",
+  name: "commonTaskNode",
 
   inject: ["getGraph", "getNode"],
   data() {
     return {
-      status: "logo",
-      imgCot: {
-        logo: "https://gw.alipayobjects.com/mdn/rms_43231b/afts/img/A*evDjT5vjkX0AAAAAAAAAAAAAARQnAQ",
-        success:
-          "https://gw.alipayobjects.com/mdn/rms_43231b/afts/img/A*6l60T6h8TTQAAAAAAAAAAAAAARQnAQ",
-        failed:
-          "https://gw.alipayobjects.com/mdn/rms_43231b/afts/img/A*SEISQ6My-HoAAAAAAAAAAAAAARQnAQ",
-        running:
-          "https://gw.alipayobjects.com/mdn/rms_43231b/afts/img/A*t8fURKfgSOgAAAAAAAAAAAAAARQnAQ",
-      },
-      label: "",
+      taskName: "",
     };
   },
   mounted() {
     const self = this;
     const node = this.getNode();
-    this.label = node.data.label;
+    this.taskName = node.data.taskName;
 
     // 监听数据改变事件
     node.on("change:data", ({ current }) => {
-      self.label = current.label;
-      self.status = current.status;
+      self.taskName = current.taskName;
     });
   },
 };
@@ -76,7 +51,7 @@ export default {
 .node .label {
   display: inline-block;
   flex-shrink: 0;
-  width: 104px;
+  width: 100%;
   margin-left: 8px;
   color: #666;
   font-size: 12px;

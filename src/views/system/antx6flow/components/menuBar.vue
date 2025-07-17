@@ -6,9 +6,13 @@
     @click.stop=""
     style="padding: 0"
   >
-    <div class="text item" @click.stop="callBack('editTask')" v-if="item.type !== 'edge'">编辑任务</div>
+    <div v-if="item.type === 'node'" class="text item" @click.stop="callBack('editTask','')" >编辑任务</div>
     <!--<div class="text item" @click.stop="callBack('source')" v-if="item.type !== 'edge'">配置数据源</div>-->
-    <div class="text item" @click.stop="callBack('remove')">删除</div>
+    <div v-if="item.type !== 'blank'" class="text item" @click.stop="callBack('remove','')">删除</div>
+
+    <div v-if="item.type === 'blank'" class="text item" @click.stop="callBack('addGraphTaskNode','commonTask')">新增任务节点</div>
+
+    <div v-if="item.type === 'blank'" class="text item" @click.stop="callBack('addGraphTaskNode','judgeTask')">新增判断节点</div>
   </el-card>
 </template>
 
@@ -34,8 +38,8 @@ export default {
     setItem(item) {
       this.item = item;
     },
-    callBack(type) {
-      this.$emit("callBack", type, this.item);
+    callBack(type,value) {
+      this.$emit("callBack", type, this.item,value,this.x,this.y);
     },
   },
 };

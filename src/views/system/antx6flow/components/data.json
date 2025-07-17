@@ -1,121 +1,4019 @@
 [
   {
-    "id": "1",
-    "shape": "dag-node",
-    "x": 290,
-    "y": 110,
-    "data": {
-      "label": "读数据",
-      "status": "success"
-    },
-    "ports": [
-      {
-        "id": "1-1",
-        "group": "bottom"
-      }
-    ]
-  },
-  {
-    "id": "2",
-    "shape": "dag-node",
-    "x": 290,
-    "y": 225,
-    "data": {
-      "label": "逻辑回归",
-      "status": "success"
-    },
-    "ports": [
-      {
-        "id": "2-1",
-        "group": "top"
-      },
-      {
-        "id": "2-2",
-        "group": "bottom"
-      },
-      {
-        "id": "2-3",
-        "group": "bottom"
-      }
-    ]
-  },
-  {
-    "id": "3",
-    "shape": "dag-node",
-    "x": 170,
-    "y": 350,
-    "data": {
-      "label": "模型预测",
-      "status": "success"
-    },
-    "ports": [
-      {
-        "id": "3-1",
-        "group": "top"
-      },
-      {
-        "id": "3-2",
-        "group": "bottom"
-      }
-    ]
-  },
-  {
-    "id": "4",
-    "shape": "dag-node",
-    "x": 450,
-    "y": 350,
-    "data": {
-      "label": "读取参数",
-      "status": "success"
-    },
-    "ports": [
-      {
-        "id": "4-1",
-        "group": "top"
-      },
-      {
-        "id": "4-2",
-        "group": "bottom"
-      }
-    ]
-  },
-  {
-    "id": "5",
     "shape": "dag-edge",
+    "attrs": {
+      "line": {
+        "strokeDasharray": ""
+      }
+    },
+    "id": "580c5293-f2ad-4018-bf37-57cbfb66a4ff",
+    "zIndex": -1,
     "source": {
-      "cell": "1",
-      "port": "1-1"
+      "cell": "e40133a7-f199-4426-b530-327e8492128d",
+      "port": "out-1752590615409"
     },
     "target": {
-      "cell": "2",
-      "port": "2-1"
-    },
-    "zIndex": 0
+      "cell": "db282d9a-26e5-4d67-89d1-1b13a74d9985",
+      "port": "in-1752590617134"
+    }
   },
   {
-    "id": "6",
     "shape": "dag-edge",
+    "attrs": {
+      "line": {
+        "strokeDasharray": ""
+      }
+    },
+    "id": "523424c7-284f-4063-834d-95550761fdee",
+    "zIndex": -1,
     "source": {
-      "cell": "2",
-      "port": "2-2"
+      "cell": "db282d9a-26e5-4d67-89d1-1b13a74d9985",
+      "port": "out-1752590617134"
     },
     "target": {
-      "cell": "3",
-      "port": "3-1"
-    },
-    "zIndex": 0
+      "cell": "0a32dfc5-3d32-4ec4-8292-b821fd10be22",
+      "port": "in-1752590618299"
+    }
   },
   {
-    "id": "7",
     "shape": "dag-edge",
+    "attrs": {
+      "line": {
+        "strokeDasharray": ""
+      }
+    },
+    "id": "27a95897-b8d7-49bc-86e1-72e0543b6208",
+    "zIndex": -1,
     "source": {
-      "cell": "2",
-      "port": "2-3"
+      "cell": "0a32dfc5-3d32-4ec4-8292-b821fd10be22",
+      "port": "out-1752590618299"
     },
     "target": {
-      "cell": "4",
-      "port": "4-1"
+      "cell": "9ad8f0cc-fdc9-4a81-8612-98caff31ae67",
+      "port": "in-1752590619750"
+    }
+  },
+  {
+    "shape": "dag-edge",
+    "attrs": {
+      "line": {
+        "strokeDasharray": ""
+      }
     },
-    "zIndex": 0
+    "id": "a13be568-3a18-45fb-a033-14bba7d3d69a",
+    "zIndex": -1,
+    "source": {
+      "cell": "56372d96-5f63-4b85-ae3f-51289fbca2a4",
+      "port": "out-1752590620714"
+    },
+    "target": {
+      "cell": "9ad8f0cc-fdc9-4a81-8612-98caff31ae67",
+      "port": "in-1752590619750"
+    }
+  },
+  {
+    "shape": "dag-edge",
+    "attrs": {
+      "line": {
+        "strokeDasharray": ""
+      }
+    },
+    "id": "d98e4186-db6a-4171-bbae-0c82259bbe0c",
+    "zIndex": -1,
+    "source": {
+      "cell": "9ad8f0cc-fdc9-4a81-8612-98caff31ae67",
+      "port": "out-1752590619750"
+    },
+    "target": {
+      "cell": "47b046f4-6c7a-49a3-93bb-8e674fd972ff",
+      "port": "in-1752590621797"
+    }
+  },
+  {
+    "shape": "dag-edge",
+    "attrs": {
+      "line": {
+        "strokeDasharray": "",
+        "style": {
+          "animation": ""
+        }
+      }
+    },
+    "id": "75d1ff1e-3f3a-42e3-87e1-59e8d3a698e4",
+    "zIndex": -1,
+    "source": {
+      "cell": "47b046f4-6c7a-49a3-93bb-8e674fd972ff",
+      "port": "out-1752590621797"
+    },
+    "target": {
+      "cell": "e95e6935-97e7-4c33-a735-b0d228eef5e9",
+      "port": "in-1752590622989"
+    }
+  },
+  {
+    "shape": "dag-edge",
+    "attrs": {
+      "line": {
+        "strokeDasharray": "",
+        "style": {
+          "animation": ""
+        }
+      }
+    },
+    "id": "11655121-92c7-49ea-8d62-ad1f1e424c83",
+    "zIndex": -1,
+    "source": {
+      "cell": "47b046f4-6c7a-49a3-93bb-8e674fd972ff",
+      "port": "out-1752590621797"
+    },
+    "target": {
+      "cell": "a9aed56e-2ef3-45d3-959e-45c8ccac6ce9",
+      "port": "in-1752590849145"
+    }
+  },
+  {
+    "shape": "dag-edge",
+    "attrs": {
+      "line": {
+        "strokeDasharray": ""
+      }
+    },
+    "id": "c13e5efb-dd5d-4b36-88a7-9412e7d4c5d5",
+    "zIndex": -1,
+    "source": {
+      "cell": "bc9a14e1-f9b9-4ece-a61b-5ef5a597c9b6",
+      "port": "out-1752590905938"
+    },
+    "target": {
+      "cell": "a2c92aa4-d320-4079-92ef-5d6b0c86c685",
+      "port": "in-1752590904394"
+    }
+  },
+  {
+    "shape": "dag-edge",
+    "attrs": {
+      "line": {
+        "strokeDasharray": ""
+      }
+    },
+    "id": "77387e04-7c6b-40c2-8a24-b7bb54a48ad2",
+    "zIndex": -1,
+    "source": {
+      "cell": "a9aed56e-2ef3-45d3-959e-45c8ccac6ce9",
+      "port": "out-1752590849145"
+    },
+    "target": {
+      "cell": "a2c92aa4-d320-4079-92ef-5d6b0c86c685",
+      "port": "in-1752590904394"
+    }
+  },
+  {
+    "shape": "dag-edge",
+    "attrs": {
+      "line": {
+        "strokeDasharray": ""
+      }
+    },
+    "id": "6b1b9f84-9f4a-4709-a49d-39dd1e2dd55b",
+    "zIndex": -1,
+    "source": {
+      "cell": "a2c92aa4-d320-4079-92ef-5d6b0c86c685",
+      "port": "out-1752590904394"
+    },
+    "target": {
+      "cell": "05cc6924-823e-4f94-bd4f-8192e0ac793d",
+      "port": "in-1752631172913"
+    }
+  },
+  {
+    "shape": "dag-edge",
+    "attrs": {
+      "line": {
+        "strokeDasharray": "",
+        "style": {
+          "animation": ""
+        }
+      }
+    },
+    "id": "43d15780-e674-4815-82b2-daf55e25a804",
+    "zIndex": -1,
+    "source": {
+      "cell": "05cc6924-823e-4f94-bd4f-8192e0ac793d",
+      "port": "out-1752631172913"
+    },
+    "target": {
+      "cell": "bb905431-a6b8-481d-8341-b2b2900f7949",
+      "port": "in-1752631179695"
+    }
+  },
+  {
+    "shape": "dag-edge",
+    "attrs": {
+      "line": {
+        "strokeDasharray": ""
+      }
+    },
+    "id": "b50e18bd-7b42-4227-8508-dc521234784f",
+    "zIndex": -1,
+    "source": {
+      "cell": "bb905431-a6b8-481d-8341-b2b2900f7949",
+      "port": "out-1752631179695"
+    },
+    "target": {
+      "cell": "fbff917e-a929-4a7a-8214-df9401514abc",
+      "port": "in-1752631174139"
+    }
+  },
+  {
+    "shape": "dag-edge",
+    "attrs": {
+      "line": {
+        "strokeDasharray": ""
+      }
+    },
+    "id": "d772527c-aa14-42a3-b2cc-a874e24e1c2b",
+    "zIndex": -1,
+    "source": {
+      "cell": "fbff917e-a929-4a7a-8214-df9401514abc",
+      "port": "out-1752631174139"
+    },
+    "target": {
+      "cell": "698ef9bb-5749-4f3d-ae82-84fa420e5e8a",
+      "port": "in-1752631175459"
+    }
+  },
+  {
+    "shape": "dag-edge",
+    "attrs": {
+      "line": {
+        "strokeDasharray": "",
+        "style": {
+          "animation": ""
+        }
+      }
+    },
+    "id": "4564cf94-3408-4bf9-9ffc-f1b37e808e52",
+    "zIndex": -1,
+    "source": {
+      "cell": "698ef9bb-5749-4f3d-ae82-84fa420e5e8a",
+      "port": "out-1752631175459"
+    },
+    "target": {
+      "cell": "3422788b-db11-4010-adf0-7a3603a2870e",
+      "port": "in-1752631176731"
+    }
+  },
+  {
+    "shape": "dag-edge",
+    "attrs": {
+      "line": {
+        "strokeDasharray": ""
+      }
+    },
+    "id": "e8d1cc00-54fa-45b0-b904-5ca19a2d1a07",
+    "zIndex": -1,
+    "source": {
+      "cell": "c1a66e33-8f55-46f2-82d6-1d7fbfe75dcc",
+      "port": "out-1752631181043"
+    },
+    "target": {
+      "cell": "05cc6924-823e-4f94-bd4f-8192e0ac793d",
+      "port": "in-1752631172913"
+    }
+  },
+  {
+    "shape": "dag-edge",
+    "attrs": {
+      "line": {
+        "strokeDasharray": ""
+      }
+    },
+    "id": "bb7b27ac-7988-426b-b30e-11680e9b50be",
+    "zIndex": -1,
+    "source": {
+      "cell": "b9a6a780-f6a8-46c2-85b1-ac3a5467bfc7",
+      "port": "out-1752631370065"
+    },
+    "target": {
+      "cell": "bb905431-a6b8-481d-8341-b2b2900f7949",
+      "port": "in-1752631179695"
+    }
+  },
+  {
+    "shape": "dag-edge",
+    "attrs": {
+      "line": {
+        "strokeDasharray": ""
+      }
+    },
+    "id": "1a3d1d1c-9917-43b3-a0e2-8720fdcdd323",
+    "zIndex": -1,
+    "source": {
+      "cell": "c04759b5-a9d9-405d-b0fa-cb8344e7e582",
+      "port": "out-1752631178286"
+    },
+    "target": {
+      "cell": "e95e6935-97e7-4c33-a735-b0d228eef5e9",
+      "port": "in-1752590622989"
+    }
+  },
+  {
+    "shape": "dag-edge",
+    "attrs": {
+      "line": {
+        "strokeDasharray": ""
+      }
+    },
+    "id": "493bfe30-9ed0-49db-9b3f-867693bc65f5",
+    "zIndex": -1,
+    "source": {
+      "cell": "0728f5f5-5703-4c07-acfd-db13d2e23a5f",
+      "port": "out-1752631833601"
+    },
+    "target": {
+      "cell": "5e8a813d-e01d-4326-aef6-40de61c12d0f",
+      "port": "in-1752631835220"
+    }
+  },
+  {
+    "shape": "dag-edge",
+    "attrs": {
+      "line": {
+        "strokeDasharray": ""
+      }
+    },
+    "id": "92aabe1e-e7a1-4474-9a05-61008f5d84ce",
+    "zIndex": -1,
+    "source": {
+      "cell": "e95e6935-97e7-4c33-a735-b0d228eef5e9",
+      "port": "out-1752590622989"
+    },
+    "target": {
+      "cell": "0728f5f5-5703-4c07-acfd-db13d2e23a5f",
+      "port": "in-1752631833601"
+    }
+  },
+  {
+    "shape": "dag-edge",
+    "attrs": {
+      "line": {
+        "strokeDasharray": ""
+      }
+    },
+    "id": "8a00a600-1e48-43a8-bbe6-61747609358b",
+    "zIndex": -1,
+    "source": {
+      "cell": "5e8a813d-e01d-4326-aef6-40de61c12d0f",
+      "port": "out-1752631835220"
+    },
+    "target": {
+      "cell": "3422788b-db11-4010-adf0-7a3603a2870e",
+      "port": "in-1752631176731"
+    }
+  },
+  {
+    "shape": "dag-edge",
+    "attrs": {
+      "line": {
+        "strokeDasharray": ""
+      }
+    },
+    "id": "5f362c1b-c0a4-489b-98b1-116ddae9d7e2",
+    "zIndex": -1,
+    "source": {
+      "cell": "6a768fb9-0ffb-4161-9176-110e091721fd",
+      "port": "out-1752631393294"
+    },
+    "target": {
+      "cell": "87c5d1e2-1b18-473c-a9b8-71ced55b37c9",
+      "port": "in-1752631395638"
+    }
+  },
+  {
+    "shape": "dag-edge",
+    "attrs": {
+      "line": {
+        "strokeDasharray": ""
+      }
+    },
+    "id": "9e8d16e7-7595-45ec-b50b-58e5a174e01a",
+    "zIndex": -1,
+    "source": {
+      "cell": "87c5d1e2-1b18-473c-a9b8-71ced55b37c9",
+      "port": "out-1752631395638"
+    },
+    "target": {
+      "cell": "ce25f292-4655-4635-b949-e6f2306c6e5d",
+      "port": "in-1752631996124"
+    }
+  },
+  {
+    "shape": "dag-edge",
+    "attrs": {
+      "line": {
+        "strokeDasharray": ""
+      }
+    },
+    "id": "b6c7e100-5913-4d90-9d0b-fbed9d75fcd1",
+    "zIndex": -1,
+    "source": {
+      "cell": "ce25f292-4655-4635-b949-e6f2306c6e5d",
+      "port": "out-1752631996124"
+    },
+    "target": {
+      "cell": "da0ad1da-a2f6-40d4-8773-7cf386829d0a"
+    }
+  },
+  {
+    "shape": "dag-edge",
+    "attrs": {
+      "line": {
+        "strokeDasharray": ""
+      }
+    },
+    "id": "b20b47cd-234f-4794-bb57-c924ecb6504e",
+    "zIndex": -1,
+    "source": {
+      "cell": "698ef9bb-5749-4f3d-ae82-84fa420e5e8a",
+      "port": "out-1752631175459"
+    },
+    "target": {
+      "cell": "87c5d1e2-1b18-473c-a9b8-71ced55b37c9",
+      "port": "in-1752631395638"
+    }
+  },
+  {
+    "shape": "dag-edge",
+    "attrs": {
+      "line": {
+        "strokeDasharray": ""
+      }
+    },
+    "id": "c9ad9386-cde2-440f-87f2-409a5dfca29e",
+    "zIndex": -1,
+    "source": {
+      "cell": "3422788b-db11-4010-adf0-7a3603a2870e",
+      "port": "out-1752631176731"
+    },
+    "target": {
+      "cell": "20e8f92c-d977-449a-a3f2-03e0cf91a199",
+      "port": "in-1752632117470"
+    }
+  },
+  {
+    "shape": "dag-edge",
+    "attrs": {
+      "line": {
+        "strokeDasharray": ""
+      }
+    },
+    "id": "701e05d8-64a1-4fc8-bba1-ef8e5b293a33",
+    "zIndex": -1,
+    "source": {
+      "cell": "20e8f92c-d977-449a-a3f2-03e0cf91a199",
+      "port": "out-1752632117470"
+    },
+    "target": {
+      "cell": "e8c2c0b2-87ae-44e5-afce-5120bf5fbef4",
+      "port": "in-1752632118590"
+    }
+  },
+  {
+    "shape": "dag-edge",
+    "attrs": {
+      "line": {
+        "strokeDasharray": ""
+      }
+    },
+    "id": "4fc94d65-08d8-44cd-9d1c-41a36d949dc7",
+    "zIndex": -1,
+    "source": {
+      "cell": "e8c2c0b2-87ae-44e5-afce-5120bf5fbef4",
+      "port": "out-1752632118590"
+    },
+    "target": {
+      "cell": "6ecb2a35-358c-4710-8aca-c33e686452dc",
+      "port": "in-1752632152970"
+    }
+  },
+  {
+    "shape": "dag-edge",
+    "attrs": {
+      "line": {
+        "strokeDasharray": ""
+      }
+    },
+    "id": "b12ecab8-ac2c-4431-a152-7d107f1dcdaa",
+    "zIndex": -1,
+    "source": {
+      "cell": "6ecb2a35-358c-4710-8aca-c33e686452dc",
+      "port": "out-1752632152970"
+    },
+    "target": {
+      "cell": "32df007b-cea4-497f-b490-232da9d2c4c4",
+      "port": "in-1752632202373"
+    }
+  },
+  {
+    "shape": "dag-edge",
+    "attrs": {
+      "line": {
+        "strokeDasharray": ""
+      }
+    },
+    "id": "a495b2d6-cc4a-4c84-bb67-4bd9df17956a",
+    "zIndex": -1,
+    "source": {
+      "cell": "c8494a68-02d7-49db-b5ef-eb226fdbd4e4",
+      "port": "out-1752632472184"
+    },
+    "target": {
+      "cell": "1bee0e4a-78ee-47df-84fd-549162f24385",
+      "port": "in-1752632379967"
+    }
+  },
+  {
+    "shape": "dag-edge",
+    "attrs": {
+      "line": {
+        "strokeDasharray": ""
+      }
+    },
+    "id": "2aa370ca-dbd9-462f-8eda-25a3e02dd9f7",
+    "zIndex": -1,
+    "source": {
+      "cell": "32df007b-cea4-497f-b490-232da9d2c4c4",
+      "port": "out-1752632202373"
+    },
+    "target": {
+      "cell": "1bee0e4a-78ee-47df-84fd-549162f24385",
+      "port": "in-1752632379967"
+    }
+  },
+  {
+    "shape": "dag-edge",
+    "attrs": {
+      "line": {
+        "strokeDasharray": "",
+        "style": {
+          "animation": ""
+        }
+      }
+    },
+    "id": "f98873ba-822a-48ee-884e-96e1d9d8dd4c",
+    "zIndex": -1,
+    "source": {
+      "cell": "67766fa2-bfe3-4a3e-ab8f-2be0543a4f39",
+      "port": "out-1752632466895"
+    },
+    "target": {
+      "cell": "e4a00798-bdd7-4ee7-802c-74da22f57a67",
+      "port": "in-1752632381198"
+    }
+  },
+  {
+    "shape": "dag-edge",
+    "attrs": {
+      "line": {
+        "strokeDasharray": ""
+      }
+    },
+    "id": "355aba30-4fdd-4432-abeb-deb1a2e86cf2",
+    "zIndex": -1,
+    "source": {
+      "cell": "1bee0e4a-78ee-47df-84fd-549162f24385",
+      "port": "out-1752632379967"
+    },
+    "target": {
+      "cell": "6dafe4c6-e520-4977-9aaf-4037127a00ad",
+      "port": "in-1752632376599"
+    }
+  },
+  {
+    "shape": "dag-edge",
+    "attrs": {
+      "line": {
+        "strokeDasharray": "",
+        "style": {
+          "animation": ""
+        }
+      }
+    },
+    "id": "e0b17ec5-a5d6-45ea-b3b8-f4daa14bd87a",
+    "zIndex": -1,
+    "source": {
+      "cell": "6dafe4c6-e520-4977-9aaf-4037127a00ad",
+      "port": "out-1752632376599"
+    },
+    "target": {
+      "cell": "e4a00798-bdd7-4ee7-802c-74da22f57a67",
+      "port": "in-1752632381198"
+    }
+  },
+  {
+    "shape": "dag-edge",
+    "attrs": {
+      "line": {
+        "strokeDasharray": ""
+      }
+    },
+    "id": "192b3881-6059-4861-8a71-28edda1df76e",
+    "zIndex": -1,
+    "source": {
+      "cell": "090034ed-1ec2-47e3-a77f-a2ead84affb7",
+      "port": "out-1752632473413"
+    },
+    "target": {
+      "cell": "1bee0e4a-78ee-47df-84fd-549162f24385",
+      "port": "in-1752632379967"
+    }
+  },
+  {
+    "shape": "dag-edge",
+    "attrs": {
+      "line": {
+        "strokeDasharray": ""
+      }
+    },
+    "id": "5792258d-a23d-4751-be3f-4d6d1e46feac",
+    "zIndex": -1,
+    "source": {
+      "cell": "061c80a9-cc53-4319-8e40-eb3ec7efd51f",
+      "port": "out-1752632474780"
+    },
+    "target": {
+      "cell": "6dafe4c6-e520-4977-9aaf-4037127a00ad",
+      "port": "in-1752632376599"
+    }
+  },
+  {
+    "shape": "dag-edge",
+    "attrs": {
+      "line": {
+        "strokeDasharray": ""
+      }
+    },
+    "id": "3ec4b4e4-0204-4b6d-965c-382796d0a7d8",
+    "zIndex": -1,
+    "source": {
+      "cell": "65927a7f-39bf-45fb-86b2-4d34f1b79366",
+      "port": "out-1752632475997"
+    },
+    "target": {
+      "cell": "e4a00798-bdd7-4ee7-802c-74da22f57a67",
+      "port": "in-1752632381198"
+    }
+  },
+  {
+    "shape": "dag-edge",
+    "attrs": {
+      "line": {
+        "strokeDasharray": ""
+      }
+    },
+    "id": "a130c453-1922-4354-a00e-e6fe600494f8",
+    "zIndex": -1,
+    "source": {
+      "cell": "e4a00798-bdd7-4ee7-802c-74da22f57a67",
+      "port": "out-1752632381198"
+    },
+    "target": {
+      "cell": "75f3b425-4a2f-4720-ba01-7fc89d1c31e5",
+      "port": "in-1752632378774"
+    }
+  },
+  {
+    "shape": "dag-edge",
+    "attrs": {
+      "line": {
+        "strokeDasharray": ""
+      }
+    },
+    "id": "539f5536-3c36-440d-b25d-0291ea73f401",
+    "zIndex": -1,
+    "source": {
+      "cell": "c15df714-2116-4734-b359-6f9e4657cdd2",
+      "port": "out-1752632468346"
+    },
+    "target": {
+      "cell": "75f3b425-4a2f-4720-ba01-7fc89d1c31e5",
+      "port": "in-1752632378774"
+    }
+  },
+  {
+    "shape": "dag-edge",
+    "attrs": {
+      "line": {
+        "strokeDasharray": ""
+      }
+    },
+    "id": "57ca836f-ddb8-4c2c-be9e-ca4f3f1a1cf8",
+    "zIndex": -1,
+    "source": {
+      "cell": "75f3b425-4a2f-4720-ba01-7fc89d1c31e5",
+      "port": "out-1752632378774"
+    },
+    "target": {
+      "cell": "88ec807b-73dd-4c9d-a7af-d85d8c6a99b3",
+      "port": "in-1752632119788"
+    }
+  },
+  {
+    "shape": "dag-edge",
+    "attrs": {
+      "line": {
+        "strokeDasharray": ""
+      }
+    },
+    "id": "eee0ebc3-f46f-4d22-9bb8-47d4e5571fb9",
+    "zIndex": -1,
+    "source": {
+      "cell": "cf158675-1580-4767-a058-c3fd57e2330f",
+      "port": "out-1752632477500"
+    },
+    "target": {
+      "cell": "88ec807b-73dd-4c9d-a7af-d85d8c6a99b3",
+      "port": "in-1752632119788"
+    }
+  },
+  {
+    "position": {
+      "x": 580,
+      "y": -250
+    },
+    "size": {
+      "width": 180,
+      "height": 40
+    },
+    "shape": "dag-commonTaskNode",
+    "component": {
+      "template": "<common-task-node />",
+      "components": {
+        "commonTaskNode": {
+          "name": "commonTaskNode",
+          "inject": {
+            "getGraph": {
+              "from": "getGraph"
+            },
+            "getNode": {
+              "from": "getNode"
+            }
+          },
+          "staticRenderFns": [],
+          "_compiled": true,
+          "_scopeId": "data-v-87d96f1e",
+          "beforeCreate": [
+            null
+          ],
+          "beforeDestroy": [
+            null
+          ],
+          "__file": "src/views/system/antx6flow/components/nodeTheme/commonTaskNode.vue",
+          "_Ctor": {}
+        }
+      },
+      "_Ctor": {}
+    },
+    "ports": {
+      "groups": {
+        "top": {
+          "position": "top",
+          "attrs": {
+            "circle": {
+              "r": 4,
+              "magnet": true,
+              "stroke": "#C2C8D5",
+              "strokeWidth": 1,
+              "fill": "#fff"
+            }
+          }
+        },
+        "bottom": {
+          "position": "bottom",
+          "attrs": {
+            "circle": {
+              "r": 4,
+              "magnet": true,
+              "stroke": "#C2C8D5",
+              "strokeWidth": 1,
+              "fill": "#fff"
+            }
+          }
+        }
+      },
+      "items": [
+        {
+          "id": "in-1752590615409",
+          "group": "top"
+        },
+        {
+          "id": "out-1752590615409",
+          "group": "bottom"
+        }
+      ]
+    },
+    "id": "e40133a7-f199-4426-b530-327e8492128d",
+    "data": {
+      "taskName": "规划建设管理科"
+    },
+    "zIndex": 5
+  },
+  {
+    "position": {
+      "x": 580,
+      "y": -170
+    },
+    "size": {
+      "width": 180,
+      "height": 40
+    },
+    "shape": "dag-commonTaskNode",
+    "component": {
+      "template": "<common-task-node />",
+      "components": {
+        "commonTaskNode": {
+          "name": "commonTaskNode",
+          "inject": {
+            "getGraph": {
+              "from": "getGraph"
+            },
+            "getNode": {
+              "from": "getNode"
+            }
+          },
+          "staticRenderFns": [],
+          "_compiled": true,
+          "_scopeId": "data-v-87d96f1e",
+          "beforeCreate": [
+            null
+          ],
+          "beforeDestroy": [
+            null
+          ],
+          "__file": "src/views/system/antx6flow/components/nodeTheme/commonTaskNode.vue",
+          "_Ctor": {}
+        }
+      },
+      "_Ctor": {}
+    },
+    "ports": {
+      "groups": {
+        "top": {
+          "position": "top",
+          "attrs": {
+            "circle": {
+              "r": 4,
+              "magnet": true,
+              "stroke": "#C2C8D5",
+              "strokeWidth": 1,
+              "fill": "#fff"
+            }
+          }
+        },
+        "bottom": {
+          "position": "bottom",
+          "attrs": {
+            "circle": {
+              "r": 4,
+              "magnet": true,
+              "stroke": "#C2C8D5",
+              "strokeWidth": 1,
+              "fill": "#fff"
+            }
+          }
+        }
+      },
+      "items": [
+        {
+          "id": "in-1752590617134",
+          "group": "top"
+        },
+        {
+          "id": "out-1752590617134",
+          "group": "bottom"
+        }
+      ]
+    },
+    "id": "db282d9a-26e5-4d67-89d1-1b13a74d9985",
+    "data": {
+      "taskName": "项目启动、投资计划"
+    },
+    "zIndex": 6
+  },
+  {
+    "position": {
+      "x": 580,
+      "y": -80
+    },
+    "size": {
+      "width": 180,
+      "height": 40
+    },
+    "shape": "dag-commonTaskNode",
+    "component": {
+      "template": "<common-task-node />",
+      "components": {
+        "commonTaskNode": {
+          "name": "commonTaskNode",
+          "inject": {
+            "getGraph": {
+              "from": "getGraph"
+            },
+            "getNode": {
+              "from": "getNode"
+            }
+          },
+          "staticRenderFns": [],
+          "_compiled": true,
+          "_scopeId": "data-v-87d96f1e",
+          "beforeCreate": [
+            null
+          ],
+          "beforeDestroy": [
+            null
+          ],
+          "__file": "src/views/system/antx6flow/components/nodeTheme/commonTaskNode.vue",
+          "_Ctor": {}
+        }
+      },
+      "_Ctor": {}
+    },
+    "ports": {
+      "groups": {
+        "top": {
+          "position": "top",
+          "attrs": {
+            "circle": {
+              "r": 4,
+              "magnet": true,
+              "stroke": "#C2C8D5",
+              "strokeWidth": 1,
+              "fill": "#fff"
+            }
+          }
+        },
+        "bottom": {
+          "position": "bottom",
+          "attrs": {
+            "circle": {
+              "r": 4,
+              "magnet": true,
+              "stroke": "#C2C8D5",
+              "strokeWidth": 1,
+              "fill": "#fff"
+            }
+          }
+        }
+      },
+      "items": [
+        {
+          "id": "in-1752590618299",
+          "group": "top"
+        },
+        {
+          "id": "out-1752590618299",
+          "group": "bottom"
+        }
+      ]
+    },
+    "id": "0a32dfc5-3d32-4ec4-8292-b821fd10be22",
+    "data": {
+      "taskName": "开展前期研究；编制预可报告（项目建议书）"
+    },
+    "zIndex": 7
+  },
+  {
+    "position": {
+      "x": 580,
+      "y": 0
+    },
+    "size": {
+      "width": 180,
+      "height": 40
+    },
+    "shape": "dag-commonTaskNode",
+    "component": {
+      "template": "<common-task-node />",
+      "components": {
+        "commonTaskNode": {
+          "name": "commonTaskNode",
+          "inject": {
+            "getGraph": {
+              "from": "getGraph"
+            },
+            "getNode": {
+              "from": "getNode"
+            }
+          },
+          "staticRenderFns": [],
+          "_compiled": true,
+          "_scopeId": "data-v-87d96f1e",
+          "beforeCreate": [
+            null
+          ],
+          "beforeDestroy": [
+            null
+          ],
+          "__file": "src/views/system/antx6flow/components/nodeTheme/commonTaskNode.vue",
+          "_Ctor": {}
+        }
+      },
+      "_Ctor": {}
+    },
+    "ports": {
+      "groups": {
+        "top": {
+          "position": "top",
+          "attrs": {
+            "circle": {
+              "r": 4,
+              "magnet": true,
+              "stroke": "#C2C8D5",
+              "strokeWidth": 1,
+              "fill": "#fff"
+            }
+          }
+        },
+        "bottom": {
+          "position": "bottom",
+          "attrs": {
+            "circle": {
+              "r": 4,
+              "magnet": true,
+              "stroke": "#C2C8D5",
+              "strokeWidth": 1,
+              "fill": "#fff"
+            }
+          }
+        }
+      },
+      "items": [
+        {
+          "id": "in-1752590619750",
+          "group": "top"
+        },
+        {
+          "id": "out-1752590619750",
+          "group": "bottom"
+        }
+      ]
+    },
+    "id": "9ad8f0cc-fdc9-4a81-8612-98caff31ae67",
+    "data": {
+      "taskName": "取得项目建议书批复"
+    },
+    "zIndex": 8
+  },
+  {
+    "position": {
+      "x": 330,
+      "y": -80
+    },
+    "size": {
+      "width": 180,
+      "height": 40
+    },
+    "shape": "dag-commonTaskNode",
+    "component": {
+      "template": "<common-task-node />",
+      "components": {
+        "commonTaskNode": {
+          "name": "commonTaskNode",
+          "inject": {
+            "getGraph": {
+              "from": "getGraph"
+            },
+            "getNode": {
+              "from": "getNode"
+            }
+          },
+          "staticRenderFns": [],
+          "_compiled": true,
+          "_scopeId": "data-v-87d96f1e",
+          "beforeCreate": [
+            null
+          ],
+          "beforeDestroy": [
+            null
+          ],
+          "__file": "src/views/system/antx6flow/components/nodeTheme/commonTaskNode.vue",
+          "_Ctor": {}
+        }
+      },
+      "_Ctor": {}
+    },
+    "ports": {
+      "groups": {
+        "top": {
+          "position": "top",
+          "attrs": {
+            "circle": {
+              "r": 4,
+              "magnet": true,
+              "stroke": "#C2C8D5",
+              "strokeWidth": 1,
+              "fill": "#fff"
+            }
+          }
+        },
+        "bottom": {
+          "position": "bottom",
+          "attrs": {
+            "circle": {
+              "r": 4,
+              "magnet": true,
+              "stroke": "#C2C8D5",
+              "strokeWidth": 1,
+              "fill": "#fff"
+            }
+          }
+        }
+      },
+      "items": [
+        {
+          "id": "in-1752590620714",
+          "group": "top"
+        },
+        {
+          "id": "out-1752590620714",
+          "group": "bottom"
+        }
+      ]
+    },
+    "id": "56372d96-5f63-4b85-ae3f-51289fbca2a4",
+    "data": {
+      "taskName": "审批局"
+    },
+    "zIndex": 9
+  },
+  {
+    "position": {
+      "x": 580,
+      "y": 70
+    },
+    "size": {
+      "width": 180,
+      "height": 40
+    },
+    "shape": "dag-commonTaskNode",
+    "component": {
+      "template": "<common-task-node />",
+      "components": {
+        "commonTaskNode": {
+          "name": "commonTaskNode",
+          "inject": {
+            "getGraph": {
+              "from": "getGraph"
+            },
+            "getNode": {
+              "from": "getNode"
+            }
+          },
+          "staticRenderFns": [],
+          "_compiled": true,
+          "_scopeId": "data-v-87d96f1e",
+          "beforeCreate": [
+            null
+          ],
+          "beforeDestroy": [
+            null
+          ],
+          "__file": "src/views/system/antx6flow/components/nodeTheme/commonTaskNode.vue",
+          "_Ctor": {}
+        }
+      },
+      "_Ctor": {}
+    },
+    "ports": {
+      "groups": {
+        "top": {
+          "position": "top",
+          "attrs": {
+            "circle": {
+              "r": 4,
+              "magnet": true,
+              "stroke": "#C2C8D5",
+              "strokeWidth": 1,
+              "fill": "#fff"
+            }
+          }
+        },
+        "bottom": {
+          "position": "bottom",
+          "attrs": {
+            "circle": {
+              "r": 4,
+              "magnet": true,
+              "stroke": "#C2C8D5",
+              "strokeWidth": 1,
+              "fill": "#fff"
+            }
+          }
+        }
+      },
+      "items": [
+        {
+          "id": "in-1752590621797",
+          "group": "top"
+        },
+        {
+          "id": "out-1752590621797",
+          "group": "bottom"
+        }
+      ]
+    },
+    "id": "47b046f4-6c7a-49a3-93bb-8e674fd972ff",
+    "data": {
+      "taskName": "是否新增用地"
+    },
+    "zIndex": 10
+  },
+  {
+    "position": {
+      "x": 1000,
+      "y": 400
+    },
+    "size": {
+      "width": 180,
+      "height": 40
+    },
+    "shape": "dag-commonTaskNode",
+    "component": {
+      "template": "<common-task-node />",
+      "components": {
+        "commonTaskNode": {
+          "name": "commonTaskNode",
+          "inject": {
+            "getGraph": {
+              "from": "getGraph"
+            },
+            "getNode": {
+              "from": "getNode"
+            }
+          },
+          "staticRenderFns": [],
+          "_compiled": true,
+          "_scopeId": "data-v-87d96f1e",
+          "beforeCreate": [
+            null
+          ],
+          "beforeDestroy": [
+            null
+          ],
+          "__file": "src/views/system/antx6flow/components/nodeTheme/commonTaskNode.vue",
+          "_Ctor": {}
+        }
+      },
+      "_Ctor": {}
+    },
+    "ports": {
+      "groups": {
+        "top": {
+          "position": "top",
+          "attrs": {
+            "circle": {
+              "r": 4,
+              "magnet": true,
+              "stroke": "#C2C8D5",
+              "strokeWidth": 1,
+              "fill": "#fff"
+            }
+          }
+        },
+        "bottom": {
+          "position": "bottom",
+          "attrs": {
+            "circle": {
+              "r": 4,
+              "magnet": true,
+              "stroke": "#C2C8D5",
+              "strokeWidth": 1,
+              "fill": "#fff"
+            }
+          }
+        }
+      },
+      "items": [
+        {
+          "id": "in-1752590622989",
+          "group": "top"
+        },
+        {
+          "id": "out-1752590622989",
+          "group": "bottom"
+        }
+      ]
+    },
+    "id": "e95e6935-97e7-4c33-a735-b0d228eef5e9",
+    "data": {
+      "taskName": "开展项目预算、编制设计"
+    },
+    "zIndex": 11
+  },
+  {
+    "position": {
+      "x": 580,
+      "y": 160
+    },
+    "size": {
+      "width": 180,
+      "height": 40
+    },
+    "shape": "dag-commonTaskNode",
+    "component": {
+      "template": "<common-task-node />",
+      "components": {
+        "commonTaskNode": {
+          "name": "commonTaskNode",
+          "inject": {
+            "getGraph": {
+              "from": "getGraph"
+            },
+            "getNode": {
+              "from": "getNode"
+            }
+          },
+          "staticRenderFns": [],
+          "_compiled": true,
+          "_scopeId": "data-v-87d96f1e",
+          "beforeCreate": [
+            null
+          ],
+          "beforeDestroy": [
+            null
+          ],
+          "__file": "src/views/system/antx6flow/components/nodeTheme/commonTaskNode.vue",
+          "_Ctor": {}
+        }
+      },
+      "_Ctor": {}
+    },
+    "ports": {
+      "groups": {
+        "top": {
+          "position": "top",
+          "attrs": {
+            "circle": {
+              "r": 4,
+              "magnet": true,
+              "stroke": "#C2C8D5",
+              "strokeWidth": 1,
+              "fill": "#fff"
+            }
+          }
+        },
+        "bottom": {
+          "position": "bottom",
+          "attrs": {
+            "circle": {
+              "r": 4,
+              "magnet": true,
+              "stroke": "#C2C8D5",
+              "strokeWidth": 1,
+              "fill": "#fff"
+            }
+          }
+        }
+      },
+      "items": [
+        {
+          "id": "in-1752590849145",
+          "group": "top"
+        },
+        {
+          "id": "out-1752590849145",
+          "group": "bottom"
+        }
+      ]
+    },
+    "id": "a9aed56e-2ef3-45d3-959e-45c8ccac6ce9",
+    "data": {
+      "taskName": "开展工程可行性研究"
+    },
+    "zIndex": 12
+  },
+  {
+    "position": {
+      "x": 580,
+      "y": 240
+    },
+    "size": {
+      "width": 180,
+      "height": 40
+    },
+    "shape": "dag-commonTaskNode",
+    "component": {
+      "template": "<common-task-node />",
+      "components": {
+        "commonTaskNode": {
+          "name": "commonTaskNode",
+          "inject": {
+            "getGraph": {
+              "from": "getGraph"
+            },
+            "getNode": {
+              "from": "getNode"
+            }
+          },
+          "staticRenderFns": [],
+          "_compiled": true,
+          "_scopeId": "data-v-87d96f1e",
+          "beforeCreate": [
+            null
+          ],
+          "beforeDestroy": [
+            null
+          ],
+          "__file": "src/views/system/antx6flow/components/nodeTheme/commonTaskNode.vue",
+          "_Ctor": {}
+        }
+      },
+      "_Ctor": {}
+    },
+    "ports": {
+      "groups": {
+        "top": {
+          "position": "top",
+          "attrs": {
+            "circle": {
+              "r": 4,
+              "magnet": true,
+              "stroke": "#C2C8D5",
+              "strokeWidth": 1,
+              "fill": "#fff"
+            }
+          }
+        },
+        "bottom": {
+          "position": "bottom",
+          "attrs": {
+            "circle": {
+              "r": 4,
+              "magnet": true,
+              "stroke": "#C2C8D5",
+              "strokeWidth": 1,
+              "fill": "#fff"
+            }
+          }
+        }
+      },
+      "items": [
+        {
+          "id": "in-1752590904394",
+          "group": "top"
+        },
+        {
+          "id": "out-1752590904394",
+          "group": "bottom"
+        }
+      ]
+    },
+    "id": "a2c92aa4-d320-4079-92ef-5d6b0c86c685",
+    "data": {
+      "taskName": "环评、土地预审、选址、稳评、洪评、航评等专项"
+    },
+    "zIndex": 13
+  },
+  {
+    "position": {
+      "x": 330,
+      "y": 160
+    },
+    "size": {
+      "width": 180,
+      "height": 40
+    },
+    "shape": "dag-commonTaskNode",
+    "component": {
+      "template": "<common-task-node />",
+      "components": {
+        "commonTaskNode": {
+          "name": "commonTaskNode",
+          "inject": {
+            "getGraph": {
+              "from": "getGraph"
+            },
+            "getNode": {
+              "from": "getNode"
+            }
+          },
+          "staticRenderFns": [],
+          "_compiled": true,
+          "_scopeId": "data-v-87d96f1e",
+          "beforeCreate": [
+            null
+          ],
+          "beforeDestroy": [
+            null
+          ],
+          "__file": "src/views/system/antx6flow/components/nodeTheme/commonTaskNode.vue",
+          "_Ctor": {}
+        }
+      },
+      "_Ctor": {}
+    },
+    "ports": {
+      "groups": {
+        "top": {
+          "position": "top",
+          "attrs": {
+            "circle": {
+              "r": 4,
+              "magnet": true,
+              "stroke": "#C2C8D5",
+              "strokeWidth": 1,
+              "fill": "#fff"
+            }
+          }
+        },
+        "bottom": {
+          "position": "bottom",
+          "attrs": {
+            "circle": {
+              "r": 4,
+              "magnet": true,
+              "stroke": "#C2C8D5",
+              "strokeWidth": 1,
+              "fill": "#fff"
+            }
+          }
+        }
+      },
+      "items": [
+        {
+          "id": "in-1752590905938",
+          "group": "top"
+        },
+        {
+          "id": "out-1752590905938",
+          "group": "bottom"
+        }
+      ]
+    },
+    "id": "bc9a14e1-f9b9-4ece-a61b-5ef5a597c9b6",
+    "data": {
+      "taskName": "环保、资归、政法委等"
+    },
+    "zIndex": 14
+  },
+  {
+    "position": {
+      "x": 580,
+      "y": 320
+    },
+    "size": {
+      "width": 180,
+      "height": 40
+    },
+    "shape": "dag-commonTaskNode",
+    "component": {
+      "template": "<common-task-node />",
+      "components": {
+        "commonTaskNode": {
+          "name": "commonTaskNode",
+          "inject": {
+            "getGraph": {
+              "from": "getGraph"
+            },
+            "getNode": {
+              "from": "getNode"
+            }
+          },
+          "staticRenderFns": [],
+          "_compiled": true,
+          "_scopeId": "data-v-87d96f1e",
+          "beforeCreate": [
+            null
+          ],
+          "beforeDestroy": [
+            null
+          ],
+          "__file": "src/views/system/antx6flow/components/nodeTheme/commonTaskNode.vue",
+          "_Ctor": {}
+        }
+      },
+      "_Ctor": {}
+    },
+    "ports": {
+      "groups": {
+        "top": {
+          "position": "top",
+          "attrs": {
+            "circle": {
+              "r": 4,
+              "magnet": true,
+              "stroke": "#C2C8D5",
+              "strokeWidth": 1,
+              "fill": "#fff"
+            }
+          }
+        },
+        "bottom": {
+          "position": "bottom",
+          "attrs": {
+            "circle": {
+              "r": 4,
+              "magnet": true,
+              "stroke": "#C2C8D5",
+              "strokeWidth": 1,
+              "fill": "#fff"
+            }
+          }
+        }
+      },
+      "items": [
+        {
+          "id": "in-1752631172913",
+          "group": "top"
+        },
+        {
+          "id": "out-1752631172913",
+          "group": "bottom"
+        }
+      ]
+    },
+    "id": "05cc6924-823e-4f94-bd4f-8192e0ac793d",
+    "data": {
+      "taskName": "取得项目可批复"
+    },
+    "zIndex": 15
+  },
+  {
+    "position": {
+      "x": 580,
+      "y": 480
+    },
+    "size": {
+      "width": 180,
+      "height": 40
+    },
+    "shape": "dag-commonTaskNode",
+    "component": {
+      "template": "<common-task-node />",
+      "components": {
+        "commonTaskNode": {
+          "name": "commonTaskNode",
+          "inject": {
+            "getGraph": {
+              "from": "getGraph"
+            },
+            "getNode": {
+              "from": "getNode"
+            }
+          },
+          "staticRenderFns": [],
+          "_compiled": true,
+          "_scopeId": "data-v-87d96f1e",
+          "beforeCreate": [
+            null
+          ],
+          "beforeDestroy": [
+            null
+          ],
+          "__file": "src/views/system/antx6flow/components/nodeTheme/commonTaskNode.vue",
+          "_Ctor": {}
+        }
+      },
+      "_Ctor": {}
+    },
+    "ports": {
+      "groups": {
+        "top": {
+          "position": "top",
+          "attrs": {
+            "circle": {
+              "r": 4,
+              "magnet": true,
+              "stroke": "#C2C8D5",
+              "strokeWidth": 1,
+              "fill": "#fff"
+            }
+          }
+        },
+        "bottom": {
+          "position": "bottom",
+          "attrs": {
+            "circle": {
+              "r": 4,
+              "magnet": true,
+              "stroke": "#C2C8D5",
+              "strokeWidth": 1,
+              "fill": "#fff"
+            }
+          }
+        }
+      },
+      "items": [
+        {
+          "id": "in-1752631174139",
+          "group": "top"
+        },
+        {
+          "id": "out-1752631174139",
+          "group": "bottom"
+        }
+      ]
+    },
+    "id": "fbff917e-a929-4a7a-8214-df9401514abc",
+    "data": {
+      "taskName": "通过初步设计审查、完成概算审核"
+    },
+    "zIndex": 16
+  },
+  {
+    "position": {
+      "x": 580,
+      "y": 550
+    },
+    "size": {
+      "width": 180,
+      "height": 40
+    },
+    "shape": "dag-commonTaskNode",
+    "component": {
+      "template": "<common-task-node />",
+      "components": {
+        "commonTaskNode": {
+          "name": "commonTaskNode",
+          "inject": {
+            "getGraph": {
+              "from": "getGraph"
+            },
+            "getNode": {
+              "from": "getNode"
+            }
+          },
+          "staticRenderFns": [],
+          "_compiled": true,
+          "_scopeId": "data-v-87d96f1e",
+          "beforeCreate": [
+            null
+          ],
+          "beforeDestroy": [
+            null
+          ],
+          "__file": "src/views/system/antx6flow/components/nodeTheme/commonTaskNode.vue",
+          "_Ctor": {}
+        }
+      },
+      "_Ctor": {}
+    },
+    "ports": {
+      "groups": {
+        "top": {
+          "position": "top",
+          "attrs": {
+            "circle": {
+              "r": 4,
+              "magnet": true,
+              "stroke": "#C2C8D5",
+              "strokeWidth": 1,
+              "fill": "#fff"
+            }
+          }
+        },
+        "bottom": {
+          "position": "bottom",
+          "attrs": {
+            "circle": {
+              "r": 4,
+              "magnet": true,
+              "stroke": "#C2C8D5",
+              "strokeWidth": 1,
+              "fill": "#fff"
+            }
+          }
+        }
+      },
+      "items": [
+        {
+          "id": "in-1752631175459",
+          "group": "top"
+        },
+        {
+          "id": "out-1752631175459",
+          "group": "bottom"
+        }
+      ]
+    },
+    "id": "698ef9bb-5749-4f3d-ae82-84fa420e5e8a",
+    "data": {
+      "taskName": "取得项目初步设计批复"
+    },
+    "zIndex": 17
+  },
+  {
+    "position": {
+      "x": 790,
+      "y": 660
+    },
+    "size": {
+      "width": 180,
+      "height": 40
+    },
+    "shape": "dag-commonTaskNode",
+    "component": {
+      "template": "<common-task-node />",
+      "components": {
+        "commonTaskNode": {
+          "name": "commonTaskNode",
+          "inject": {
+            "getGraph": {
+              "from": "getGraph"
+            },
+            "getNode": {
+              "from": "getNode"
+            }
+          },
+          "staticRenderFns": [],
+          "_compiled": true,
+          "_scopeId": "data-v-87d96f1e",
+          "beforeCreate": [
+            null
+          ],
+          "beforeDestroy": [
+            null
+          ],
+          "__file": "src/views/system/antx6flow/components/nodeTheme/commonTaskNode.vue",
+          "_Ctor": {}
+        }
+      },
+      "_Ctor": {}
+    },
+    "ports": {
+      "groups": {
+        "top": {
+          "position": "top",
+          "attrs": {
+            "circle": {
+              "r": 4,
+              "magnet": true,
+              "stroke": "#C2C8D5",
+              "strokeWidth": 1,
+              "fill": "#fff"
+            }
+          }
+        },
+        "bottom": {
+          "position": "bottom",
+          "attrs": {
+            "circle": {
+              "r": 4,
+              "magnet": true,
+              "stroke": "#C2C8D5",
+              "strokeWidth": 1,
+              "fill": "#fff"
+            }
+          }
+        }
+      },
+      "items": [
+        {
+          "id": "in-1752631176731",
+          "group": "top"
+        },
+        {
+          "id": "out-1752631176731",
+          "group": "bottom"
+        }
+      ]
+    },
+    "id": "3422788b-db11-4010-adf0-7a3603a2870e",
+    "data": {
+      "taskName": "开展施工图设计"
+    },
+    "zIndex": 18
+  },
+  {
+    "position": {
+      "x": 1180,
+      "y": 320
+    },
+    "size": {
+      "width": 180,
+      "height": 40
+    },
+    "shape": "dag-commonTaskNode",
+    "component": {
+      "template": "<common-task-node />",
+      "components": {
+        "commonTaskNode": {
+          "name": "commonTaskNode",
+          "inject": {
+            "getGraph": {
+              "from": "getGraph"
+            },
+            "getNode": {
+              "from": "getNode"
+            }
+          },
+          "staticRenderFns": [],
+          "_compiled": true,
+          "_scopeId": "data-v-87d96f1e",
+          "beforeCreate": [
+            null
+          ],
+          "beforeDestroy": [
+            null
+          ],
+          "__file": "src/views/system/antx6flow/components/nodeTheme/commonTaskNode.vue",
+          "_Ctor": {}
+        }
+      },
+      "_Ctor": {}
+    },
+    "ports": {
+      "groups": {
+        "top": {
+          "position": "top",
+          "attrs": {
+            "circle": {
+              "r": 4,
+              "magnet": true,
+              "stroke": "#C2C8D5",
+              "strokeWidth": 1,
+              "fill": "#fff"
+            }
+          }
+        },
+        "bottom": {
+          "position": "bottom",
+          "attrs": {
+            "circle": {
+              "r": 4,
+              "magnet": true,
+              "stroke": "#C2C8D5",
+              "strokeWidth": 1,
+              "fill": "#fff"
+            }
+          }
+        }
+      },
+      "items": [
+        {
+          "id": "in-1752631178286",
+          "group": "top"
+        },
+        {
+          "id": "out-1752631178286",
+          "group": "bottom"
+        }
+      ]
+    },
+    "id": "c04759b5-a9d9-405d-b0fa-cb8344e7e582",
+    "data": {
+      "taskName": "工程中心招标技术科"
+    },
+    "zIndex": 19
+  },
+  {
+    "position": {
+      "x": 580,
+      "y": 400
+    },
+    "size": {
+      "width": 180,
+      "height": 40
+    },
+    "shape": "dag-commonTaskNode",
+    "component": {
+      "template": "<common-task-node />",
+      "components": {
+        "commonTaskNode": {
+          "name": "commonTaskNode",
+          "inject": {
+            "getGraph": {
+              "from": "getGraph"
+            },
+            "getNode": {
+              "from": "getNode"
+            }
+          },
+          "staticRenderFns": [],
+          "_compiled": true,
+          "_scopeId": "data-v-87d96f1e",
+          "beforeCreate": [
+            null
+          ],
+          "beforeDestroy": [
+            null
+          ],
+          "__file": "src/views/system/antx6flow/components/nodeTheme/commonTaskNode.vue",
+          "_Ctor": {}
+        }
+      },
+      "_Ctor": {}
+    },
+    "ports": {
+      "groups": {
+        "top": {
+          "position": "top",
+          "attrs": {
+            "circle": {
+              "r": 4,
+              "magnet": true,
+              "stroke": "#C2C8D5",
+              "strokeWidth": 1,
+              "fill": "#fff"
+            }
+          }
+        },
+        "bottom": {
+          "position": "bottom",
+          "attrs": {
+            "circle": {
+              "r": 4,
+              "magnet": true,
+              "stroke": "#C2C8D5",
+              "strokeWidth": 1,
+              "fill": "#fff"
+            }
+          }
+        }
+      },
+      "items": [
+        {
+          "id": "in-1752631179695",
+          "group": "top"
+        },
+        {
+          "id": "out-1752631179695",
+          "group": "bottom"
+        }
+      ]
+    },
+    "id": "bb905431-a6b8-481d-8341-b2b2900f7949",
+    "data": {
+      "taskName": "开展初步设计、编制项目概算"
+    },
+    "zIndex": 20
+  },
+  {
+    "position": {
+      "x": 330,
+      "y": 240
+    },
+    "size": {
+      "width": 180,
+      "height": 40
+    },
+    "shape": "dag-commonTaskNode",
+    "component": {
+      "template": "<common-task-node />",
+      "components": {
+        "commonTaskNode": {
+          "name": "commonTaskNode",
+          "inject": {
+            "getGraph": {
+              "from": "getGraph"
+            },
+            "getNode": {
+              "from": "getNode"
+            }
+          },
+          "staticRenderFns": [],
+          "_compiled": true,
+          "_scopeId": "data-v-87d96f1e",
+          "beforeCreate": [
+            null
+          ],
+          "beforeDestroy": [
+            null
+          ],
+          "__file": "src/views/system/antx6flow/components/nodeTheme/commonTaskNode.vue",
+          "_Ctor": {}
+        }
+      },
+      "_Ctor": {}
+    },
+    "ports": {
+      "groups": {
+        "top": {
+          "position": "top",
+          "attrs": {
+            "circle": {
+              "r": 4,
+              "magnet": true,
+              "stroke": "#C2C8D5",
+              "strokeWidth": 1,
+              "fill": "#fff"
+            }
+          }
+        },
+        "bottom": {
+          "position": "bottom",
+          "attrs": {
+            "circle": {
+              "r": 4,
+              "magnet": true,
+              "stroke": "#C2C8D5",
+              "strokeWidth": 1,
+              "fill": "#fff"
+            }
+          }
+        }
+      },
+      "items": [
+        {
+          "id": "in-1752631181043",
+          "group": "top"
+        },
+        {
+          "id": "out-1752631181043",
+          "group": "bottom"
+        }
+      ]
+    },
+    "id": "c1a66e33-8f55-46f2-82d6-1d7fbfe75dcc",
+    "data": {
+      "taskName": "审批局"
+    },
+    "zIndex": 21
+  },
+  {
+    "position": {
+      "x": 330,
+      "y": 320
+    },
+    "size": {
+      "width": 180,
+      "height": 40
+    },
+    "shape": "dag-commonTaskNode",
+    "component": {
+      "template": "<common-task-node />",
+      "components": {
+        "commonTaskNode": {
+          "name": "commonTaskNode",
+          "inject": {
+            "getGraph": {
+              "from": "getGraph"
+            },
+            "getNode": {
+              "from": "getNode"
+            }
+          },
+          "staticRenderFns": [],
+          "_compiled": true,
+          "_scopeId": "data-v-87d96f1e",
+          "beforeCreate": [
+            null
+          ],
+          "beforeDestroy": [
+            null
+          ],
+          "__file": "src/views/system/antx6flow/components/nodeTheme/commonTaskNode.vue",
+          "_Ctor": {}
+        }
+      },
+      "_Ctor": {}
+    },
+    "ports": {
+      "groups": {
+        "top": {
+          "position": "top",
+          "attrs": {
+            "circle": {
+              "r": 4,
+              "magnet": true,
+              "stroke": "#C2C8D5",
+              "strokeWidth": 1,
+              "fill": "#fff"
+            }
+          }
+        },
+        "bottom": {
+          "position": "bottom",
+          "attrs": {
+            "circle": {
+              "r": 4,
+              "magnet": true,
+              "stroke": "#C2C8D5",
+              "strokeWidth": 1,
+              "fill": "#fff"
+            }
+          }
+        }
+      },
+      "items": [
+        {
+          "id": "in-1752631370065",
+          "group": "top"
+        },
+        {
+          "id": "out-1752631370065",
+          "group": "bottom"
+        }
+      ]
+    },
+    "id": "b9a6a780-f6a8-46c2-85b1-ac3a5467bfc7",
+    "data": {
+      "taskName": "工程中心招标技术科"
+    },
+    "zIndex": 22
+  },
+  {
+    "position": {
+      "x": 340,
+      "y": 550
+    },
+    "size": {
+      "width": 180,
+      "height": 40
+    },
+    "shape": "dag-commonTaskNode",
+    "component": {
+      "template": "<common-task-node />",
+      "components": {
+        "commonTaskNode": {
+          "name": "commonTaskNode",
+          "inject": {
+            "getGraph": {
+              "from": "getGraph"
+            },
+            "getNode": {
+              "from": "getNode"
+            }
+          },
+          "staticRenderFns": [],
+          "_compiled": true,
+          "_scopeId": "data-v-87d96f1e",
+          "beforeCreate": [
+            null
+          ],
+          "beforeDestroy": [
+            null
+          ],
+          "__file": "src/views/system/antx6flow/components/nodeTheme/commonTaskNode.vue",
+          "_Ctor": {}
+        }
+      },
+      "_Ctor": {}
+    },
+    "ports": {
+      "groups": {
+        "top": {
+          "position": "top",
+          "attrs": {
+            "circle": {
+              "r": 4,
+              "magnet": true,
+              "stroke": "#C2C8D5",
+              "strokeWidth": 1,
+              "fill": "#fff"
+            }
+          }
+        },
+        "bottom": {
+          "position": "bottom",
+          "attrs": {
+            "circle": {
+              "r": 4,
+              "magnet": true,
+              "stroke": "#C2C8D5",
+              "strokeWidth": 1,
+              "fill": "#fff"
+            }
+          }
+        }
+      },
+      "items": [
+        {
+          "id": "in-1752631393294",
+          "group": "top"
+        },
+        {
+          "id": "out-1752631393294",
+          "group": "bottom"
+        }
+      ]
+    },
+    "id": "6a768fb9-0ffb-4161-9176-110e091721fd",
+    "data": {
+      "taskName": "拆迁办"
+    },
+    "zIndex": 23
+  },
+  {
+    "position": {
+      "x": 340,
+      "y": 630
+    },
+    "size": {
+      "width": 180,
+      "height": 40
+    },
+    "shape": "dag-commonTaskNode",
+    "component": {
+      "template": "<common-task-node />",
+      "components": {
+        "commonTaskNode": {
+          "name": "commonTaskNode",
+          "inject": {
+            "getGraph": {
+              "from": "getGraph"
+            },
+            "getNode": {
+              "from": "getNode"
+            }
+          },
+          "staticRenderFns": [],
+          "_compiled": true,
+          "_scopeId": "data-v-87d96f1e",
+          "beforeCreate": [
+            null
+          ],
+          "beforeDestroy": [
+            null
+          ],
+          "__file": "src/views/system/antx6flow/components/nodeTheme/commonTaskNode.vue",
+          "_Ctor": {}
+        }
+      },
+      "_Ctor": {}
+    },
+    "ports": {
+      "groups": {
+        "top": {
+          "position": "top",
+          "attrs": {
+            "circle": {
+              "r": 4,
+              "magnet": true,
+              "stroke": "#C2C8D5",
+              "strokeWidth": 1,
+              "fill": "#fff"
+            }
+          }
+        },
+        "bottom": {
+          "position": "bottom",
+          "attrs": {
+            "circle": {
+              "r": 4,
+              "magnet": true,
+              "stroke": "#C2C8D5",
+              "strokeWidth": 1,
+              "fill": "#fff"
+            }
+          }
+        }
+      },
+      "items": [
+        {
+          "id": "in-1752631395638",
+          "group": "top"
+        },
+        {
+          "id": "out-1752631395638",
+          "group": "bottom"
+        }
+      ]
+    },
+    "id": "87c5d1e2-1b18-473c-a9b8-71ced55b37c9",
+    "data": {
+      "taskName": "拆迁及用地报批"
+    },
+    "zIndex": 24
+  },
+  {
+    "position": {
+      "x": 1000,
+      "y": 480
+    },
+    "size": {
+      "width": 180,
+      "height": 40
+    },
+    "shape": "dag-commonTaskNode",
+    "component": {
+      "template": "<common-task-node />",
+      "components": {
+        "commonTaskNode": {
+          "name": "commonTaskNode",
+          "inject": {
+            "getGraph": {
+              "from": "getGraph"
+            },
+            "getNode": {
+              "from": "getNode"
+            }
+          },
+          "staticRenderFns": [],
+          "_compiled": true,
+          "_scopeId": "data-v-87d96f1e",
+          "beforeCreate": [
+            null
+          ],
+          "beforeDestroy": [
+            null
+          ],
+          "__file": "src/views/system/antx6flow/components/nodeTheme/commonTaskNode.vue",
+          "_Ctor": {}
+        }
+      },
+      "_Ctor": {}
+    },
+    "ports": {
+      "groups": {
+        "top": {
+          "position": "top",
+          "attrs": {
+            "circle": {
+              "r": 4,
+              "magnet": true,
+              "stroke": "#C2C8D5",
+              "strokeWidth": 1,
+              "fill": "#fff"
+            }
+          }
+        },
+        "bottom": {
+          "position": "bottom",
+          "attrs": {
+            "circle": {
+              "r": 4,
+              "magnet": true,
+              "stroke": "#C2C8D5",
+              "strokeWidth": 1,
+              "fill": "#fff"
+            }
+          }
+        }
+      },
+      "items": [
+        {
+          "id": "in-1752631833601",
+          "group": "top"
+        },
+        {
+          "id": "out-1752631833601",
+          "group": "bottom"
+        }
+      ]
+    },
+    "id": "0728f5f5-5703-4c07-acfd-db13d2e23a5f",
+    "data": {
+      "taskName": "通过初步设计审查，完成概算审核"
+    },
+    "zIndex": 25
+  },
+  {
+    "position": {
+      "x": 1000,
+      "y": 550
+    },
+    "size": {
+      "width": 180,
+      "height": 40
+    },
+    "shape": "dag-commonTaskNode",
+    "component": {
+      "template": "<common-task-node />",
+      "components": {
+        "commonTaskNode": {
+          "name": "commonTaskNode",
+          "inject": {
+            "getGraph": {
+              "from": "getGraph"
+            },
+            "getNode": {
+              "from": "getNode"
+            }
+          },
+          "staticRenderFns": [],
+          "_compiled": true,
+          "_scopeId": "data-v-87d96f1e",
+          "beforeCreate": [
+            null
+          ],
+          "beforeDestroy": [
+            null
+          ],
+          "__file": "src/views/system/antx6flow/components/nodeTheme/commonTaskNode.vue",
+          "_Ctor": {}
+        }
+      },
+      "_Ctor": {}
+    },
+    "ports": {
+      "groups": {
+        "top": {
+          "position": "top",
+          "attrs": {
+            "circle": {
+              "r": 4,
+              "magnet": true,
+              "stroke": "#C2C8D5",
+              "strokeWidth": 1,
+              "fill": "#fff"
+            }
+          }
+        },
+        "bottom": {
+          "position": "bottom",
+          "attrs": {
+            "circle": {
+              "r": 4,
+              "magnet": true,
+              "stroke": "#C2C8D5",
+              "strokeWidth": 1,
+              "fill": "#fff"
+            }
+          }
+        }
+      },
+      "items": [
+        {
+          "id": "in-1752631835220",
+          "group": "top"
+        },
+        {
+          "id": "out-1752631835220",
+          "group": "bottom"
+        }
+      ]
+    },
+    "id": "5e8a813d-e01d-4326-aef6-40de61c12d0f",
+    "data": {
+      "taskName": "取得项目初步设计批复"
+    },
+    "zIndex": 26
+  },
+  {
+    "position": {
+      "x": 340,
+      "y": 710
+    },
+    "size": {
+      "width": 180,
+      "height": 40
+    },
+    "shape": "dag-commonTaskNode",
+    "component": {
+      "template": "<common-task-node />",
+      "components": {
+        "commonTaskNode": {
+          "name": "commonTaskNode",
+          "inject": {
+            "getGraph": {
+              "from": "getGraph"
+            },
+            "getNode": {
+              "from": "getNode"
+            }
+          },
+          "staticRenderFns": [],
+          "_compiled": true,
+          "_scopeId": "data-v-87d96f1e",
+          "beforeCreate": [
+            null
+          ],
+          "beforeDestroy": [
+            null
+          ],
+          "__file": "src/views/system/antx6flow/components/nodeTheme/commonTaskNode.vue",
+          "_Ctor": {}
+        }
+      },
+      "_Ctor": {}
+    },
+    "ports": {
+      "groups": {
+        "top": {
+          "position": "top",
+          "attrs": {
+            "circle": {
+              "r": 4,
+              "magnet": true,
+              "stroke": "#C2C8D5",
+              "strokeWidth": 1,
+              "fill": "#fff"
+            }
+          }
+        },
+        "bottom": {
+          "position": "bottom",
+          "attrs": {
+            "circle": {
+              "r": 4,
+              "magnet": true,
+              "stroke": "#C2C8D5",
+              "strokeWidth": 1,
+              "fill": "#fff"
+            }
+          }
+        }
+      },
+      "items": [
+        {
+          "id": "in-1752631996124",
+          "group": "top"
+        },
+        {
+          "id": "out-1752631996124",
+          "group": "bottom"
+        }
+      ]
+    },
+    "id": "ce25f292-4655-4635-b949-e6f2306c6e5d",
+    "data": {
+      "taskName": "取得用地批复"
+    },
+    "zIndex": 27
+  },
+  {
+    "position": {
+      "x": 340,
+      "y": 790
+    },
+    "size": {
+      "width": 180,
+      "height": 40
+    },
+    "shape": "dag-commonTaskNode",
+    "component": {
+      "template": "<common-task-node />",
+      "components": {
+        "commonTaskNode": {
+          "name": "commonTaskNode",
+          "inject": {
+            "getGraph": {
+              "from": "getGraph"
+            },
+            "getNode": {
+              "from": "getNode"
+            }
+          },
+          "staticRenderFns": [],
+          "_compiled": true,
+          "_scopeId": "data-v-87d96f1e",
+          "beforeCreate": [
+            null
+          ],
+          "beforeDestroy": [
+            null
+          ],
+          "__file": "src/views/system/antx6flow/components/nodeTheme/commonTaskNode.vue",
+          "_Ctor": {}
+        }
+      },
+      "_Ctor": {}
+    },
+    "ports": {
+      "groups": {
+        "top": {
+          "position": "top",
+          "attrs": {
+            "circle": {
+              "r": 4,
+              "magnet": true,
+              "stroke": "#C2C8D5",
+              "strokeWidth": 1,
+              "fill": "#fff"
+            }
+          }
+        },
+        "bottom": {
+          "position": "bottom",
+          "attrs": {
+            "circle": {
+              "r": 4,
+              "magnet": true,
+              "stroke": "#C2C8D5",
+              "strokeWidth": 1,
+              "fill": "#fff"
+            }
+          }
+        }
+      },
+      "items": [
+        {
+          "id": "in-1752631999162",
+          "group": "top"
+        },
+        {
+          "id": "out-1752631999162",
+          "group": "bottom"
+        }
+      ]
+    },
+    "id": "da0ad1da-a2f6-40d4-8773-7cf386829d0a",
+    "data": {
+      "taskName": "土地划拨"
+    },
+    "zIndex": 28
+  },
+  {
+    "position": {
+      "x": 790,
+      "y": 740
+    },
+    "size": {
+      "width": 180,
+      "height": 40
+    },
+    "shape": "dag-commonTaskNode",
+    "component": {
+      "template": "<common-task-node />",
+      "components": {
+        "commonTaskNode": {
+          "name": "commonTaskNode",
+          "inject": {
+            "getGraph": {
+              "from": "getGraph"
+            },
+            "getNode": {
+              "from": "getNode"
+            }
+          },
+          "staticRenderFns": [],
+          "_compiled": true,
+          "_scopeId": "data-v-87d96f1e",
+          "beforeCreate": [
+            null
+          ],
+          "beforeDestroy": [
+            null
+          ],
+          "__file": "src/views/system/antx6flow/components/nodeTheme/commonTaskNode.vue",
+          "_Ctor": {}
+        }
+      },
+      "_Ctor": {}
+    },
+    "ports": {
+      "groups": {
+        "top": {
+          "position": "top",
+          "attrs": {
+            "circle": {
+              "r": 4,
+              "magnet": true,
+              "stroke": "#C2C8D5",
+              "strokeWidth": 1,
+              "fill": "#fff"
+            }
+          }
+        },
+        "bottom": {
+          "position": "bottom",
+          "attrs": {
+            "circle": {
+              "r": 4,
+              "magnet": true,
+              "stroke": "#C2C8D5",
+              "strokeWidth": 1,
+              "fill": "#fff"
+            }
+          }
+        }
+      },
+      "items": [
+        {
+          "id": "in-1752632117470",
+          "group": "top"
+        },
+        {
+          "id": "out-1752632117470",
+          "group": "bottom"
+        }
+      ]
+    },
+    "id": "20e8f92c-d977-449a-a3f2-03e0cf91a199",
+    "data": {
+      "taskName": "开展施工图审查"
+    },
+    "zIndex": 29
+  },
+  {
+    "position": {
+      "x": 790,
+      "y": 820
+    },
+    "size": {
+      "width": 180,
+      "height": 40
+    },
+    "shape": "dag-commonTaskNode",
+    "component": {
+      "template": "<common-task-node />",
+      "components": {
+        "commonTaskNode": {
+          "name": "commonTaskNode",
+          "inject": {
+            "getGraph": {
+              "from": "getGraph"
+            },
+            "getNode": {
+              "from": "getNode"
+            }
+          },
+          "staticRenderFns": [],
+          "_compiled": true,
+          "_scopeId": "data-v-87d96f1e",
+          "beforeCreate": [
+            null
+          ],
+          "beforeDestroy": [
+            null
+          ],
+          "__file": "src/views/system/antx6flow/components/nodeTheme/commonTaskNode.vue",
+          "_Ctor": {}
+        }
+      },
+      "_Ctor": {}
+    },
+    "ports": {
+      "groups": {
+        "top": {
+          "position": "top",
+          "attrs": {
+            "circle": {
+              "r": 4,
+              "magnet": true,
+              "stroke": "#C2C8D5",
+              "strokeWidth": 1,
+              "fill": "#fff"
+            }
+          }
+        },
+        "bottom": {
+          "position": "bottom",
+          "attrs": {
+            "circle": {
+              "r": 4,
+              "magnet": true,
+              "stroke": "#C2C8D5",
+              "strokeWidth": 1,
+              "fill": "#fff"
+            }
+          }
+        }
+      },
+      "items": [
+        {
+          "id": "in-1752632118590",
+          "group": "top"
+        },
+        {
+          "id": "out-1752632118590",
+          "group": "bottom"
+        }
+      ]
+    },
+    "id": "e8c2c0b2-87ae-44e5-afce-5120bf5fbef4",
+    "data": {
+      "taskName": "取得施工图设计批复"
+    },
+    "zIndex": 30
+  },
+  {
+    "position": {
+      "x": 790,
+      "y": 1380
+    },
+    "size": {
+      "width": 180,
+      "height": 40
+    },
+    "shape": "dag-commonTaskNode",
+    "component": {
+      "template": "<common-task-node />",
+      "components": {
+        "commonTaskNode": {
+          "name": "commonTaskNode",
+          "inject": {
+            "getGraph": {
+              "from": "getGraph"
+            },
+            "getNode": {
+              "from": "getNode"
+            }
+          },
+          "staticRenderFns": [],
+          "_compiled": true,
+          "_scopeId": "data-v-87d96f1e",
+          "beforeCreate": [
+            null
+          ],
+          "beforeDestroy": [
+            null
+          ],
+          "__file": "src/views/system/antx6flow/components/nodeTheme/commonTaskNode.vue",
+          "_Ctor": {}
+        }
+      },
+      "_Ctor": {}
+    },
+    "ports": {
+      "groups": {
+        "top": {
+          "position": "top",
+          "attrs": {
+            "circle": {
+              "r": 4,
+              "magnet": true,
+              "stroke": "#C2C8D5",
+              "strokeWidth": 1,
+              "fill": "#fff"
+            }
+          }
+        },
+        "bottom": {
+          "position": "bottom",
+          "attrs": {
+            "circle": {
+              "r": 4,
+              "magnet": true,
+              "stroke": "#C2C8D5",
+              "strokeWidth": 1,
+              "fill": "#fff"
+            }
+          }
+        }
+      },
+      "items": [
+        {
+          "id": "in-1752632119788",
+          "group": "top"
+        },
+        {
+          "id": "out-1752632119788",
+          "group": "bottom"
+        }
+      ]
+    },
+    "id": "88ec807b-73dd-4c9d-a7af-d85d8c6a99b3",
+    "data": {
+      "taskName": "开工建设、现场管理"
+    },
+    "zIndex": 31
+  },
+  {
+    "position": {
+      "x": 790,
+      "y": 900
+    },
+    "size": {
+      "width": 180,
+      "height": 40
+    },
+    "shape": "dag-commonTaskNode",
+    "component": {
+      "template": "<common-task-node />",
+      "components": {
+        "commonTaskNode": {
+          "name": "commonTaskNode",
+          "inject": {
+            "getGraph": {
+              "from": "getGraph"
+            },
+            "getNode": {
+              "from": "getNode"
+            }
+          },
+          "staticRenderFns": [],
+          "_compiled": true,
+          "_scopeId": "data-v-87d96f1e",
+          "beforeCreate": [
+            null
+          ],
+          "beforeDestroy": [
+            null
+          ],
+          "__file": "src/views/system/antx6flow/components/nodeTheme/commonTaskNode.vue",
+          "_Ctor": {}
+        }
+      },
+      "_Ctor": {}
+    },
+    "ports": {
+      "groups": {
+        "top": {
+          "position": "top",
+          "attrs": {
+            "circle": {
+              "r": 4,
+              "magnet": true,
+              "stroke": "#C2C8D5",
+              "strokeWidth": 1,
+              "fill": "#fff"
+            }
+          }
+        },
+        "bottom": {
+          "position": "bottom",
+          "attrs": {
+            "circle": {
+              "r": 4,
+              "magnet": true,
+              "stroke": "#C2C8D5",
+              "strokeWidth": 1,
+              "fill": "#fff"
+            }
+          }
+        }
+      },
+      "items": [
+        {
+          "id": "in-1752632152970",
+          "group": "top"
+        },
+        {
+          "id": "out-1752632152970",
+          "group": "bottom"
+        }
+      ]
+    },
+    "id": "6ecb2a35-358c-4710-8aca-c33e686452dc",
+    "data": {
+      "taskName": "确定招标代理、编标单位、开展施工、监理等招标工作"
+    },
+    "zIndex": 32
+  },
+  {
+    "position": {
+      "x": 790,
+      "y": 980
+    },
+    "size": {
+      "width": 180,
+      "height": 40
+    },
+    "shape": "dag-commonTaskNode",
+    "component": {
+      "template": "<common-task-node />",
+      "components": {
+        "commonTaskNode": {
+          "name": "commonTaskNode",
+          "inject": {
+            "getGraph": {
+              "from": "getGraph"
+            },
+            "getNode": {
+              "from": "getNode"
+            }
+          },
+          "staticRenderFns": [],
+          "_compiled": true,
+          "_scopeId": "data-v-87d96f1e",
+          "beforeCreate": [
+            null
+          ],
+          "beforeDestroy": [
+            null
+          ],
+          "__file": "src/views/system/antx6flow/components/nodeTheme/commonTaskNode.vue",
+          "_Ctor": {}
+        }
+      },
+      "_Ctor": {}
+    },
+    "ports": {
+      "groups": {
+        "top": {
+          "position": "top",
+          "attrs": {
+            "circle": {
+              "r": 4,
+              "magnet": true,
+              "stroke": "#C2C8D5",
+              "strokeWidth": 1,
+              "fill": "#fff"
+            }
+          }
+        },
+        "bottom": {
+          "position": "bottom",
+          "attrs": {
+            "circle": {
+              "r": 4,
+              "magnet": true,
+              "stroke": "#C2C8D5",
+              "strokeWidth": 1,
+              "fill": "#fff"
+            }
+          }
+        }
+      },
+      "items": [
+        {
+          "id": "in-1752632202373",
+          "group": "top"
+        },
+        {
+          "id": "out-1752632202373",
+          "group": "bottom"
+        }
+      ]
+    },
+    "id": "32df007b-cea4-497f-b490-232da9d2c4c4",
+    "data": {
+      "taskName": "完成施工、监理等招标工作，签订合同"
+    },
+    "zIndex": 33
+  },
+  {
+    "position": {
+      "x": 790,
+      "y": 1140
+    },
+    "size": {
+      "width": 180,
+      "height": 40
+    },
+    "shape": "dag-commonTaskNode",
+    "component": {
+      "template": "<common-task-node />",
+      "components": {
+        "commonTaskNode": {
+          "name": "commonTaskNode",
+          "inject": {
+            "getGraph": {
+              "from": "getGraph"
+            },
+            "getNode": {
+              "from": "getNode"
+            }
+          },
+          "staticRenderFns": [],
+          "_compiled": true,
+          "_scopeId": "data-v-87d96f1e",
+          "beforeCreate": [
+            null
+          ],
+          "beforeDestroy": [
+            null
+          ],
+          "__file": "src/views/system/antx6flow/components/nodeTheme/commonTaskNode.vue",
+          "_Ctor": {}
+        }
+      },
+      "_Ctor": {}
+    },
+    "ports": {
+      "groups": {
+        "top": {
+          "position": "top",
+          "attrs": {
+            "circle": {
+              "r": 4,
+              "magnet": true,
+              "stroke": "#C2C8D5",
+              "strokeWidth": 1,
+              "fill": "#fff"
+            }
+          }
+        },
+        "bottom": {
+          "position": "bottom",
+          "attrs": {
+            "circle": {
+              "r": 4,
+              "magnet": true,
+              "stroke": "#C2C8D5",
+              "strokeWidth": 1,
+              "fill": "#fff"
+            }
+          }
+        }
+      },
+      "items": [
+        {
+          "id": "in-1752632376599",
+          "group": "top"
+        },
+        {
+          "id": "out-1752632376599",
+          "group": "bottom"
+        }
+      ]
+    },
+    "id": "6dafe4c6-e520-4977-9aaf-4037127a00ad",
+    "data": {
+      "taskName": "质安监手续"
+    },
+    "zIndex": 34
+  },
+  {
+    "position": {
+      "x": 790,
+      "y": 1300
+    },
+    "size": {
+      "width": 180,
+      "height": 40
+    },
+    "shape": "dag-commonTaskNode",
+    "component": {
+      "template": "<common-task-node />",
+      "components": {
+        "commonTaskNode": {
+          "name": "commonTaskNode",
+          "inject": {
+            "getGraph": {
+              "from": "getGraph"
+            },
+            "getNode": {
+              "from": "getNode"
+            }
+          },
+          "staticRenderFns": [],
+          "_compiled": true,
+          "_scopeId": "data-v-87d96f1e",
+          "beforeCreate": [
+            null
+          ],
+          "beforeDestroy": [
+            null
+          ],
+          "__file": "src/views/system/antx6flow/components/nodeTheme/commonTaskNode.vue",
+          "_Ctor": {}
+        }
+      },
+      "_Ctor": {}
+    },
+    "ports": {
+      "groups": {
+        "top": {
+          "position": "top",
+          "attrs": {
+            "circle": {
+              "r": 4,
+              "magnet": true,
+              "stroke": "#C2C8D5",
+              "strokeWidth": 1,
+              "fill": "#fff"
+            }
+          }
+        },
+        "bottom": {
+          "position": "bottom",
+          "attrs": {
+            "circle": {
+              "r": 4,
+              "magnet": true,
+              "stroke": "#C2C8D5",
+              "strokeWidth": 1,
+              "fill": "#fff"
+            }
+          }
+        }
+      },
+      "items": [
+        {
+          "id": "in-1752632378774",
+          "group": "top"
+        },
+        {
+          "id": "out-1752632378774",
+          "group": "bottom"
+        }
+      ]
+    },
+    "id": "75f3b425-4a2f-4720-ba01-7fc89d1c31e5",
+    "data": {
+      "taskName": "临时设施施工"
+    },
+    "zIndex": 35
+  },
+  {
+    "position": {
+      "x": 790,
+      "y": 1060
+    },
+    "size": {
+      "width": 180,
+      "height": 40
+    },
+    "shape": "dag-commonTaskNode",
+    "component": {
+      "template": "<common-task-node />",
+      "components": {
+        "commonTaskNode": {
+          "name": "commonTaskNode",
+          "inject": {
+            "getGraph": {
+              "from": "getGraph"
+            },
+            "getNode": {
+              "from": "getNode"
+            }
+          },
+          "staticRenderFns": [],
+          "_compiled": true,
+          "_scopeId": "data-v-87d96f1e",
+          "beforeCreate": [
+            null
+          ],
+          "beforeDestroy": [
+            null
+          ],
+          "__file": "src/views/system/antx6flow/components/nodeTheme/commonTaskNode.vue",
+          "_Ctor": {}
+        }
+      },
+      "_Ctor": {}
+    },
+    "ports": {
+      "groups": {
+        "top": {
+          "position": "top",
+          "attrs": {
+            "circle": {
+              "r": 4,
+              "magnet": true,
+              "stroke": "#C2C8D5",
+              "strokeWidth": 1,
+              "fill": "#fff"
+            }
+          }
+        },
+        "bottom": {
+          "position": "bottom",
+          "attrs": {
+            "circle": {
+              "r": 4,
+              "magnet": true,
+              "stroke": "#C2C8D5",
+              "strokeWidth": 1,
+              "fill": "#fff"
+            }
+          }
+        }
+      },
+      "items": [
+        {
+          "id": "in-1752632379967",
+          "group": "top"
+        },
+        {
+          "id": "out-1752632379967",
+          "group": "bottom"
+        }
+      ]
+    },
+    "id": "1bee0e4a-78ee-47df-84fd-549162f24385",
+    "data": {
+      "taskName": "工程管理"
+    },
+    "zIndex": 36
+  },
+  {
+    "position": {
+      "x": 790,
+      "y": 1220
+    },
+    "size": {
+      "width": 180,
+      "height": 40
+    },
+    "shape": "dag-commonTaskNode",
+    "component": {
+      "template": "<common-task-node />",
+      "components": {
+        "commonTaskNode": {
+          "name": "commonTaskNode",
+          "inject": {
+            "getGraph": {
+              "from": "getGraph"
+            },
+            "getNode": {
+              "from": "getNode"
+            }
+          },
+          "staticRenderFns": [],
+          "_compiled": true,
+          "_scopeId": "data-v-87d96f1e",
+          "beforeCreate": [
+            null
+          ],
+          "beforeDestroy": [
+            null
+          ],
+          "__file": "src/views/system/antx6flow/components/nodeTheme/commonTaskNode.vue",
+          "_Ctor": {}
+        }
+      },
+      "_Ctor": {}
+    },
+    "ports": {
+      "groups": {
+        "top": {
+          "position": "top",
+          "attrs": {
+            "circle": {
+              "r": 4,
+              "magnet": true,
+              "stroke": "#C2C8D5",
+              "strokeWidth": 1,
+              "fill": "#fff"
+            }
+          }
+        },
+        "bottom": {
+          "position": "bottom",
+          "attrs": {
+            "circle": {
+              "r": 4,
+              "magnet": true,
+              "stroke": "#C2C8D5",
+              "strokeWidth": 1,
+              "fill": "#fff"
+            }
+          }
+        }
+      },
+      "items": [
+        {
+          "id": "in-1752632381198",
+          "group": "top"
+        },
+        {
+          "id": "out-1752632381198",
+          "group": "bottom"
+        }
+      ]
+    },
+    "id": "e4a00798-bdd7-4ee7-802c-74da22f57a67",
+    "data": {
+      "taskName": "取得施工许可"
+    },
+    "zIndex": 37
+  },
+  {
+    "position": {
+      "x": 510,
+      "y": 1140
+    },
+    "size": {
+      "width": 180,
+      "height": 40
+    },
+    "shape": "dag-commonTaskNode",
+    "component": {
+      "template": "<common-task-node />",
+      "components": {
+        "commonTaskNode": {
+          "name": "commonTaskNode",
+          "inject": {
+            "getGraph": {
+              "from": "getGraph"
+            },
+            "getNode": {
+              "from": "getNode"
+            }
+          },
+          "staticRenderFns": [],
+          "_compiled": true,
+          "_scopeId": "data-v-87d96f1e",
+          "beforeCreate": [
+            null
+          ],
+          "beforeDestroy": [
+            null
+          ],
+          "__file": "src/views/system/antx6flow/components/nodeTheme/commonTaskNode.vue",
+          "_Ctor": {}
+        }
+      },
+      "_Ctor": {}
+    },
+    "ports": {
+      "groups": {
+        "top": {
+          "position": "top",
+          "attrs": {
+            "circle": {
+              "r": 4,
+              "magnet": true,
+              "stroke": "#C2C8D5",
+              "strokeWidth": 1,
+              "fill": "#fff"
+            }
+          }
+        },
+        "bottom": {
+          "position": "bottom",
+          "attrs": {
+            "circle": {
+              "r": 4,
+              "magnet": true,
+              "stroke": "#C2C8D5",
+              "strokeWidth": 1,
+              "fill": "#fff"
+            }
+          }
+        }
+      },
+      "items": [
+        {
+          "id": "in-1752632466895",
+          "group": "top"
+        },
+        {
+          "id": "out-1752632466895",
+          "group": "bottom"
+        }
+      ]
+    },
+    "id": "67766fa2-bfe3-4a3e-ab8f-2be0543a4f39",
+    "data": {
+      "taskName": "用地批复"
+    },
+    "zIndex": 38
+  },
+  {
+    "position": {
+      "x": 510,
+      "y": 1220
+    },
+    "size": {
+      "width": 180,
+      "height": 40
+    },
+    "shape": "dag-commonTaskNode",
+    "component": {
+      "template": "<common-task-node />",
+      "components": {
+        "commonTaskNode": {
+          "name": "commonTaskNode",
+          "inject": {
+            "getGraph": {
+              "from": "getGraph"
+            },
+            "getNode": {
+              "from": "getNode"
+            }
+          },
+          "staticRenderFns": [],
+          "_compiled": true,
+          "_scopeId": "data-v-87d96f1e",
+          "beforeCreate": [
+            null
+          ],
+          "beforeDestroy": [
+            null
+          ],
+          "__file": "src/views/system/antx6flow/components/nodeTheme/commonTaskNode.vue",
+          "_Ctor": {}
+        }
+      },
+      "_Ctor": {}
+    },
+    "ports": {
+      "groups": {
+        "top": {
+          "position": "top",
+          "attrs": {
+            "circle": {
+              "r": 4,
+              "magnet": true,
+              "stroke": "#C2C8D5",
+              "strokeWidth": 1,
+              "fill": "#fff"
+            }
+          }
+        },
+        "bottom": {
+          "position": "bottom",
+          "attrs": {
+            "circle": {
+              "r": 4,
+              "magnet": true,
+              "stroke": "#C2C8D5",
+              "strokeWidth": 1,
+              "fill": "#fff"
+            }
+          }
+        }
+      },
+      "items": [
+        {
+          "id": "in-1752632468346",
+          "group": "top"
+        },
+        {
+          "id": "out-1752632468346",
+          "group": "bottom"
+        }
+      ]
+    },
+    "id": "c15df714-2116-4734-b359-6f9e4657cdd2",
+    "data": {
+      "taskName": "临时用地办理"
+    },
+    "zIndex": 39
+  },
+  {
+    "position": {
+      "x": 510,
+      "y": 980
+    },
+    "size": {
+      "width": 180,
+      "height": 40
+    },
+    "shape": "dag-commonTaskNode",
+    "component": {
+      "template": "<common-task-node />",
+      "components": {
+        "commonTaskNode": {
+          "name": "commonTaskNode",
+          "inject": {
+            "getGraph": {
+              "from": "getGraph"
+            },
+            "getNode": {
+              "from": "getNode"
+            }
+          },
+          "staticRenderFns": [],
+          "_compiled": true,
+          "_scopeId": "data-v-87d96f1e",
+          "beforeCreate": [
+            null
+          ],
+          "beforeDestroy": [
+            null
+          ],
+          "__file": "src/views/system/antx6flow/components/nodeTheme/commonTaskNode.vue",
+          "_Ctor": {}
+        }
+      },
+      "_Ctor": {}
+    },
+    "ports": {
+      "groups": {
+        "top": {
+          "position": "top",
+          "attrs": {
+            "circle": {
+              "r": 4,
+              "magnet": true,
+              "stroke": "#C2C8D5",
+              "strokeWidth": 1,
+              "fill": "#fff"
+            }
+          }
+        },
+        "bottom": {
+          "position": "bottom",
+          "attrs": {
+            "circle": {
+              "r": 4,
+              "magnet": true,
+              "stroke": "#C2C8D5",
+              "strokeWidth": 1,
+              "fill": "#fff"
+            }
+          }
+        }
+      },
+      "items": [
+        {
+          "id": "in-1752632472184",
+          "group": "top"
+        },
+        {
+          "id": "out-1752632472184",
+          "group": "bottom"
+        }
+      ]
+    },
+    "id": "c8494a68-02d7-49db-b5ef-eb226fdbd4e4",
+    "data": {
+      "taskName": "工程中心工程管理科"
+    },
+    "zIndex": 41
+  },
+  {
+    "position": {
+      "x": 1090,
+      "y": 980
+    },
+    "size": {
+      "width": 180,
+      "height": 40
+    },
+    "shape": "dag-commonTaskNode",
+    "component": {
+      "template": "<common-task-node />",
+      "components": {
+        "commonTaskNode": {
+          "name": "commonTaskNode",
+          "inject": {
+            "getGraph": {
+              "from": "getGraph"
+            },
+            "getNode": {
+              "from": "getNode"
+            }
+          },
+          "staticRenderFns": [],
+          "_compiled": true,
+          "_scopeId": "data-v-87d96f1e",
+          "beforeCreate": [
+            null
+          ],
+          "beforeDestroy": [
+            null
+          ],
+          "__file": "src/views/system/antx6flow/components/nodeTheme/commonTaskNode.vue",
+          "_Ctor": {}
+        }
+      },
+      "_Ctor": {}
+    },
+    "ports": {
+      "groups": {
+        "top": {
+          "position": "top",
+          "attrs": {
+            "circle": {
+              "r": 4,
+              "magnet": true,
+              "stroke": "#C2C8D5",
+              "strokeWidth": 1,
+              "fill": "#fff"
+            }
+          }
+        },
+        "bottom": {
+          "position": "bottom",
+          "attrs": {
+            "circle": {
+              "r": 4,
+              "magnet": true,
+              "stroke": "#C2C8D5",
+              "strokeWidth": 1,
+              "fill": "#fff"
+            }
+          }
+        }
+      },
+      "items": [
+        {
+          "id": "in-1752632473413",
+          "group": "top"
+        },
+        {
+          "id": "out-1752632473413",
+          "group": "bottom"
+        }
+      ]
+    },
+    "id": "090034ed-1ec2-47e3-a77f-a2ead84affb7",
+    "data": {
+      "taskName": "项目安评"
+    },
+    "zIndex": 42
+  },
+  {
+    "position": {
+      "x": 1090,
+      "y": 1060
+    },
+    "size": {
+      "width": 180,
+      "height": 40
+    },
+    "shape": "dag-commonTaskNode",
+    "component": {
+      "template": "<common-task-node />",
+      "components": {
+        "commonTaskNode": {
+          "name": "commonTaskNode",
+          "inject": {
+            "getGraph": {
+              "from": "getGraph"
+            },
+            "getNode": {
+              "from": "getNode"
+            }
+          },
+          "staticRenderFns": [],
+          "_compiled": true,
+          "_scopeId": "data-v-87d96f1e",
+          "beforeCreate": [
+            null
+          ],
+          "beforeDestroy": [
+            null
+          ],
+          "__file": "src/views/system/antx6flow/components/nodeTheme/commonTaskNode.vue",
+          "_Ctor": {}
+        }
+      },
+      "_Ctor": {}
+    },
+    "ports": {
+      "groups": {
+        "top": {
+          "position": "top",
+          "attrs": {
+            "circle": {
+              "r": 4,
+              "magnet": true,
+              "stroke": "#C2C8D5",
+              "strokeWidth": 1,
+              "fill": "#fff"
+            }
+          }
+        },
+        "bottom": {
+          "position": "bottom",
+          "attrs": {
+            "circle": {
+              "r": 4,
+              "magnet": true,
+              "stroke": "#C2C8D5",
+              "strokeWidth": 1,
+              "fill": "#fff"
+            }
+          }
+        }
+      },
+      "items": [
+        {
+          "id": "in-1752632474780",
+          "group": "top"
+        },
+        {
+          "id": "out-1752632474780",
+          "group": "bottom"
+        }
+      ]
+    },
+    "id": "061c80a9-cc53-4319-8e40-eb3ec7efd51f",
+    "data": {
+      "taskName": "质监站"
+    },
+    "zIndex": 43
+  },
+  {
+    "position": {
+      "x": 1090,
+      "y": 1140
+    },
+    "size": {
+      "width": 180,
+      "height": 40
+    },
+    "shape": "dag-commonTaskNode",
+    "component": {
+      "template": "<common-task-node />",
+      "components": {
+        "commonTaskNode": {
+          "name": "commonTaskNode",
+          "inject": {
+            "getGraph": {
+              "from": "getGraph"
+            },
+            "getNode": {
+              "from": "getNode"
+            }
+          },
+          "staticRenderFns": [],
+          "_compiled": true,
+          "_scopeId": "data-v-87d96f1e",
+          "beforeCreate": [
+            null
+          ],
+          "beforeDestroy": [
+            null
+          ],
+          "__file": "src/views/system/antx6flow/components/nodeTheme/commonTaskNode.vue",
+          "_Ctor": {}
+        }
+      },
+      "_Ctor": {}
+    },
+    "ports": {
+      "groups": {
+        "top": {
+          "position": "top",
+          "attrs": {
+            "circle": {
+              "r": 4,
+              "magnet": true,
+              "stroke": "#C2C8D5",
+              "strokeWidth": 1,
+              "fill": "#fff"
+            }
+          }
+        },
+        "bottom": {
+          "position": "bottom",
+          "attrs": {
+            "circle": {
+              "r": 4,
+              "magnet": true,
+              "stroke": "#C2C8D5",
+              "strokeWidth": 1,
+              "fill": "#fff"
+            }
+          }
+        }
+      },
+      "items": [
+        {
+          "id": "in-1752632475997",
+          "group": "top"
+        },
+        {
+          "id": "out-1752632475997",
+          "group": "bottom"
+        }
+      ]
+    },
+    "id": "65927a7f-39bf-45fb-86b2-4d34f1b79366",
+    "data": {
+      "taskName": "规划建设管理科"
+    },
+    "zIndex": 44
+  },
+  {
+    "position": {
+      "x": 1090,
+      "y": 1300
+    },
+    "size": {
+      "width": 180,
+      "height": 40
+    },
+    "shape": "dag-commonTaskNode",
+    "component": {
+      "template": "<common-task-node />",
+      "components": {
+        "commonTaskNode": {
+          "name": "commonTaskNode",
+          "inject": {
+            "getGraph": {
+              "from": "getGraph"
+            },
+            "getNode": {
+              "from": "getNode"
+            }
+          },
+          "staticRenderFns": [],
+          "_compiled": true,
+          "_scopeId": "data-v-87d96f1e",
+          "beforeCreate": [
+            null
+          ],
+          "beforeDestroy": [
+            null
+          ],
+          "__file": "src/views/system/antx6flow/components/nodeTheme/commonTaskNode.vue",
+          "_Ctor": {}
+        }
+      },
+      "_Ctor": {}
+    },
+    "ports": {
+      "groups": {
+        "top": {
+          "position": "top",
+          "attrs": {
+            "circle": {
+              "r": 4,
+              "magnet": true,
+              "stroke": "#C2C8D5",
+              "strokeWidth": 1,
+              "fill": "#fff"
+            }
+          }
+        },
+        "bottom": {
+          "position": "bottom",
+          "attrs": {
+            "circle": {
+              "r": 4,
+              "magnet": true,
+              "stroke": "#C2C8D5",
+              "strokeWidth": 1,
+              "fill": "#fff"
+            }
+          }
+        }
+      },
+      "items": [
+        {
+          "id": "in-1752632477500",
+          "group": "top"
+        },
+        {
+          "id": "out-1752632477500",
+          "group": "bottom"
+        }
+      ]
+    },
+    "id": "cf158675-1580-4767-a058-c3fd57e2330f",
+    "data": {
+      "taskName": "水土保持"
+    },
+    "zIndex": 45
   }
 ]

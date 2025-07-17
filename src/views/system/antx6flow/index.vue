@@ -85,11 +85,8 @@
           </el-tooltip>
         </header>
         <div id="draw-cot" />
-        <Drawer ref="drawer" @addNode="addNode" />
       </div>
     </section>
-    <DialogCondition ref="dialogCondition"></DialogCondition>
-    <DialogMysql ref="dialogMysql"></DialogMysql>
     <EditTaskInfoDialog ref="editTaskInfoDialog"></EditTaskInfoDialog>
   </div>
 </template>
@@ -98,95 +95,14 @@
 import { Graph, Path } from "@antv/x6";
 import "@antv/x6-vue-shape";
 
-import database from "./components/nodeTheme/database.vue";
-import condition from "./components/nodeTheme/condition.vue";
-import onlyout from "./components/nodeTheme/onlyOut.vue";
-import onlyin from "./components/nodeTheme/onlyIn.vue";
+import commonTaskNode from "./components/nodeTheme/commonTaskNode.vue";
 import DataJson from "./components/data";
 import MenuBar from "./components/menuBar";
-import Drawer from "./components/drawer";
-import DialogCondition from "./components/dialog/condition.vue";
-import DialogMysql from "./components/dialog/mysql.vue";
 import EditTaskInfoDialog from "./components/dialog/editTaskInfoDialog.vue";
-
-const nodeStatusList = [
-  [
-    {
-      id: "1",
-      status: "running",
-    },
-    {
-      id: "2",
-      status: "default",
-    },
-    {
-      id: "3",
-      status: "default",
-    },
-    {
-      id: "4",
-      status: "default",
-    },
-  ],
-  [
-    {
-      id: "1",
-      status: "success",
-    },
-    {
-      id: "2",
-      status: "running",
-    },
-    {
-      id: "3",
-      status: "default",
-    },
-    {
-      id: "4",
-      status: "default",
-    },
-  ],
-  [
-    {
-      id: "1",
-      status: "success",
-    },
-    {
-      id: "2",
-      status: "success",
-    },
-    {
-      id: "3",
-      status: "running",
-    },
-    {
-      id: "4",
-      status: "running",
-    },
-  ],
-  [
-    {
-      id: "1",
-      status: "success",
-    },
-    {
-      id: "2",
-      status: "success",
-    },
-    {
-      id: "3",
-      status: "success",
-    },
-    {
-      id: "4",
-      status: "failed",
-    },
-  ],
-];
 
 export default {
   name: "App",
-  components: { MenuBar, Drawer, DialogCondition, DialogMysql,EditTaskInfoDialog },
+  components: { MenuBar,EditTaskInfoDialog },
   data() {
     return {
       graph: "",
@@ -213,147 +129,15 @@ export default {
     initGraph() {
       // 注册节点
       Graph.registerNode(
-        "dag-condition",
+        "dag-commonTaskNode",
         {
           inherit: "vue-shape",
           width: 180,
           height: 36,
           component: {
-            template: `<condition />`,
+            template: `<common-task-node />`,
             components: {
-              condition,
-            },
-          },
-          ports: {
-            groups: {
-              top: {
-                position: "top",
-                attrs: {
-                  circle: {
-                    r: 4,
-                    magnet: true,
-                    stroke: "#C2C8D5",
-                    strokeWidth: 1,
-                    fill: "#fff",
-                  },
-                },
-              },
-              bottom: {
-                position: "bottom",
-                attrs: {
-                  circle: {
-                    r: 4,
-                    magnet: true,
-                    stroke: "#C2C8D5",
-                    strokeWidth: 1,
-                    fill: "#fff",
-                  },
-                },
-              },
-            },
-          },
-        },
-        true
-      );
-
-      Graph.registerNode(
-        "dag-output",
-        {
-          inherit: "vue-shape",
-          width: 180,
-          height: 36,
-          component: {
-            template: `<onlyout />`,
-            components: {
-              onlyout,
-            },
-          },
-          ports: {
-            groups: {
-              top: {
-                position: "top",
-                attrs: {
-                  circle: {
-                    r: 4,
-                    magnet: true,
-                    stroke: "#C2C8D5",
-                    strokeWidth: 1,
-                    fill: "#fff",
-                  },
-                },
-              },
-              bottom: {
-                position: "bottom",
-                attrs: {
-                  circle: {
-                    r: 4,
-                    magnet: true,
-                    stroke: "#C2C8D5",
-                    strokeWidth: 1,
-                    fill: "#fff",
-                  },
-                },
-              },
-            },
-          },
-        },
-        true
-      );
-
-      Graph.registerNode(
-        "dag-onlyIn",
-        {
-          inherit: "vue-shape",
-          width: 180,
-          height: 36,
-          component: {
-            template: `<onlyin />`,
-            components: {
-              onlyin,
-            },
-          },
-          ports: {
-            groups: {
-              top: {
-                position: "top",
-                attrs: {
-                  circle: {
-                    r: 4,
-                    magnet: true,
-                    stroke: "#C2C8D5",
-                    strokeWidth: 1,
-                    fill: "#fff",
-                  },
-                },
-              },
-              bottom: {
-                position: "bottom",
-                attrs: {
-                  circle: {
-                    r: 4,
-                    magnet: true,
-                    stroke: "#C2C8D5",
-                    strokeWidth: 1,
-                    fill: "#fff",
-                  },
-                },
-              },
-            },
-          },
-        },
-        true
-      );
-
-      Graph.registerNode(
-        "dag-node",
-        {
-          inherit: "vue-shape",
-          width: 180,
-          height: 36,
-          component: {
-            template: `<database />`,
-            components: {
-              database,
+              commonTaskNode,
             },
           },
           ports: {
@@ -532,11 +316,24 @@ export default {
         });
       });
 
+      //画布空白地方，鼠标右键单击事件
+      graph.on("blank:contextmenu", ({ e, x, y, node, view }) => {
+        console.log(e, x, y, view);
+        this.showContextMenu = true;
+
+        this.$nextTick(() => {
+          // this.$refs.menuBar.setItem({ type: 'node', item: node })
+          const p = graph.localToPage(x, y);
+          this.$refs.menuBar.initFn(p.x, p.y, { type: "blank", item: node });
+        });
+      });
+
+      //连线后的事件
       graph.on("edge:connected", ({ edge }) => {
         const source = graph.getCellById(edge.source.cell);
         const target = graph.getCellById(edge.target.cell);
 
-        // 只允许输入
+        /*// 只允许输入
         if (target.data.type == "output") {
           return graph.removeEdge(edge.id);
         }
@@ -565,7 +362,7 @@ export default {
           }
           this.$refs.dialogCondition.visible = true;
           this.$refs.dialogCondition.init(source.data, edge);
-        }
+        }*/
 
         edge.attr({
           line: {
@@ -591,6 +388,7 @@ export default {
         });
       });
     },
+
     async showNodeStatus(statusList) {
       const status = statusList.shift();
       status?.forEach((item) => {
@@ -606,6 +404,7 @@ export default {
         this.showNodeStatus(statusList);
       }, 300);
     },
+
     // 初始化节点/边
     init(data = []) {
       const cells = [];
@@ -619,21 +418,26 @@ export default {
       });
       this.graph.resetCells(cells);
     },
+
     zoomFn(num) {
       this.graph.zoom(num);
     },
+
     centerFn() {
       const num = 1 - this.graph.zoom();
       num > 1 ? this.graph.zoom(num * -1) : this.graph.zoom(num);
       this.graph.centerContent();
     },
+
     startFn(item) {
       this.timer && clearTimeout(this.timer);
       this.init(item || DataJson);
-      this.showNodeStatus(Object.assign([], nodeStatusList));
+      //this.showNodeStatus(Object.assign([], nodeStatusList));
       this.graph.centerContent();
     },
+
     createMenuFn() {},
+
     keyBindFn() {
       // copy cut paste
       this.graph.bindKey(["meta+c", "ctrl+c"], () => {
@@ -703,7 +507,7 @@ export default {
     },
 
     //这是右键菜单的回调函数
-    contextMenuFn(type, node) {
+    contextMenuFn(type, node,value,x,y) {
       switch (type) {
         case "remove":
           if (node.type == "edge") {
@@ -719,6 +523,10 @@ export default {
         case "editTask":
           this.$refs.editTaskInfoDialog.visible=true;
           this.$refs.editTaskInfoDialog.init(node);
+          break;
+        case "addGraphTaskNode":
+          this.addGraphTaskNode(value,x,y)
+          break
       }
 
       this.showContextMenu = false;
@@ -729,8 +537,27 @@ export default {
     },
     addNode(option) {
       const p = this.graph.pageToLocal(option.x, option.y);
+      console.log(JSON.stringify(option))
       this.graph.addNode(Object.assign({}, option, p));
     },
+
+    addGraphTaskNode(value,x,y){
+      const time = new Date().getTime();
+      const p = this.graph.pageToLocal(parseInt(x), parseInt(y));
+
+      let commonTaskNodeProperty={
+        "x":901,"y":297,"width":180,"height":40,"shape":"dag-commonTaskNode",
+        "data": {},
+        "ports":
+          {"groups":
+              {
+                "top":{"position":"top","attrs":{"circle":{"r":4,"magnet":true,"stroke":"#C2C8D5","strokeWidth":1,"fill":"#fff"}}},
+                "bottom":{"position":"bottom","attrs":{"circle":{"r":4,"magnet":true,"stroke":"#C2C8D5","strokeWidth":1,"fill":"#fff"}}}},
+            "items":[{"id":"in-"+time,"group":"top"},{"id":"out-"+time,"group":"bottom"}]
+          }}
+      this.graph.addNode(Object.assign({}, commonTaskNodeProperty, p));
+    }
+
   },
 };
 </script>
