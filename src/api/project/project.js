@@ -26,3 +26,12 @@ export function selectProjectLiuChengTuDataLogList(data) {
     data: data
   })
 }
+
+// 新增流程图数据
+export function insertLiuChengTuDataLog(data) {
+  return request({
+    url: '/project/liuChengTu/insertLiuChengTuDataLog',
+    method: 'post',
+    data: data
+  })
+}

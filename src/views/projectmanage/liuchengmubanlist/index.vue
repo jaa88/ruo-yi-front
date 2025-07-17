@@ -38,15 +38,19 @@
             type="text"
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
-            v-hasPermi="['system:notice:edit']"
           >修改</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
-            v-hasPermi="['system:notice:remove']"
           >删除</el-button>
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-delete"
+            @click="openLiuChengTuGraph(scope.row)"
+          >流程图</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -59,14 +63,20 @@
       @pagination="getList"
     />
 
+    <el-dialog title="流程图" :visible.sync="liuChengTuGraphVisible" width="800px" top="5vh" append-to-body fullscreen>
+      <myflow @saveFromMyflow="saveFromMyflow"></myflow>
+    </el-dialog>
+
   </div>
 </template>
 
 <script>
-import { selectProjectBaseList,selectProjectLiuChengTuTemplateList, selectProjectLiuChengTuDataLogList} from "@/api/project/project"
+  import Myflow from "../myflow/index";
+import { selectProjectBaseList,selectProjectLiuChengTuTemplateList, selectProjectLiuChengTuDataLogList,insertLiuChengTuDataLog} from "@/api/project/project"
 
 export default {
   name: "ProjectLiuChengTuTemplate",
+  components: { Myflow },
   data() {
     return {
       // 遮罩层
@@ -103,13 +113,25 @@ export default {
         noticeType: [
           { required: true, message: "公告类型不能为空", trigger: "change" }
         ]
-      }
+      },
+      liuChengTuGraphVisible:false,
+      curRow:null,
     }
   },
   created() {
     this.getList()
   },
   methods: {
+    saveFromMyflow(data){
+      let param={
+        "projectLiuChengTuTemplateId":this.curRow.id,
+        "currentCellsJsonStr":JSON.stringify(data["cells"])
+      }
+      insertLiuChengTuDataLog(param).then(response => {
+        alert("已保存成功")
+      })
+    },
+
     /** 查询列表数据 */
     getList() {
       this.loading = true
@@ -174,6 +196,11 @@ export default {
         this.getList()
         this.$modal.msgSuccess("删除成功")
       }).catch(() => {})
+    },
+
+    openLiuChengTuGraph(row){
+      this.curRow=row;
+      this.liuChengTuGraphVisible=true;
     }
   }
 }
