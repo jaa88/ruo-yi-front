@@ -8,3 +8,21 @@ export function selectProjectBaseList(data) {
     data: data
   })
 }
+
+// 查询模板列表
+export function selectProjectLiuChengTuTemplateList(data) {
+  return request({
+    url: '/project/liuChengTu/selectProjectLiuChengTuTemplateList',
+    method: 'post',
+    data: data
+  })
+}
+
+// 查询模板数据列表
+export function selectProjectLiuChengTuDataLogList(data) {
+  return request({
+    url: '/project/liuChengTu/selectProjectLiuChengTuDataLogList',
+    method: 'post',
+    data: data
+  })
+}
