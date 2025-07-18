@@ -35,3 +35,57 @@ export function insertLiuChengTuDataLog(data) {
     data: data
   })
 }
+
+// 新增项目基础信息
+export function insertProjectBase(data) {
+  return request({
+    url: '/project/base/insertProjectBase',
+    method: 'post',
+    data: data
+  })
+}
+
+// 更新项目基础信息
+export function updateProjectBase(data) {
+  return request({
+    url: '/project/base/updateProjectBase',
+    method: 'post',
+    data: data
+  })
+}
+
+// 删除项目基础信息
+export function deleteProjectBase(data) {
+  return request({
+    url: '/project/base/deleteProjectBase',
+    method: 'post',
+    data: data
+  })
+}
+
+// 新增模板信息
+export function insertProjectTemplate(data) {
+  return request({
+    url: '/project/base/insertProjectBase',
+    method: 'post',
+    data: data
+  })
+}
+
+// 更新模板信息
+export function updateProjectTemplate(data) {
+  return request({
+    url: '/project/base/updateProjectBase',
+    method: 'post',
+    data: data
+  })
+}
+
+// 删除项目流程图模板
+export function deleteProjectTemplate(data) {
+  return request({
+    url: '/project/liuChengTu/deleteProjectTemplate',
+    method: 'post',
+    data: data
+  })
+}

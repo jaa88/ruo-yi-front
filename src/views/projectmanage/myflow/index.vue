@@ -65,13 +65,15 @@ import { Graph, Path } from "@antv/x6";
 import "@antv/x6-vue-shape";
 
 import commonTaskNode from "./components/nodeTheme/commonTaskNode.vue";
-import DataJson from "./components/data";
 import MenuBar from "./components/menuBar";
 import EditTaskInfoDialog from "./components/dialog/editTaskInfoDialog.vue";
 
 export default {
   name: "myflow",
   components: { MenuBar,EditTaskInfoDialog },
+  props:{
+    parentCellsJsonStr:String
+  },
   data() {
     return {
       graph: "",
@@ -191,7 +193,7 @@ export default {
           },
         },
         background: {
-          color: "#fffbe6", // 设置画布背景颜色
+          //color: "#fffbe6", // 设置画布背景颜色
         },
         container: document.getElementById("draw-cot"),
         panning: {
@@ -301,38 +303,6 @@ export default {
       graph.on("edge:connected", ({ edge }) => {
         const source = graph.getCellById(edge.source.cell);
         const target = graph.getCellById(edge.target.cell);
-
-        /*// 只允许输入
-        if (target.data.type == "output") {
-          return graph.removeEdge(edge.id);
-        }
-
-        // 只允许输出
-        if (source.data.type == "onlyIn") {
-          return graph.removeEdge(edge.id);
-        }
-
-        // 如果线源头的一端链接桩只允许输入
-        if (/in/.test(edge.source.port)) {
-          return graph.removeEdge(edge.id);
-        }
-
-        // 目标一端链接桩只允许输出
-        if (/out/.test(edge.target.port)) {
-          return graph.removeEdge(edge.id);
-        }
-
-        if (source.data.type == "condition") {
-          console.log(source);
-          console.log(target);
-          console.log(edge);
-          if (target.data.t === edge.id || target.data.f === edge.id) {
-            return graph.removeEdge(edge.id);
-          }
-          this.$refs.dialogCondition.visible = true;
-          this.$refs.dialogCondition.init(source.data, edge);
-        }*/
-
         edge.attr({
           line: {
             strokeDasharray: "",
@@ -400,7 +370,7 @@ export default {
 
     startFn(item) {
       this.timer && clearTimeout(this.timer);
-      this.init(item || DataJson);
+      this.init(item || JSON.parse(this.parentCellsJsonStr));
       //this.showNodeStatus(Object.assign([], nodeStatusList));
       this.graph.centerContent();
     },
@@ -462,8 +432,7 @@ export default {
     },
     loadFn() {
       this.timer && clearTimeout(this.timer);
-      const x6Json = JSON.parse(localStorage.getItem("x6Json"));
-
+      const x6Json = JSON.parse(this.parentCellsJsonStr);
       this.startFn(x6Json.cells);
     },
     lockFn() {
@@ -534,7 +503,6 @@ export default {
 </script>
 
 <style lang="sass" scoped>
-
   header
     display: flex
     justify-content: flex-end

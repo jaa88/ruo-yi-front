@@ -63,8 +63,26 @@
       @pagination="getList"
     />
 
-    <el-dialog title="流程图" :visible.sync="liuChengTuGraphVisible" width="800px" top="5vh" append-to-body fullscreen>
-      <myflow @saveFromMyflow="saveFromMyflow"></myflow>
+    <div v-if="liuChengTuGraphVisible">
+      <el-dialog title="流程图" :visible.sync="liuChengTuGraphVisible" width="800px" top="5vh" append-to-body fullscreen>
+        <myflow @saveFromMyflow="saveFromMyflow"></myflow>
+      </el-dialog>
+    </div>
+
+    <!-- 添加或修改岗位对话框 -->
+    <el-dialog :title="addOrUpdateTemplateDialogTitle" :visible.sync="addOrUpdateLiuChengTuTemplateVisible" width="500px" append-to-body>
+      <el-form ref="addOrUpdateTemplateForm" :model="addOrUpdateTemplateForm" :rules="addOrUpdateTemplateFormRules" label-width="80px">
+        <el-form-item label="模板名称" prop="postName">
+          <el-input v-model="addOrUpdateTemplateForm.templateName" placeholder="模板名称" />
+        </el-form-item>
+        <el-form-item label="备注" prop="postCode">
+          <el-input v-model="addOrUpdateTemplateForm.remark" placeholder="备注" />
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="submitForm">确 定</el-button>
+        <el-button @click="cancelAddOrUpdateTemplate">取 消</el-button>
+      </div>
     </el-dialog>
 
   </div>
@@ -72,7 +90,7 @@
 
 <script>
   import Myflow from "../myflow/index";
-import { selectProjectBaseList,selectProjectLiuChengTuTemplateList, selectProjectLiuChengTuDataLogList,insertLiuChengTuDataLog} from "@/api/project/project"
+import { selectProjectBaseList,selectProjectLiuChengTuTemplateList, selectProjectLiuChengTuDataLogList,insertLiuChengTuDataLog,insertProjectBase} from "@/api/project/project"
 
 export default {
   name: "ProjectLiuChengTuTemplate",
@@ -81,14 +99,6 @@ export default {
     return {
       // 遮罩层
       loading: true,
-      // 选中数组
-      ids: [],
-      // 非单个禁用
-      single: true,
-      // 非多个禁用
-      multiple: true,
-      // 显示搜索条件
-      showSearch: true,
       // 总条数
       total: 0,
       // 公告表格数据
@@ -104,18 +114,18 @@ export default {
         templateName: "",
       },
       // 表单参数
-      form: {},
+      addOrUpdateTemplateForm: {},
       // 表单校验
-      rules: {
-        noticeTitle: [
-          { required: true, message: "公告标题不能为空", trigger: "blur" }
-        ],
-        noticeType: [
-          { required: true, message: "公告类型不能为空", trigger: "change" }
+      addOrUpdateTemplateFormRules: {
+        templateName: [
+          { required: true, message: "项目名称不能为空", trigger: "blur" }
         ]
       },
       liuChengTuGraphVisible:false,
       curRow:null,
+      //打开新增模板dialog
+      addOrUpdateTemplateDialogTitle:"",
+      addOrUpdateLiuChengTuTemplateVisible:false,
     }
   },
   created() {
@@ -150,41 +160,46 @@ export default {
 
     /** 新增按钮操作 */
     handleAdd() {
-      this.reset()
-      this.open = true
-      this.title = "添加公告"
+      this.addOrUpdateTemplateDialogTitle="新增项目";
+      this.addOrUpdateLiuChengTuTemplateVisible = true;
     },
 
     /** 修改按钮操作 */
     handleUpdate(row) {
-      this.reset()
-      const noticeId = row.noticeId || this.ids
-      getNotice(noticeId).then(response => {
-        this.form = response.data
-        this.open = true
-        this.title = "修改公告"
-      })
+      this.addOrUpdateTemplateForm={
+        "templateName":row.templateName,
+        "remark":row.remark,
+        "id":row.id
+      }
+      this.addOrUpdateTemplateDialogTitle="修改项目";
+      this.addOrUpdateLiuChengTuTemplateVisible = true;
     },
 
     /** 提交按钮 */
     submitForm: function() {
-      this.$refs["form"].validate(valid => {
+      this.$refs["addOrUpdateTemplateForm"].validate(valid => {
         if (valid) {
-          if (this.form.noticeId != undefined) {
-            updateNotice(this.form).then(response => {
+          if (this.addOrUpdateTemplateForm.id != undefined) {
+            updateProjectBase(this.addOrUpdateTemplateForm).then(response => {
               this.$modal.msgSuccess("修改成功")
-              this.open = false
+              this.addOrUpdateLiuChengTuTemplateVisible = false
               this.getList()
             })
           } else {
-            addNotice(this.form).then(response => {
+            insertProjectBase(this.addOrUpdateTemplateForm).then(response => {
               this.$modal.msgSuccess("新增成功")
-              this.open = false
+              this.addOrUpdateLiuChengTuTemplateVisible = false
               this.getList()
             })
           }
         }
       })
+    },
+
+    //取消新增或修改
+    cancelAddOrUpdateTemplate(){
+      this.addOrUpdateLiuChengTuTemplateVisible=false;
+      this.addOrUpdateTemplateForm={};
     },
 
     /** 删除按钮操作 */

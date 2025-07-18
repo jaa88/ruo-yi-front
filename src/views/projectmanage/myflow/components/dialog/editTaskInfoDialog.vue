@@ -3,6 +3,7 @@
     title="编辑任务"
     :visible.sync="visible"
     width="500px"
+    append-to-body
   >
     <el-form :inline="true" class="demo-form-inline" label-width="120px" label-position="left">
       <el-form-item label="任务名称">
