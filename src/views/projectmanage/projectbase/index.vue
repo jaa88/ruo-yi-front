@@ -16,26 +16,50 @@
       </el-form-item>
     </el-form>
 
-    <el-table v-loading="loading" :data="tableData">
-      <el-table-column  label="序号" width="60px" align="center">
+    <el-table v-loading="loading" :data="tableData"  class="custom-class" stripe>
+      <el-table-column  label="序号" min-width="60px" align="center">
         <template slot-scope="scope"> {{(queryParams.pageNum-1)*queryParams.pageSize+(scope.$index+1)}} </template>
       </el-table-column>
 
-      <el-table-column  label="项目名称" align="center" :show-overflow-tooltip="true">
+      <el-table-column  label="项目名称" align="center" min-width="120px" :show-overflow-tooltip="true">
         <template slot-scope="scope"> {{scope.row.projectName}} </template>
       </el-table-column>
 
-      <el-table-column  label="备注" align="center" :show-overflow-tooltip="true">
+      <el-table-column label="负责人员" align="center" prop="createTime" min-width="120px"  :show-overflow-tooltip="true">
+        <template slot-scope="scope">
+          <span v-for="item in scope.row.canEditProjectUserList">{{ item.nickName+";" }}</span>
+        </template>
+      </el-table-column>
+
+      <el-table-column  label="备注" min-width="120px" align="center" :show-overflow-tooltip="true">
         <template slot-scope="scope"> {{scope.row.remark}} </template>
       </el-table-column>
 
-      <el-table-column label="创建者" align="center" prop="createBy" width="100" />
-      <el-table-column label="创建时间" align="center" prop="createTime" width="100">
+      <el-table-column label="任务进度" align="center"  min-width="120px">
         <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.createTime, '{y}-{m}-{d}') }}</span>
+          <el-tag>{{scope.row.allDoneNodeCount+'/'+scope.row.allPayAttentionNodeCount}}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+
+      <el-table-column label="进行中任务" align="left" prop="createTime" min-width="200px"  :show-overflow-tooltip="true">
+        <template slot-scope="scope">
+          <div v-if="hasValidTasks(scope.row.cellsJsonStr)">
+            <div v-for="(task, idx) in getNumberedTasks(scope.row.cellsJsonStr)"
+                 :key="idx">
+              {{ task }}
+            </div>
+          </div>
+        </template>
+      </el-table-column>
+
+
+      <el-table-column label="更新时间" align="center" prop="createTime" width="100">
+        <template slot-scope="scope">
+          <span>{{ parseTime(scope.row.updateTime, '{y}-{m}-{d}') }}</span>
+        </template>
+      </el-table-column>
+
+      <el-table-column label="操作" align="center" min-width="150px" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
             size="mini"
@@ -67,18 +91,31 @@
       @pagination="getList"
     />
 
-    <el-dialog title="流程图" :visible.sync="liuChengTuGraphVisible" width="1400px" top="5vh" append-to-body  :destroy-on-close="true">
-      <myflow :parentCellsJsonStr="parentCellsJsonStr" @saveFromMyflow="saveFromMyflow"></myflow>
-    </el-dialog>
-
+    <div v-if="liuChengTuGraphVisible">
+      <el-dialog title="流程图" :visible.sync="liuChengTuGraphVisible" width="1400px" top="5vh" append-to-body >
+        <myflow :parentCellsJsonStr="parentCellsJsonStr" :projectCanEditProjectUserList="curRowCanEditProjectUserList"  @saveFromMyflow="saveFromMyflow"></myflow>
+      </el-dialog>
+    </div>
 
     <!-- 添加或修改岗位对话框 -->
     <el-dialog id="ffff" :title="addOrUpdateProjectBaseDialogTitle" :visible.sync="addOrUpdateProjectBaseVisible" width="500px" append-to-body>
       <el-form ref="addOrUpdateProjectBaseForm" :model="addOrUpdateProjectBaseForm" :rules="addOrUpdateProjectBaseFormRules" label-width="80px">
-        <el-form-item label="项目名称" prop="postName">
+        <el-form-item label="项目名称" prop="projectName">
           <el-input v-model="addOrUpdateProjectBaseForm.projectName" placeholder="项目名称" />
         </el-form-item>
-        <el-form-item label="备注" prop="postCode">
+
+        <el-form-item label="相关人员" prop="projectName">
+          <el-select v-model="addOrUpdateProjectBaseForm.canEditProjectUserIdList" filterable multiple placeholder="请选择">
+            <el-option
+              v-for="item in allUserList"
+              :key="item.userId"
+              :label="item.nickName"
+              :value="item.userId">
+            </el-option>
+          </el-select>
+        </el-form-item>
+
+        <el-form-item label="备注" prop="remark">
           <el-input v-model="addOrUpdateProjectBaseForm.remark" placeholder="备注" />
         </el-form-item>
       </el-form>
@@ -93,6 +130,7 @@
 
 <script>
   import Myflow from "../myflow/index";
+  import {selectAllUserList} from  "@/api/system/user"
   import { selectProjectBaseList,selectProjectLiuChengTuTemplateList, selectProjectLiuChengTuDataLogList,insertLiuChengTuDataLog,insertProjectBase,updateProjectBase,deleteProjectBase } from "@/api/project/project"
 
 export default {
@@ -122,23 +160,48 @@ export default {
       },
       liuChengTuGraphVisible:false,
       curRow:null,
+      //能够操作项目的人员
+      curRowCanEditProjectUserList:[],
       //打开新增模板dialog
       addOrUpdateProjectBaseDialogTitle:"",
       addOrUpdateProjectBaseVisible:false,
       parentCellsJsonStr:"",
+      //所有的user
+      allUserList:[],
     }
   },
   created() {
     this.getList()
   },
+
+  mounted(){
+    this.selectAllUserList();
+  },
   methods: {
+    //进行中的任务
+    getNumberedTasks(jsonStr) {
+      const result = [];
+      JSON.parse(jsonStr).forEach(item => {
+        if (item.shape == 'dag-commonTaskNode' && item.data?.status == 2) {
+          result.push(`${result.length + 1}.${item.data.taskName}`);
+        }
+      });
+      return result;
+    },
+
+    hasValidTasks(jsonStr) {
+      return jsonStr!=null && jsonStr.length > 10;
+    },
+
     saveFromMyflow(data){
+      let curObj=this;
       let param={
         "projectBaseId":this.curRow.id,
         "currentCellsJsonStr":JSON.stringify(data["cells"])
       }
       insertLiuChengTuDataLog(param).then(response => {
         alert("已保存成功")
+        curObj.getList();
       })
     },
     
@@ -146,7 +209,29 @@ export default {
     getList() {
       this.loading = true
       selectProjectBaseList(this.queryParams).then(response => {
-        this.tableData = response.data
+        //补充现在的进度
+        let tableData=response.data;
+        for(let i=0;i<tableData.length;i++){
+          let row=tableData[i];
+          let allPayAttentionNodeCount=0;
+          let allDoneNodeCount=0;
+          if(row.cellsJsonStr!=null && row.cellsJsonStr.length>10){
+            JSON.parse(row.cellsJsonStr).forEach(item => {
+              //1 未开始 2 进行中 3 完成 4 不再关注 5 部分完成
+              if (item.shape == 'dag-commonTaskNode' && item.data?.status != 4) {
+                allPayAttentionNodeCount+=1;
+                if(item.data?.status == 3){
+                  allDoneNodeCount+=1;
+                }
+              }
+            });
+            tableData[i]["allPayAttentionNodeCount"]=allPayAttentionNodeCount;
+            tableData[i]["allDoneNodeCount"]=allDoneNodeCount;
+          }else{
+            tableData[i]["allPayAttentionNodeCount"]=0;
+            tableData[i]["allDoneNodeCount"]=0;          }
+        }
+        this.tableData = response.data;
         this.total = response.total
         this.loading = false
       })
@@ -170,6 +255,7 @@ export default {
       this.addOrUpdateProjectBaseForm={
         "projectName":row.projectName,
         "remark":row.remark,
+        "canEditProjectUserIdList":row.canEditProjectUserIdList,
         "id":row.id
       }
       this.addOrUpdateProjectBaseDialogTitle="修改项目";
@@ -217,7 +303,17 @@ export default {
     openLiuChengTuGraph(row){
       this.curRow=row;
       this.parentCellsJsonStr=row.cellsJsonStr;
+      this.curRowCanEditProjectUserList=row.canEditProjectUserList;
       this.liuChengTuGraphVisible=true;
+    },
+
+    //所有的userList
+    selectAllUserList(){
+      let curObj=this;
+      selectAllUserList().then(response=>{
+          curObj.allUserList=response.data;
+        }
+      )
     }
   }
 }
@@ -230,6 +326,10 @@ export default {
 
   .el-dialog__body{
     padding: 10px 20px !important;
+  }
+
+  .custom-class .el-table__row{
+    height: 80px;
   }
 </style>
 

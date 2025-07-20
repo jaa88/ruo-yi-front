@@ -72,7 +72,8 @@ export default {
   name: "myflow",
   components: { MenuBar,EditTaskInfoDialog },
   props:{
-    parentCellsJsonStr:String
+    parentCellsJsonStr:String,
+    projectCanEditProjectUserList:Array,
   },
   data() {
     return {
@@ -297,6 +298,12 @@ export default {
           const p = graph.localToPage(x, y);
           this.$refs.menuBar.initFn(p.x, p.y, { type: "blank", item: node });
         });
+      });
+
+      //鼠标双击事件 todo
+      graph.on("node:dblclick", ({ e, x, y, node, view }) => {
+        this.$refs.editTaskInfoDialog.visible=true;
+        this.$refs.editTaskInfoDialog.init({ type: "node", item: node,"projectCanEditProjectUserList":this.projectCanEditProjectUserList });
       });
 
       //连线后的事件

@@ -1,7 +1,17 @@
 <template>
-  <div class="node">
+  <div class="node"  :style="{ 'border-left': status == '1' ? '4px solid #5f95ff' :status == '2' ? '4px solid #FF3333':status == '3' ? '4px solid #7FFF00': status == '4' ? '4px solid #878787':'4px solid yellow' }">
     <div>
-      <span class="label">{{ taskName }}</span>
+      <el-popover
+        placement="right"
+        width="400"
+        trigger="hover">
+        <div>
+          shoaghaoghahgo
+        </div>
+        <span slot="reference" class="label" :style="{'text-decoration':status =='4'?'line-through':''}">{{ taskName }}</span>
+      </el-popover>
+
+      <!--<span class="label" :style="{'text-decoration':status =='4'?'line-through':''}">{{ taskName }}</span>-->
     </div>
   </div>
 </template>
@@ -14,16 +24,19 @@ export default {
   data() {
     return {
       taskName: "",
+      status:"1"
     };
   },
   mounted() {
     const self = this;
     const node = this.getNode();
     this.taskName = node.data.taskName;
+    this.status=node.data.status;
 
     // 监听数据改变事件
     node.on("change:data", ({ current }) => {
       self.taskName = current.taskName;
+      self.status=current.status;
     });
   },
 };
@@ -36,7 +49,7 @@ export default {
   height: 100%;
   background-color: #fff;
   border: 1px solid #c2c8d5;
-  border-left: 4px solid #5f95ff;
+  /*border-left: 4px solid #5f95ff;*/
   border-radius: 4px;
   box-shadow: 0 2px 5px 1px rgba(0, 0, 0, 0.06);
 }

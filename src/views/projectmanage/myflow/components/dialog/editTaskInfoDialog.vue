@@ -10,8 +10,25 @@
         <el-input v-model="taskName" placeholder="任务名称"></el-input>
       </el-form-item>
 
-      <el-form-item label="负责人">
-        <el-input v-model="chargePerson" placeholder="负责人"></el-input>
+      <el-form-item label="任务状态">
+        <el-select v-model="status">
+          <el-option label="未开始" value="1" />
+          <el-option label="进行中" value="2" />
+          <el-option label="完成" value="3" />
+          <el-option label="不再关注" value="4" />
+          <el-option label="部分完成" value="5" />
+        </el-select>
+      </el-form-item>
+
+      <el-form-item label="负责人" >
+        <el-select v-model="chargeUserIdList" filterable multiple placeholder="请选择">
+          <el-option
+            v-for="item in projectCanEditProjectUserList"
+            :key="item.userId"
+            :label="item.nickName"
+            :value="item.userId">
+          </el-option>
+        </el-select>
       </el-form-item>
 
       <el-form-item label="备注">
@@ -40,32 +57,47 @@ export default {
       node: {},
       label: "",
       taskName:"",//任务名称
-      chargePerson:"",//负责人
+      chargeUserIdList:"",//负责人
       remark:"",//备注
       startTime:"",// 开始时间
+      status:"1",//任务状态
+      projectCanEditProjectUserList:[],//项目能编辑的人员
     };
   },
-  mounted() {},
+
+  mounted() {
+
+  },
+
   methods: {
     init(item) {
       //初始化数据
+      console.log("item:"+JSON.stringify(item))
       this.node = item;
       this.label = item.item.data.label;
       this.taskName=item.item.data.taskName;
-      this.chargePerson=item.item.data.chargePerson;
+      this.chargeUserIdList=item.item.data.chargeUserIdList;
       this.remark=item.item.data.remark;
       this.startTime=item.item.data.startTime;
+      this.status=item.item.data.status;
+      if(typeof this.status ==='undefined' || this.status==null){
+        this.status="1";
+      }
+      this.projectCanEditProjectUserList=item.projectCanEditProjectUserList;
     },
     submit() {
       var node = this.$parent.getNodeById(this.node.item.id);
+      //这个是数组，不能机械的用 Object.assign了
+      this.node.item.data.chargeUserIdList=[];
       node.setData(
         Object.assign({}, this.node.item.data,
           {
             label: this.label,
             taskName:this.taskName,
-            chargePerson:this.chargePerson,
+            chargeUserIdList:this.chargeUserIdList,
             remark:this.remark,
-            startTime:this.remark
+            startTime:this.remark,
+            status:this.status,
           })
       );
       this.visible = false;

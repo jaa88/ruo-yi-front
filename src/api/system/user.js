@@ -134,3 +134,11 @@ export function deptTreeSelect() {
     method: 'get'
   })
 }
+
+// 查询部门下拉树结构
+export function selectAllUserList() {
+  return request({
+    url: '/system/user/selectAllUserList',
+    method: 'get'
+  })
+}
