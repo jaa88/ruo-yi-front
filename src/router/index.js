@@ -88,6 +88,21 @@ export const constantRoutes = [
       }
     ]
   }
+  ,
+  {
+    path: '/projectmanage/projectdetail',
+    component: Layout,
+    hidden: true,
+    redirect: 'noredirect',
+    children: [
+      {
+        path: 'index/:id(\\d+)',
+        component: () => import('@/views/projectmanage/projectdetail/index'),
+        name: 'projectdetail',
+        meta: { title: '项目详情', icon: 'user' }
+      }
+    ]
+  }
 ]
 
 // 动态路由，基于用户权限动态去加载
@@ -176,8 +191,10 @@ Router.prototype.replace = function push(location) {
   return routerReplace.call(this, location).catch(err => err)
 }
 
+
 export default new Router({
-  mode: 'history', // 去掉url中的#
+  mode: 'hash', // 去掉url中的#
+  base:'/jiaoyun',
   scrollBehavior: () => ({ y: 0 }),
   routes: constantRoutes
 })

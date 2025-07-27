@@ -22,8 +22,12 @@
       </el-table-column>
 
       <el-table-column  label="项目名称" align="center" min-width="120px" :show-overflow-tooltip="true">
-        <template slot-scope="scope"> {{scope.row.projectName}} </template>
+        <template slot-scope="scope">
+          <a @click="openProjectDetailPage(scope.row)">{{scope.row.projectName}}</a>
+           </template>
       </el-table-column>
+
+
 
       <el-table-column label="负责人员" align="center" prop="createTime" min-width="120px"  :show-overflow-tooltip="true">
         <template slot-scope="scope">
@@ -92,8 +96,8 @@
     />
 
     <div v-if="liuChengTuGraphVisible">
-      <el-dialog title="流程图" :visible.sync="liuChengTuGraphVisible" width="1400px" top="5vh" append-to-body >
-        <myflow :parentCellsJsonStr="parentCellsJsonStr" :projectCanEditProjectUserList="curRowCanEditProjectUserList"  @saveFromMyflow="saveFromMyflow"></myflow>
+      <el-dialog title="流程图" :visible.sync="liuChengTuGraphVisible" width="1400px" top="5vh" append-to-body :close-on-click-modal="false">
+        <myflow :parentCellsJsonStr="parentCellsJsonStr" :projectCanEditProjectUserList="curRowCanEditProjectUserList"  @saveFromMyflow="saveFromMyflow" @closeMyflowDialog="closeMyflowDialog"></myflow>
       </el-dialog>
     </div>
 
@@ -178,6 +182,15 @@ export default {
     this.selectAllUserList();
   },
   methods: {
+    openProjectDetailPage(row){
+      console.log("row.projectName"+row.projectName)
+      this.$tab.openPage(row.projectName, '/projectmanage/projectdetail/index/' +row.id, row)
+    },
+
+    closeMyflowDialog(){
+      this.liuChengTuGraphVisible=false;
+    },
+
     //进行中的任务
     getNumberedTasks(jsonStr) {
       const result = [];

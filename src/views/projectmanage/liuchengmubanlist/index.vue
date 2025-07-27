@@ -65,7 +65,7 @@
 
     <div v-if="liuChengTuGraphVisible">
       <el-dialog title="流程图" :visible.sync="liuChengTuGraphVisible" width="800px" top="5vh" append-to-body fullscreen>
-        <myflow @saveFromMyflow="saveFromMyflow"></myflow>
+        <myflow @saveFromMyflow="saveFromMyflow" @closeMyflowDialog="closeMyflowDialog"></myflow>
       </el-dialog>
     </div>
 
@@ -132,6 +132,11 @@ export default {
     this.getList()
   },
   methods: {
+    closeMyflowDialog(){
+      alert("xxxxx")
+      this.liuChengTuGraphVisible=false;
+    },
+
     saveFromMyflow(data){
       let param={
         "projectLiuChengTuTemplateId":this.curRow.id,

@@ -134,12 +134,7 @@ export default {
           inherit: "vue-shape",
           width: 180,
           height: 36,
-          component: {
-            template: `<common-task-node />`,
-            components: {
-              commonTaskNode,
-            },
-          },
+          component: commonTaskNode,
           ports: {
             groups: {
               top: {

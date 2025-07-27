@@ -73,12 +73,14 @@ export default {
       title: process.env.VUE_APP_TITLE,
       codeUrl: "",
       loginForm: {
-        username: "admin",
-        password: "admin123",
+        username: "",
+        /*password: "admin123",*/
+        password: "",
         rememberMe: false,
         code: "",
         uuid: ""
       },
+
       loginRules: {
         username: [
           { required: true, trigger: "blur", message: "请输入您的账号" }

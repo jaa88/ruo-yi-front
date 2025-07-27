@@ -47,10 +47,10 @@
           <el-tooltip
             class="item"
             effect="dark"
-            content="重新加载"
+            content="关闭页面"
             placement="bottom"
           >
-            <i class="el-icon-link" @click="loadFn()" />
+            <i class="el-icon-close" @click="closeMyflowDialog()" />
           </el-tooltip>
         </header>
         <div id="draw-cot" />
@@ -78,7 +78,6 @@ export default {
   data() {
     return {
       graph: "",
-      timer: "",
       isLock: false,
       showContextMenu: false,
     };
@@ -292,10 +291,14 @@ export default {
       graph.on("blank:contextmenu", ({ e, x, y, node, view }) => {
         console.log(e, x, y, view);
         this.showContextMenu = true;
+        x=x-200;
+        y=y-100;
 
         this.$nextTick(() => {
           // this.$refs.menuBar.setItem({ type: 'node', item: node })
           const p = graph.localToPage(x, y);
+          console.log("x:"+x+"  p.x:"+p.x);
+          console.log("y:"+y+"  p.y:"+p.y)
           this.$refs.menuBar.initFn(p.x, p.y, { type: "blank", item: node });
         });
       });
@@ -335,22 +338,6 @@ export default {
       });
     },
 
-    async showNodeStatus(statusList) {
-      const status = statusList.shift();
-      status?.forEach((item) => {
-        const { id, status } = item;
-        const node = this.graph.getCellById(id);
-        const data = node.getData();
-        node.setData({
-          ...data,
-          status: status,
-        });
-      });
-      this.timer = setTimeout(() => {
-        this.showNodeStatus(statusList);
-      }, 300);
-    },
-
     // 初始化节点/边
     init(data = []) {
       const cells = [];
@@ -376,9 +363,7 @@ export default {
     },
 
     startFn(item) {
-      this.timer && clearTimeout(this.timer);
       this.init(item || JSON.parse(this.parentCellsJsonStr));
-      //this.showNodeStatus(Object.assign([], nodeStatusList));
       this.graph.centerContent();
     },
 
@@ -430,27 +415,21 @@ export default {
       });
     },
     saveFn() {
-      localStorage.setItem(
-        "x6Json",
-        JSON.stringify(this.graph.toJSON({ diff: true }))
-      );
-      this.$emit("saveFromMyflow",this.graph.toJSON({ diff: true }))
+      let curObj=this;
+      curObj.$modal.confirm('是否确认保存数据？').then(function() {
+        localStorage.setItem(
+          "x6Json",
+          JSON.stringify(curObj.graph.toJSON({ diff: true }))
+        );
+        curObj.$emit("saveFromMyflow",curObj.graph.toJSON({ diff: true }))
+      })
+    },
 
-    },
-    loadFn() {
-      this.timer && clearTimeout(this.timer);
-      const x6Json = JSON.parse(this.parentCellsJsonStr);
-      this.startFn(x6Json.cells);
-    },
-    lockFn() {
-      this.isLock = !this.isLock;
-      if (this.isLock) {
-        this.graph.enablePanning();
-        this.graph.enableKeyboard();
-      } else {
-        this.graph.disablePanning();
-        this.graph.disableKeyboard();
-      }
+    closeMyflowDialog() {
+      let curObj=this;
+      curObj.$modal.confirm('是否确认关闭流程图？').then(function() {
+        curObj.$emit("closeMyflowDialog",{})
+      });
     },
 
     //这是右键菜单的回调函数
