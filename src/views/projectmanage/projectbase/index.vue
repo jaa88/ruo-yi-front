@@ -16,76 +16,77 @@
       </el-form-item>
     </el-form>
 
-    <el-table v-loading="loading" :data="tableData"  class="custom-class" stripe>
-      <el-table-column  label="序号" min-width="60px" align="center">
-        <template slot-scope="scope"> {{(queryParams.pageNum-1)*queryParams.pageSize+(scope.$index+1)}} </template>
-      </el-table-column>
+    <div id="projectBaseTableDiv">
+      <el-table v-loading="loading" :data="tableData"  class="custom-class" stripe>
+        <el-table-column  label="序号" min-width="60px" align="center">
+          <template slot-scope="scope"> {{(queryParams.pageNum-1)*queryParams.pageSize+(scope.$index+1)}} </template>
+        </el-table-column>
 
-      <el-table-column  label="项目名称" align="center" min-width="120px" :show-overflow-tooltip="true">
-        <template slot-scope="scope">
-          <a @click="openProjectDetailPage(scope.row)">{{scope.row.projectName}}</a>
-           </template>
-      </el-table-column>
+        <el-table-column  label="项目名称" align="center" min-width="120px" :show-overflow-tooltip="true">
+          <template slot-scope="scope">
+            <a style="color:#1890ff" @click="openProjectDetailPage(scope.row)">{{scope.row.projectName}}</a>
+          </template>
+        </el-table-column>
 
+        <el-table-column label="负责人员" align="center" prop="createTime" min-width="120px"  :show-overflow-tooltip="true">
+          <template slot-scope="scope">
+            <span v-for="item in scope.row.canEditProjectUserList">{{ item.nickName+";" }}</span>
+          </template>
+        </el-table-column>
 
+        <el-table-column  label="备注" min-width="120px" align="center" :show-overflow-tooltip="true">
+          <template slot-scope="scope"> {{scope.row.remark}} </template>
+        </el-table-column>
 
-      <el-table-column label="负责人员" align="center" prop="createTime" min-width="120px"  :show-overflow-tooltip="true">
-        <template slot-scope="scope">
-          <span v-for="item in scope.row.canEditProjectUserList">{{ item.nickName+";" }}</span>
-        </template>
-      </el-table-column>
+        <el-table-column label="任务进度" align="center"  min-width="120px">
+          <template slot-scope="scope">
+            <el-tag>{{scope.row.allDoneNodeCount+'/'+scope.row.allPayAttentionNodeCount}}</el-tag>
+          </template>
+        </el-table-column>
 
-      <el-table-column  label="备注" min-width="120px" align="center" :show-overflow-tooltip="true">
-        <template slot-scope="scope"> {{scope.row.remark}} </template>
-      </el-table-column>
-
-      <el-table-column label="任务进度" align="center"  min-width="120px">
-        <template slot-scope="scope">
-          <el-tag>{{scope.row.allDoneNodeCount+'/'+scope.row.allPayAttentionNodeCount}}</el-tag>
-        </template>
-      </el-table-column>
-
-      <el-table-column label="进行中任务" align="left" prop="createTime" min-width="200px"  :show-overflow-tooltip="true">
-        <template slot-scope="scope">
-          <div v-if="hasValidTasks(scope.row.cellsJsonStr)">
-            <div v-for="(task, idx) in getNumberedTasks(scope.row.cellsJsonStr)"
-                 :key="idx">
-              {{ task }}
+        <el-table-column label="进行中任务" align="left" prop="createTime" min-width="200px"  :show-overflow-tooltip="true">
+          <template slot-scope="scope">
+            <div v-if="hasValidTasks(scope.row.cellsJsonStr)">
+              <div v-for="(task, idx) in getNumberedTasks(scope.row.cellsJsonStr)"
+                   :key="idx">
+                {{ task }}
+              </div>
             </div>
-          </div>
-        </template>
-      </el-table-column>
+          </template>
+        </el-table-column>
 
 
-      <el-table-column label="更新时间" align="center" prop="createTime" width="100">
-        <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.updateTime, '{y}-{m}-{d}') }}</span>
-        </template>
-      </el-table-column>
+        <el-table-column label="更新时间" align="center" prop="createTime" width="100">
+          <template slot-scope="scope">
+            <span>{{ parseTime(scope.row.updateTime, '{y}-{m}-{d}') }}</span>
+          </template>
+        </el-table-column>
 
-      <el-table-column label="操作" align="center" min-width="150px" class-name="small-padding fixed-width">
-        <template slot-scope="scope">
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-edit"
-            @click="handleUpdate(scope.row)"
-          >修改</el-button>
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-delete"
-            @click="handleDelete(scope.row)"
-          >删除</el-button>
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-delete"
-            @click="openLiuChengTuGraph(scope.row)"
-          >流程图</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
+        <el-table-column label="操作" align="center" min-width="150px" class-name="small-padding fixed-width">
+          <template slot-scope="scope">
+            <el-button
+              size="mini"
+              type="text"
+              icon="el-icon-edit"
+              @click="handleUpdate(scope.row)"
+            >修改</el-button>
+            <el-button
+              size="mini"
+              type="text"
+              icon="el-icon-delete"
+              @click="handleDelete(scope.row)"
+            >删除</el-button>
+            <el-button
+              size="mini"
+              type="text"
+              icon="el-icon-delete"
+              @click="openLiuChengTuGraph(scope.row)"
+            >流程图</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+    </div>
+
 
     <pagination
       v-show="total>0"
@@ -122,6 +123,11 @@
         <el-form-item label="备注" prop="remark">
           <el-input v-model="addOrUpdateProjectBaseForm.remark" placeholder="备注" />
         </el-form-item>
+
+        <el-form-item label="目录配置" prop="remark">
+          <el-input v-model="addOrUpdateProjectBaseForm.contentsSetStr" placeholder="类似如下“1:前期,2:中期,3:后期”，英文符号" />
+        </el-form-item>
+
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm">确 定</el-button>
@@ -269,6 +275,7 @@ export default {
         "projectName":row.projectName,
         "remark":row.remark,
         "canEditProjectUserIdList":row.canEditProjectUserIdList,
+        "contentsSetStr":row.contentsSetStr,
         "id":row.id
       }
       this.addOrUpdateProjectBaseDialogTitle="修改项目";
@@ -341,7 +348,7 @@ export default {
     padding: 10px 20px !important;
   }
 
-  .custom-class .el-table__row{
+  #projectBaseTableDiv .custom-class .el-table__row{
     height: 80px;
   }
 </style>

@@ -39,6 +39,10 @@
         <el-input v-model="startTime" placeholder="开始时间"></el-input>
       </el-form-item>
 
+      <el-form-item label="目录">
+        <el-input v-model="contentsNumStr" placeholder="目录序号，有小数点"></el-input>
+      </el-form-item>
+
     </el-form>
     <footer class="footer">
       <el-button type="primary" @click="submit">确定</el-button>
@@ -61,7 +65,8 @@ export default {
       remark:"",//备注
       startTime:"",// 开始时间
       status:"1",//任务状态
-      projectCanEditProjectUserList:[],//项目能编辑的人员
+      projectCanEditProjectUserList:[],//项目能编辑的人员，
+      contentsNumStr:"",//有小数点
     };
   },
 
@@ -84,8 +89,18 @@ export default {
         this.status="1";
       }
       this.projectCanEditProjectUserList=item.projectCanEditProjectUserList;
+      this.contentsNumStr=item.item.data.contentsNumStr;
     },
     submit() {
+      if(typeof this.taskName =='undefined' || this.taskName==""){
+        alert("请输入任务名")
+        return;
+      }
+      if(typeof this.contentsNumStr =='undefined' || this.contentsNumStr==""){
+        alert("请输入目录")
+        return;
+      }
+
       var node = this.$parent.getNodeById(this.node.item.id);
       //这个是数组，不能机械的用 Object.assign了
       this.node.item.data.chargeUserIdList=[];
@@ -98,6 +113,7 @@ export default {
             remark:this.remark,
             startTime:this.remark,
             status:this.status,
+            contentsNumStr:this.contentsNumStr
           })
       );
       this.visible = false;

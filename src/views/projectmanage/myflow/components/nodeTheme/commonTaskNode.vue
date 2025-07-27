@@ -1,5 +1,5 @@
 <template>
-  <div class="node"  :style="{ 'border-left': status == '1' ? '4px solid #5f95ff' :status == '2' ? '4px solid #FF3333':status == '3' ? '4px solid #7FFF00': status == '4' ? '4px solid #878787':'4px solid yellow' }">
+  <div class="node"  :style="{ 'border-left': status == '1' ? '4px solid #5f95ff' :status == '2' ? '4px solid #FF3333':status == '3' ? '4px solid #7FFF00': status == '4' ? '4px solid #878787':'4px solid #C9DD23' }">
     <div>
       <el-popover
         placement="right"
