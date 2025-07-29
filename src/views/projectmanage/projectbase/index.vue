@@ -28,9 +28,9 @@
           </template>
         </el-table-column>
 
-        <el-table-column label="负责人员" align="center" prop="createTime" min-width="120px"  :show-overflow-tooltip="true">
+        <el-table-column label="负责部门" align="center" prop="createTime" min-width="120px"  :show-overflow-tooltip="true">
           <template slot-scope="scope">
-            <span v-for="item in scope.row.canEditProjectUserList">{{ item.nickName+";" }}</span>
+            <span v-for="item in scope.row.canEditProjectDeptList">{{ item.deptName+";" }}</span>
           </template>
         </el-table-column>
 
@@ -98,7 +98,7 @@
 
     <div v-if="liuChengTuGraphVisible">
       <el-dialog title="流程图" :visible.sync="liuChengTuGraphVisible" width="1400px" top="5vh" append-to-body :close-on-click-modal="false">
-        <myflow :parentCellsJsonStr="parentCellsJsonStr" :projectCanEditProjectUserList="curRowCanEditProjectUserList"  @saveFromMyflow="saveFromMyflow" @closeMyflowDialog="closeMyflowDialog"></myflow>
+        <myflow :parentCellsJsonStr="parentCellsJsonStr" :projectCanEditProjectDeptList="curRowCanEditProjectDeptList"  @saveFromMyflow="saveFromMyflow" @closeMyflowDialog="closeMyflowDialog"></myflow>
       </el-dialog>
     </div>
 
@@ -110,12 +110,12 @@
         </el-form-item>
 
         <el-form-item label="相关人员" prop="projectName">
-          <el-select v-model="addOrUpdateProjectBaseForm.canEditProjectUserIdList" filterable multiple placeholder="请选择">
+          <el-select v-model="addOrUpdateProjectBaseForm.canEditProjectDeptIdList" filterable multiple placeholder="请选择">
             <el-option
-              v-for="item in allUserList"
-              :key="item.userId"
-              :label="item.nickName"
-              :value="item.userId">
+              v-for="item in allDeptList"
+              :key="item.deptId"
+              :label="item.deptName"
+              :value="item.deptId">
             </el-option>
           </el-select>
         </el-form-item>
@@ -140,7 +140,7 @@
 
 <script>
   import Myflow from "../myflow/index";
-  import {selectAllUserList} from  "@/api/system/user"
+  import {selectAllDeptList} from  "@/api/system/dept"
   import { selectProjectBaseList,selectProjectLiuChengTuTemplateList, selectProjectLiuChengTuDataLogList,insertLiuChengTuDataLog,insertProjectBase,updateProjectBase,deleteProjectBase } from "@/api/project/project"
 
 export default {
@@ -171,13 +171,13 @@ export default {
       liuChengTuGraphVisible:false,
       curRow:null,
       //能够操作项目的人员
-      curRowCanEditProjectUserList:[],
+      curRowCanEditProjectDeptList:[],
       //打开新增模板dialog
       addOrUpdateProjectBaseDialogTitle:"",
       addOrUpdateProjectBaseVisible:false,
       parentCellsJsonStr:"",
-      //所有的user
-      allUserList:[],
+      //所有的dept
+      allDeptList:[],
     }
   },
   created() {
@@ -185,7 +185,7 @@ export default {
   },
 
   mounted(){
-    this.selectAllUserList();
+    this.selectAllDeptList();
   },
   methods: {
     openProjectDetailPage(row){
@@ -274,7 +274,7 @@ export default {
       this.addOrUpdateProjectBaseForm={
         "projectName":row.projectName,
         "remark":row.remark,
-        "canEditProjectUserIdList":row.canEditProjectUserIdList,
+        "canEditProjectDeptIdList":row.canEditProjectDeptIdList,
         "contentsSetStr":row.contentsSetStr,
         "id":row.id
       }
@@ -323,15 +323,17 @@ export default {
     openLiuChengTuGraph(row){
       this.curRow=row;
       this.parentCellsJsonStr=row.cellsJsonStr;
-      this.curRowCanEditProjectUserList=row.canEditProjectUserList;
+      this.curRowCanEditProjectDeptList=row.canEditProjectDeptList;
+      console.log("328:"+JSON.stringify(this.curRowCanEditProjectDeptList))
       this.liuChengTuGraphVisible=true;
     },
 
-    //所有的userList
-    selectAllUserList(){
+
+    //所有的deptList
+    selectAllDeptList(){
       let curObj=this;
-      selectAllUserList().then(response=>{
-          curObj.allUserList=response.data;
+      selectAllDeptList().then(response=>{
+          curObj.allDeptList=response.data;
         }
       )
     }

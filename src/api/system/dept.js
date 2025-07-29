@@ -50,3 +50,11 @@ export function delDept(deptId) {
     method: 'delete'
   })
 }
+
+// 查询部门下拉树结构
+export function selectAllDeptList() {
+  return request({
+    url: '/system/dept/selectAllDeptList',
+    method: 'get'
+  })
+}

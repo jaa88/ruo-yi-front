@@ -50,7 +50,7 @@
 
 <script>
   import Myflow from "../myflow/index";
-  import {selectAllUserList} from  "@/api/system/user"
+  import {selectAllDeptList} from  "@/api/system/dept"
   import { selectProjectBaseList } from "@/api/project/project"
 
 export default {

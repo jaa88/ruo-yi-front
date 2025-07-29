@@ -20,13 +20,13 @@
         </el-select>
       </el-form-item>
 
-      <el-form-item label="负责人" >
-        <el-select v-model="chargeUserIdList" filterable multiple placeholder="请选择">
+      <el-form-item label="负责部门" >
+        <el-select v-model="chargeDeptIdList" filterable multiple placeholder="请选择">
           <el-option
-            v-for="item in projectCanEditProjectUserList"
-            :key="item.userId"
-            :label="item.nickName"
-            :value="item.userId">
+            v-for="item in projectCanEditProjectDeptList"
+            :key="item.deptId"
+            :label="item.deptName"
+            :value="item.deptId">
           </el-option>
         </el-select>
       </el-form-item>
@@ -61,11 +61,11 @@ export default {
       node: {},
       label: "",
       taskName:"",//任务名称
-      chargeUserIdList:"",//负责人
+      chargeDeptIdList:"",//负责人
       remark:"",//备注
       startTime:"",// 开始时间
       status:"1",//任务状态
-      projectCanEditProjectUserList:[],//项目能编辑的人员，
+      projectCanEditProjectDeptList:[],//项目能编辑的人员，
       contentsNumStr:"",//有小数点
     };
   },
@@ -81,14 +81,14 @@ export default {
       this.node = item;
       this.label = item.item.data.label;
       this.taskName=item.item.data.taskName;
-      this.chargeUserIdList=item.item.data.chargeUserIdList;
+      this.chargeDeptIdList=item.item.data.chargeDeptIdList;
       this.remark=item.item.data.remark;
       this.startTime=item.item.data.startTime;
       this.status=item.item.data.status;
       if(typeof this.status ==='undefined' || this.status==null){
         this.status="1";
       }
-      this.projectCanEditProjectUserList=item.projectCanEditProjectUserList;
+      this.projectCanEditProjectDeptList=item.projectCanEditProjectDeptList;
       this.contentsNumStr=item.item.data.contentsNumStr;
     },
     submit() {
@@ -103,13 +103,13 @@ export default {
 
       var node = this.$parent.getNodeById(this.node.item.id);
       //这个是数组，不能机械的用 Object.assign了
-      this.node.item.data.chargeUserIdList=[];
+      this.node.item.data.chargeDeptIdList=[];
       node.setData(
         Object.assign({}, this.node.item.data,
           {
             label: this.label,
             taskName:this.taskName,
-            chargeUserIdList:this.chargeUserIdList,
+            chargeDeptIdList:this.chargeDeptIdList,
             remark:this.remark,
             startTime:this.remark,
             status:this.status,

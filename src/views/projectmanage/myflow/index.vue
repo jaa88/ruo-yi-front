@@ -73,7 +73,7 @@ export default {
   components: { MenuBar,EditTaskInfoDialog },
   props:{
     parentCellsJsonStr:String,
-    projectCanEditProjectUserList:Array,
+    projectCanEditProjectDeptList:Array,
   },
   data() {
     return {
@@ -306,7 +306,7 @@ export default {
       //鼠标双击事件 todo
       graph.on("node:dblclick", ({ e, x, y, node, view }) => {
         this.$refs.editTaskInfoDialog.visible=true;
-        this.$refs.editTaskInfoDialog.init({ type: "node", item: node,"projectCanEditProjectUserList":this.projectCanEditProjectUserList });
+        this.$refs.editTaskInfoDialog.init({ type: "node", item: node,"projectCanEditProjectDeptList":this.projectCanEditProjectDeptList });
       });
 
       //连线后的事件
