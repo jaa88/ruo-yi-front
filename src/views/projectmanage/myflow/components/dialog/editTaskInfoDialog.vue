@@ -10,6 +10,10 @@
         <el-input v-model="taskName" placeholder="任务名称"></el-input>
       </el-form-item>
 
+      <el-form-item label="目录">
+        <el-input v-model="contentsNumStr" placeholder="目录序号，有小数点"></el-input>
+      </el-form-item>
+
       <el-form-item label="任务状态">
         <el-select v-model="status">
           <el-option label="未开始" value="1" />
@@ -31,18 +35,25 @@
         </el-select>
       </el-form-item>
 
+      <el-form-item label="任务开始时间">
+        <el-date-picker
+          v-model="startTime"
+          type="date"
+          placeholder="选择日期">
+        </el-date-picker>
+      </el-form-item>
+
+      <el-form-item label="预计完成时间">
+        <el-date-picker
+          v-model="expectedEndTime"
+          type="date"
+          placeholder="选择日期">
+        </el-date-picker>
+      </el-form-item>
+
       <el-form-item label="备注">
         <el-input v-model="remark" placeholder="备注"></el-input>
       </el-form-item>
-
-      <el-form-item label="开始时间">
-        <el-input v-model="startTime" placeholder="开始时间"></el-input>
-      </el-form-item>
-
-      <el-form-item label="目录">
-        <el-input v-model="contentsNumStr" placeholder="目录序号，有小数点"></el-input>
-      </el-form-item>
-
     </el-form>
     <footer class="footer">
       <el-button type="primary" @click="submit">确定</el-button>
@@ -67,6 +78,7 @@ export default {
       status:"1",//任务状态
       projectCanEditProjectDeptList:[],//项目能编辑的人员，
       contentsNumStr:"",//有小数点
+      expectedEndTime:null,//预计结束时间
     };
   },
 
@@ -84,6 +96,7 @@ export default {
       this.chargeDeptIdList=item.item.data.chargeDeptIdList;
       this.remark=item.item.data.remark;
       this.startTime=item.item.data.startTime;
+      this.expectedEndTime=item.item.data.expectedEndTime;
       this.status=item.item.data.status;
       if(typeof this.status ==='undefined' || this.status==null){
         this.status="1";
@@ -111,7 +124,8 @@ export default {
             taskName:this.taskName,
             chargeDeptIdList:this.chargeDeptIdList,
             remark:this.remark,
-            startTime:this.remark,
+            startTime:this.startTime,
+            expectedEndTime:this.expectedEndTime,
             status:this.status,
             contentsNumStr:this.contentsNumStr
           })

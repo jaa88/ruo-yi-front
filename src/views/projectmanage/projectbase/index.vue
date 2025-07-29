@@ -76,12 +76,12 @@
               icon="el-icon-delete"
               @click="handleDelete(scope.row)"
             >删除</el-button>
-            <el-button
+            <!--<el-button
               size="mini"
               type="text"
               icon="el-icon-delete"
               @click="openLiuChengTuGraph(scope.row)"
-            >流程图</el-button>
+            >流程图</el-button>-->
           </template>
         </el-table-column>
       </el-table>
