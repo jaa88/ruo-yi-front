@@ -11,6 +11,16 @@
           <el-tooltip
             class="item"
             effect="dark"
+            content="保存为模板"
+            placement="bottom"
+            style="margin-right: 500px"
+          >
+            <i class="el-icon-star-on" @click="openSaveAsTemplatePage" />
+          </el-tooltip>
+
+          <el-tooltip
+            class="item"
+            effect="dark"
             content="放大"
             placement="bottom"
           >
@@ -57,6 +67,7 @@
       </div>
     </section>
     <EditTaskInfoDialog ref="editTaskInfoDialog"></EditTaskInfoDialog>
+    <SaveAsTemplateDialog ref="saveAsTemplateDialog"></SaveAsTemplateDialog>
   </div>
 </template>
 
@@ -67,10 +78,11 @@ import "@antv/x6-vue-shape";
 import commonTaskNode from "./components/nodeTheme/commonTaskNode.vue";
 import MenuBar from "./components/menuBar";
 import EditTaskInfoDialog from "./components/dialog/editTaskInfoDialog.vue";
+import SaveAsTemplateDialog from "./components/dialog/saveAsTemplateDialog.vue";
 
 export default {
   name: "myflow",
-  components: { MenuBar,EditTaskInfoDialog },
+  components: { MenuBar,EditTaskInfoDialog,SaveAsTemplateDialog },
   props:{
     parentCellsJsonStr:String,
     projectCanEditProjectDeptList:Array,
@@ -91,6 +103,12 @@ export default {
     this.startFn();
   },
   methods: {
+    //打开保存为模板页面
+    openSaveAsTemplatePage(){
+      this.$refs.saveAsTemplateDialog.visible=true;
+      this.$refs.saveAsTemplateDialog.init(this.graph.toJSON({ diff: true }));
+    },
+
     getNodeById(id) {
       return this.graph.getCellById(id);
     },

@@ -66,7 +66,7 @@ export function deleteProjectBase(data) {
 // 新增模板信息
 export function insertProjectTemplate(data) {
   return request({
-    url: '/project/base/insertProjectBase',
+    url: '/project/liuChengTu/insertProjectTemplate',
     method: 'post',
     data: data
   })
@@ -81,7 +81,7 @@ export function updateProjectTemplate(data) {
   })
 }
 
-// 删除项目流程图模板
+// 删除流程图模板
 export function deleteProjectTemplate(data) {
   return request({
     url: '/project/liuChengTu/deleteProjectTemplate',

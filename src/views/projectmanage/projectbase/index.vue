@@ -109,7 +109,7 @@
           <el-input v-model="addOrUpdateProjectBaseForm.projectName" placeholder="项目名称" />
         </el-form-item>
 
-        <el-form-item label="相关人员" prop="projectName">
+        <el-form-item label="相关部门" prop="projectName">
           <el-select v-model="addOrUpdateProjectBaseForm.canEditProjectDeptIdList" filterable multiple placeholder="请选择">
             <el-option
               v-for="item in allDeptList"
@@ -126,6 +126,17 @@
 
         <el-form-item label="目录配置" prop="remark">
           <el-input v-model="addOrUpdateProjectBaseForm.contentsSetStr" placeholder="类似如下“1:前期,2:中期,3:后期”，英文符号" />
+        </el-form-item>
+
+        <el-form-item label="初始模板" prop="projectName">
+          <el-select v-model="addOrUpdateProjectBaseForm.cellsJsonStr" filterable placeholder="请选择">
+            <el-option
+              v-for="item in allTemplateList"
+              :key="item.id"
+              :label="item.templateName"
+              :value="item.cellsJsonStr">
+            </el-option>
+          </el-select>
         </el-form-item>
 
       </el-form>
@@ -178,6 +189,9 @@ export default {
       parentCellsJsonStr:"",
       //所有的dept
       allDeptList:[],
+      allTemplateList:[],
+      //新增项目时选择的初始模板
+      choosedInitCellsJsonStr:"",
     }
   },
   created() {
@@ -186,8 +200,15 @@ export default {
 
   mounted(){
     this.selectAllDeptList();
+    this.selectAllTemplateList();
   },
   methods: {
+    selectAllTemplateList(){
+      selectProjectLiuChengTuTemplateList({"pageNum":1,"pageSize":1000}).then(response => {
+        this.allTemplateList = response.data
+      })
+    },
+
     openProjectDetailPage(row){
       console.log("row.projectName"+row.projectName)
       this.$tab.openPage(row.projectName, '/projectmanage/projectdetail/index/' +row.id, row)
@@ -281,6 +302,7 @@ export default {
       this.addOrUpdateProjectBaseDialogTitle="修改项目";
       this.addOrUpdateProjectBaseVisible = true;
     },
+
 
     /** 提交按钮 */
     submitForm: function() {

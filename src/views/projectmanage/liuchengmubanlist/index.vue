@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
+    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" label-width="68px">
       <el-form-item label="模板名称" prop="noticeTitle">
         <el-input
           v-model="queryParams.templateName"
@@ -25,7 +25,11 @@
         <template slot-scope="scope"> {{scope.row.templateName}} </template>
       </el-table-column>
 
-      <el-table-column label="创建者" align="center" prop="createBy" width="100" />
+      <el-table-column  label="备注" align="center" :show-overflow-tooltip="true">
+        <template slot-scope="scope"> {{scope.row.remark}} </template>
+      </el-table-column>
+
+      <!--<el-table-column label="创建者" align="center" prop="createBy" width="100" />-->
       <el-table-column label="创建时间" align="center" prop="createTime" width="100">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.createTime, '{y}-{m}-{d}') }}</span>
@@ -64,8 +68,8 @@
     />
 
     <div v-if="liuChengTuGraphVisible">
-      <el-dialog title="流程图" :visible.sync="liuChengTuGraphVisible" width="800px" top="5vh" append-to-body fullscreen>
-        <myflow @saveFromMyflow="saveFromMyflow" @closeMyflowDialog="closeMyflowDialog"></myflow>
+      <el-dialog title="流程图" :visible.sync="liuChengTuGraphVisible" width="1400px" top="5vh" append-to-body :close-on-click-modal="false">
+        <myflow :parentCellsJsonStr="parentCellsJsonStr" :projectCanEditProjectDeptList="curRowCanEditProjectDeptList"  @saveFromMyflow="saveFromMyflow" @closeMyflowDialog="closeMyflowDialog"></myflow>
       </el-dialog>
     </div>
 
@@ -90,7 +94,8 @@
 
 <script>
   import Myflow from "../myflow/index";
-import { selectProjectBaseList,selectProjectLiuChengTuTemplateList, selectProjectLiuChengTuDataLogList,insertLiuChengTuDataLog,insertProjectBase} from "@/api/project/project"
+import { selectProjectBaseList,selectProjectLiuChengTuTemplateList, selectProjectLiuChengTuDataLogList,insertLiuChengTuDataLog,insertProjectBase,deleteProjectTemplate} from "@/api/project/project"
+  import {insertProjectTemplate} from "../../../api/project/project";
 
 export default {
   name: "ProjectLiuChengTuTemplate",
@@ -126,6 +131,9 @@ export default {
       //打开新增模板dialog
       addOrUpdateTemplateDialogTitle:"",
       addOrUpdateLiuChengTuTemplateVisible:false,
+      parentCellsJsonStr:"",
+      //能够操作项目的人员
+      curRowCanEditProjectDeptList:[],
     }
   },
   created() {
@@ -133,17 +141,32 @@ export default {
   },
   methods: {
     closeMyflowDialog(){
-      alert("xxxxx")
       this.liuChengTuGraphVisible=false;
     },
 
     saveFromMyflow(data){
+      let curObj=this;
+      //我转一下，把所有的status 都赋1
+      let cells=data["cells"];
+      if(typeof cells!='undefined' && cells.length>0){
+        for(let i=0;i<cells.length;i++){
+          let tempObj=cells[i];
+          if(tempObj["shape"]=="dag-commonTaskNode"){
+            let tempData=tempObj["data"];
+            if(typeof tempData["status"] !='undefined'){
+              cells[i]["data"]["status"]="1"
+            }
+          }
+        }
+      }
+
       let param={
         "projectLiuChengTuTemplateId":this.curRow.id,
-        "currentCellsJsonStr":JSON.stringify(data["cells"])
+        "currentCellsJsonStr":JSON.stringify(cells)
       }
       insertLiuChengTuDataLog(param).then(response => {
-        alert("已保存成功")
+        alert("已保存成功");
+        curObj.getList();
       })
     },
 
@@ -185,13 +208,13 @@ export default {
       this.$refs["addOrUpdateTemplateForm"].validate(valid => {
         if (valid) {
           if (this.addOrUpdateTemplateForm.id != undefined) {
-            updateProjectBase(this.addOrUpdateTemplateForm).then(response => {
+            updateProjectTemplate(this.addOrUpdateTemplateForm).then(response => {
               this.$modal.msgSuccess("修改成功")
               this.addOrUpdateLiuChengTuTemplateVisible = false
               this.getList()
             })
           } else {
-            insertProjectBase(this.addOrUpdateTemplateForm).then(response => {
+            insertProjectTemplate(this.addOrUpdateTemplateForm).then(response => {
               this.$modal.msgSuccess("新增成功")
               this.addOrUpdateLiuChengTuTemplateVisible = false
               this.getList()
@@ -209,9 +232,9 @@ export default {
 
     /** 删除按钮操作 */
     handleDelete(row) {
-      const noticeIds = row.noticeId || this.ids
-      this.$modal.confirm('是否确认删除公告编号为"' + noticeIds + '"的数据项？').then(function() {
-        return delNotice(noticeIds)
+      let templateName=row.templateName;
+      this.$modal.confirm('是否确认删除公告编号为"' + templateName + '"的数据项？').then(function() {
+        return deleteProjectTemplate({"id":row.id})
       }).then(() => {
         this.getList()
         this.$modal.msgSuccess("删除成功")
@@ -220,8 +243,20 @@ export default {
 
     openLiuChengTuGraph(row){
       this.curRow=row;
+      this.parentCellsJsonStr=row.cellsJsonStr;
+      this.curRowCanEditProjectDeptList=row.canEditProjectDeptList;
+      console.log("228:"+JSON.stringify(this.curRowCanEditProjectDeptList))
       this.liuChengTuGraphVisible=true;
-    }
+    },
   }
 }
 </script>
+<style rel="stylesheet/scss" lang="scss">
+  .el-dialog__header {
+    display: none !important;
+  }
+
+  .el-dialog__body{
+    padding: 10px 20px !important;
+  }
+</style>
