@@ -6,12 +6,15 @@
     </div>
 
     <div id="testJi">
-      <el-table v-loading="loading" :data="sortedNodeTableData"  class="custom-class"  :span-method="objectSpanMethod" border>
-        <el-table-column  label="分期" align="center" min-width="120px" :show-overflow-tooltip="true">
+      <el-table v-loading="loading" :data="sortedNodeTableData"  class="custom-class" :span-method="objectSpanMethod"  border>
+
+        <el-table-column v-for="item in maxContentsNum-1" :key="item"   label="" align="center" min-width="100px" :show-overflow-tooltip="true">
           <template slot-scope="scope">
-            <div style="font-size:24px;font-weight: bold" >{{scope.row.data.parentContentsNumSetName}}</div>
+            <div v-if="item==1" style="font-size:24px;font-weight: bold" >{{scope.row.data["contentsTableColumn"+(item-1)]}}</div>
+            <div v-else style="font-size:18px;font-weight: bold" >{{scope.row.data["contentsTableColumn"+(item-1)]}}</div>
           </template>
         </el-table-column>
+
 
         <el-table-column label="任务名称" align="center" prop="createTime" min-width="120px"  :show-overflow-tooltip="true">
           <template slot-scope="scope">
@@ -20,13 +23,13 @@
         </el-table-column>
 
         <!--1 未开始 2 进行中 3 完成 4 不再关注 5 部分完成-->
-        <el-table-column label="完成情况" align="center"  min-width="120px">
+        <el-table-column label="完成情况" align="center"  min-width="70px">
           <template slot-scope="scope">
             <el-tag :color="scope.row.data.status==1?'#5f95ff':scope.row.data.status==2?'#FF3333':scope.row.data.status==3?'#7FFF00':scope.row.data.status==4?'#878787':scope.row.data.status==5?'#C9DD23':''">{{getStatusName(scope.row)}}</el-tag>
           </template>
         </el-table-column>
 
-        <el-table-column label="负责部门" align="left" prop="createTime" min-width="100px"  :show-overflow-tooltip="true">
+        <el-table-column label="负责部门" align="left" prop="createTime" min-width="90px"  :show-overflow-tooltip="true">
           <template slot-scope="scope">
             <div>
               <span >{{ scope.row.data.allChargeDeptNameStr }}</span>
@@ -34,13 +37,13 @@
           </template>
         </el-table-column>
 
-        <el-table-column label="任务开始时间" align="center" prop="startTime" width="100">
+        <el-table-column label="任务开始时间" align="center" prop="startTime" min-width="90px">
           <template slot-scope="scope">
             <span>{{ parseTime(scope.row.data.startTime, '{y}-{m}-{d}') }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column label="预期结束时间" align="center" prop="expectedEndTime" width="100">
+        <el-table-column label="预期结束时间" align="center" prop="expectedEndTime" min-width="90px">
           <template slot-scope="scope">
             <span>{{ parseTime(scope.row.data.expectedEndTime, '{y}-{m}-{d}') }}</span>
           </template>
@@ -86,8 +89,10 @@ export default {
       },
 
       sortedNodeTableData:[],
-      spanArr:[],
-      position:0,
+      spanArr0:[],
+      spanArr1:[],
+      position0:0,
+      position1:0,
       //原始目录配置
       contentsSetStr:"",
       //原始目录配置map
@@ -98,6 +103,8 @@ export default {
       liuChengTuGraphVisible:false,
       parentCellsJsonStr:"",
       curRowCanEditProjectDeptList:[],
+      //当前最大目录数
+      maxContentsNum:0,
 
     }
   },
@@ -152,8 +159,13 @@ export default {
             let cellsJsonStr=tempObj["cellsJsonStr"];
             this.parentCellsJsonStr=cellsJsonStr;
             this.curRowCanEditProjectDeptList=tempObj["canEditProjectDeptList"]
-            curObj.generateContentsSetMap(tempObj["contentsSetStr"]);
+
+            //对节点进行排序
             curObj.sortedNodeTableData=curObj.getNodeDataAndSort(cellsJsonStr);
+
+            //根据配置好的目录，生成对象（其实非map）
+            curObj.generateContentsSetMap(tempObj["contentsSetStr"]);
+            //补充所有目录单元格
             curObj.supplyContentsSetNumStr();
             //确定哪些单元格要合并
             curObj.rowspan();
@@ -168,9 +180,23 @@ export default {
     supplyContentsSetNumStr(){
       for(let i=0;i<this.sortedNodeTableData.length;i++){
         let tempObj=this.sortedNodeTableData[i]["data"];
-        let parentContentsNumStr=tempObj["parentContentsNumStr"];
-        if(typeof parentContentsNumStr!='undefined' && parentContentsNumStr!=null){
-          this.sortedNodeTableData[i]["data"]["parentContentsNumSetName"]=this.contentsSetMap[parentContentsNumStr];
+        //获取当前的节点目录信息例如【1,1,0】
+        let splitContentsNumArr=tempObj["splitContentsNumArr"];
+        for(let j=0;j<this.maxContentsNum-1;j++){
+          //获取当前的key,例如1 例如1.1
+          let key="contentsNumStr";
+          for(let k=0;k<=j;k++){
+            key+=splitContentsNumArr[k];
+            if(k!=j){
+              key+=".";
+            }
+          }
+          //如果不带0，则赋值
+          if(splitContentsNumArr[j]=='0'){
+            this.sortedNodeTableData[i]["data"]["contentsTableColumn"+j]="-";
+          }else{
+            this.sortedNodeTableData[i]["data"]["contentsTableColumn"+j]=this.contentsSetMap[key];
+          }
         }
       }
     },
@@ -204,7 +230,7 @@ export default {
           let temObj=arr[i];
           let temArr=temObj.split(":");
           if(temArr.length==2){
-            this.$set(this.contentsSetMap, temArr[0], temArr[1]);
+            this.$set(this.contentsSetMap, "contentsNumStr"+temArr[0], temArr[1]);
           }
         }
       }else{
@@ -215,26 +241,56 @@ export default {
     getNodeDataAndSort(cellsJsonStr){
       let tempList=JSON.parse(cellsJsonStr);
       let returnArr=[];
+      //循环以后，先计算获取最大目录层级
+      let maxContentsNum=0;
       if(tempList.length>0){
         for(let i=0;i<tempList.length;i++){
           let tempObj=tempList[i];
           if(tempObj["shape"]==="dag-commonTaskNode"){
             if(typeof tempObj.data.contentsNumStr !='undefined'){
-              tempObj.data["parentContentsNumStr"]=tempObj.data["contentsNumStr"].split(".")[0];
-              tempObj.data["childContentsNumStr"]=tempObj.data["contentsNumStr"].split(".")[1];
+              //目录可以是1.1.1.2.3   或者4.1之类
+              let curContentsNum=tempObj.data["contentsNumStr"].split(".").length;
+              if(maxContentsNum<curContentsNum){
+                maxContentsNum=curContentsNum;
+              }
+            }
+          }
+        }
+        this.maxContentsNum=maxContentsNum;
+        //遍历每个目录，组装所有的目录，并补全到最多层级
+        for(let i=0;i<tempList.length;i++){
+          let tempObj=tempList[i];
+          if(tempObj["shape"]==="dag-commonTaskNode"){
+            if(typeof tempObj.data.contentsNumStr !='undefined'){
+              //目录可以是1.1.1.2.3   或者4.1之类，反正第一个必须是
+              //加入最高4层，那就是整一个数组【1,1,2,30】
+              //如果只有1.1 那就是【1,1,0,0】
+              let splitContentsNumArr=tempObj.data["contentsNumStr"].split(".");
+              let originContentsNumArrLength=splitContentsNumArr.length;
+              for(let j=0;j<maxContentsNum-originContentsNumArrLength;j++){
+                splitContentsNumArr.push(0);
+              }
+              tempObj.data["splitContentsNumArr"]=splitContentsNumArr;
             }
             returnArr.push(tempObj)
           }
         }
       }
-      returnArr.sort((a, b) => a.data.parentContentsNumStr - b.data.parentContentsNumStr);
-      returnArr.sort((a, b) => {
-        if (a.data.parentContentsNumStr === b.data.parentContentsNumStr) {
-          return a.data.childContentsNumStr - b.data.childContentsNumStr;
-        }
-        // 否则，按年龄排序
-        return a.data.parentContentsNumStr - b.data.parentContentsNumStr;
-      });
+
+      //开始排序
+      //多层排序，一层一层来
+      for(let i=0;i<maxContentsNum;i++){
+        returnArr.sort((a, b) => {
+          for(let i=0; i<maxContentsNum; i++) {
+            const valA = a.data.splitContentsNumArr[i] || 0;
+            const valB = b.data.splitContentsNumArr[i] || 0;
+            if(valA !== valB) {
+              return valA - valB;
+            }
+          }
+          return 0;
+        });
+      }
       return returnArr;
     },
 
@@ -242,15 +298,19 @@ export default {
     rowspan() {
       this.sortedNodeTableData.forEach((item, index) => {
         if (index === 0) {
-          this.spanArr.push(1)
-          this.position = 0
+          for(let i=0;i<this.maxContentsNum-1;i++){
+            this["spanArr"+i].push(1)
+            this["position"+i] = 0
+          }
         } else {
-          if (this.sortedNodeTableData[index].data.parentContentsNumStr == this.sortedNodeTableData[ index-1 ].data.parentContentsNumStr) {
-            this.spanArr[this.position] += 1
-            this.spanArr.push(0)
-          } else {
-            this.spanArr.push(1)
-            this.position = index
+          for(let i=0;i<this.maxContentsNum-1;i++){
+            if (this.sortedNodeTableData[index].data["contentsTableColumn"+i] == this.sortedNodeTableData[ index-1 ].data["contentsTableColumn"+i] ) {
+              this["spanArr"+i][this["position"+i]] += 1
+              this["spanArr"+i].push(0)
+            } else {
+              this["spanArr"+i].push(1)
+              this["position"+i]= index
+            }
           }
         }
       })
@@ -259,7 +319,15 @@ export default {
 
     objectSpanMethod({ row, column, rowIndex, columnIndex }) {
       if (columnIndex === 0) {
-        const _row = this.spanArr[rowIndex]
+        const _row = this.spanArr0[rowIndex]
+        const _col = _row > 0 ? 1: 0
+        return {
+          rowspan: _row,
+          colspan: _col
+        }
+      }
+      if (columnIndex === 1) {
+        const _row = this.spanArr1[rowIndex]
         const _col = _row > 0 ? 1: 0
         return {
           rowspan: _row,
