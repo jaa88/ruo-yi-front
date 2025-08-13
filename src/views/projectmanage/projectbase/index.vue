@@ -28,6 +28,19 @@
           </template>
         </el-table-column>
 
+        <el-table-column  label="项目图" align="center" min-width="120px" :show-overflow-tooltip="true">
+          <template slot-scope="scope">
+            <div v-if="scope.row.projectMainImagePathAndName!=null && scope.row.projectMainImagePathAndName!='' ">
+              <el-image
+                style="width: 100px; height: 100px"
+                :src="uploadUrlPrefix+scope.row.projectMainImagePathAndName"
+                :preview-src-list="[uploadUrlPrefix+scope.row.projectMainImagePathAndName]"
+              >
+              </el-image>
+            </div>
+          </template>
+        </el-table-column>
+
         <el-table-column label="负责部门" align="center" prop="createTime" min-width="120px"  :show-overflow-tooltip="true">
           <template slot-scope="scope">
             <span v-for="item in scope.row.canEditProjectDeptList">{{ item.deptName+";" }}</span>
@@ -128,6 +141,20 @@
           <el-input v-model="addOrUpdateProjectBaseForm.contentsSetStr" placeholder="类似如下“1:前期,2:中期,3:后期”，英文符号" />
         </el-form-item>
 
+        <el-form-item label="上传文件" style="margin-bottom: 10px !important;">
+          <el-upload style="" list-type="picture-card"
+                     :file-list="addOrUpdateProjectBaseForm.fileList"
+                     :limit="1"
+                     :on-success="onSuccess" :on-error="onError" :on-remove="handleRemove"
+                     :action="uploadUrl" :headers="headers" accept=".jpg,.jpeg,.png"
+                     :on-preview="handlePictureCardPreview"
+          >
+
+
+               <el-button size="small" type="primary">导入</el-button>
+          </el-upload>
+        </el-form-item>
+
         <el-form-item label="初始模板" prop="projectName">
           <el-select v-model="addOrUpdateProjectBaseForm.cellsJsonStr" filterable placeholder="请选择">
             <el-option
@@ -146,10 +173,15 @@
       </div>
     </el-dialog>
 
+    <el-dialog :visible.sync="dialogVisible">
+      <img width="100%" :src="dialogImageUrl" alt="">
+    </el-dialog>
+
   </div>
 </template>
 
 <script>
+  import { getToken } from "@/utils/auth"
   import Myflow from "../myflow/index";
   import {selectAllDeptList} from  "@/api/system/dept"
   import { selectProjectBaseList,selectProjectLiuChengTuTemplateList, selectProjectLiuChengTuDataLogList,insertLiuChengTuDataLog,insertProjectBase,updateProjectBase,deleteProjectBase } from "@/api/project/project"
@@ -159,6 +191,12 @@ export default {
   components: { Myflow },
   data() {
     return {
+      //上传文件url
+      uploadUrl:process.env.VUE_APP_BASE_API+"/common/upload",
+      uploadUrlPrefix:process.env.VUE_APP_BASE_API,
+      headers: {
+        Authorization: "Bearer " + getToken()
+      },
       // 遮罩层
       loading: true,
       // 总条数
@@ -192,6 +230,8 @@ export default {
       allTemplateList:[],
       //新增项目时选择的初始模板
       choosedInitCellsJsonStr:"",
+      dialogImageUrl: '',
+      dialogVisible: false
     }
   },
   created() {
@@ -203,6 +243,53 @@ export default {
     this.selectAllTemplateList();
   },
   methods: {
+    handlePictureCardPreview(file){
+      this.dialogImageUrl = file.url;
+      this.dialogVisible = true;
+    },
+
+    /**
+     * 上传失败回调函数
+     */
+    onError(err, file, fileList) {
+      this.$message({
+        message: "上传失败",
+        type: "error"
+      });
+    },
+
+    /**
+     * 上传成功回调函数
+     */
+    onSuccess(response, file, fileList) {
+      if(response.code==500){
+        this.$message({
+          message: "上传失败:"+response.msg,
+          type: "error"
+        });
+        return;
+      }
+
+      this.$message({
+        message: "上传成功",
+        type: "info"
+      });
+      let returnUploadFile=response;
+      this.addOrUpdateProjectBaseForm.returnUploadFileList.push(returnUploadFile);
+      this.addOrUpdateProjectBaseForm.projectMainImagePathAndName=returnUploadFile["fileName"];
+    },
+
+    //删除文件回调
+    handleRemove(file,fileList){
+      console.log("file.name:"+file.name)
+      for(let i=this.addOrUpdateProjectBaseForm.returnUploadFileList.length-1;i>0;i--){
+        if(file.name===this.addOrUpdateProjectBaseForm.returnUploadFileList[i]["originalFilename"]){
+          this.addOrUpdateProjectBaseForm.returnUploadFileList.slice(i,1);
+          break;
+        }
+      }
+    },
+
     selectAllTemplateList(){
       selectProjectLiuChengTuTemplateList({"pageNum":1,"pageSize":1000}).then(response => {
         this.allTemplateList = response.data
@@ -285,7 +372,10 @@ export default {
 
     /** 新增按钮操作 */
     handleAdd() {
-      this.addOrUpdateProjectBaseForm={};
+      this.addOrUpdateProjectBaseForm={
+        fileList:[],
+        returnUploadFileList:[]
+      };
       this.addOrUpdateProjectBaseDialogTitle="新增项目";
       this.addOrUpdateProjectBaseVisible = true;
     },
@@ -297,7 +387,10 @@ export default {
         "remark":row.remark,
         "canEditProjectDeptIdList":row.canEditProjectDeptIdList,
         "contentsSetStr":row.contentsSetStr,
-        "id":row.id
+        "id":row.id,
+        fileList:row.projectMainImagePathAndName!=null && row.projectMainImagePathAndName!=''?[{"projectMainImagePathAndName":row.projectMainImagePathAndName,"url":process.env.VUE_APP_BASE_API+row.projectMainImagePathAndName}]:[],
+        projectMainImagePathAndName:row.projectMainImagePathAndName,
+        returnUploadFileList:[]
       }
       this.addOrUpdateProjectBaseDialogTitle="修改项目";
       this.addOrUpdateProjectBaseVisible = true;
