@@ -150,6 +150,7 @@
                              :on-preview="handlePictureCardPreview"
                   >
 
+
                        <el-button size="small" type="primary">导入</el-button>
                   </el-upload>
                 </el-form-item>
@@ -357,7 +358,6 @@ export default {
     },
 
     openProjectDetailPage(row){
-      console.log("row.projectName"+row.projectName)
       this.$tab.openPage(row.projectName, '/projectmanage/projectdetail/index/' +row.id, row)
     },
 

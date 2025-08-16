@@ -65,6 +65,8 @@
 export default {
   name: "dialogMysql",
 
+  props:["whereComeFrom"],
+
   data() {
     return {
       visible: false,
@@ -89,7 +91,6 @@ export default {
   methods: {
     init(item) {
       //初始化数据
-      console.log("item:"+JSON.stringify(item))
       this.node = item;
       this.label = item.item.data.label;
       this.taskName=item.item.data.taskName;
@@ -114,22 +115,40 @@ export default {
         return;
       }
 
-      var node = this.$parent.getNodeById(this.node.item.id);
-      //这个是数组，不能机械的用 Object.assign了
-      this.node.item.data.chargeDeptIdList=[];
-      node.setData(
-        Object.assign({}, this.node.item.data,
-          {
-            label: this.label,
-            taskName:this.taskName,
-            chargeDeptIdList:this.chargeDeptIdList,
-            remark:this.remark,
-            startTime:this.startTime,
-            expectedEndTime:this.expectedEndTime,
-            status:this.status,
-            contentsNumStr:this.contentsNumStr
-          })
-      );
+      if("flow"==this.whereComeFrom){
+        var node = this.$parent.getNodeById(this.node.item.id);
+        //这个是数组，不能机械的用 Object.assign了
+        this.node.item.data.chargeDeptIdList=[];
+        node.setData(
+          Object.assign({}, this.node.item.data,
+            {
+              label: this.label,
+              taskName:this.taskName,
+              chargeDeptIdList:this.chargeDeptIdList,
+              remark:this.remark,
+              startTime:this.startTime,
+              expectedEndTime:this.expectedEndTime,
+              status:this.status,
+              contentsNumStr:this.contentsNumStr
+            })
+        );
+      }
+      if("projectDetail"==this.whereComeFrom){
+        this.node.item.data.chargeDeptIdList=[];
+        this.node.item.data=
+          Object.assign({}, this.node.item.data,
+            {
+              label: this.label,
+              taskName:this.taskName,
+              chargeDeptIdList:this.chargeDeptIdList,
+              remark:this.remark,
+              startTime:this.startTime,
+              expectedEndTime:this.expectedEndTime,
+              status:this.status,
+              contentsNumStr:this.contentsNumStr
+            });
+        this.$parent.saveFromEditTaskInfoDialog(this.node)
+      }
       this.visible = false;
     },
   },

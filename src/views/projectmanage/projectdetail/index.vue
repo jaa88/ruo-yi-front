@@ -18,7 +18,7 @@
 
         <el-table-column label="任务名称" align="center" prop="createTime" min-width="120px"  :show-overflow-tooltip="true">
           <template slot-scope="scope">
-            <span >{{ scope.row.data.taskName }}</span>
+            <span style="color: #36a3f7;cursor:pointer" @click="openTaskItemEditPage(scope.row)">{{ scope.row.data.taskName }}</span>
           </template>
         </el-table-column>
 
@@ -61,6 +61,8 @@
           <myflow :parentCellsJsonStr="parentCellsJsonStr" :projectCanEditProjectDeptList="curRowCanEditProjectDeptList"  @saveFromMyflow="saveFromMyflow" @closeMyflowDialog="closeMyflowDialog"></myflow>
         </el-dialog>
       </div>
+
+      <EditTaskInfoDialog ref="editTaskInfoDialog" whereComeFrom="projectDetail"></EditTaskInfoDialog>
     </div>
   </div>
 </template>
@@ -69,10 +71,11 @@
   import Myflow from "../myflow/index";
   import {selectAllDeptList} from  "@/api/system/dept"
   import { selectProjectBaseList,selectProjectLiuChengTuTemplateList, selectProjectLiuChengTuDataLogList,insertLiuChengTuDataLog,insertProjectBase,updateProjectBase,deleteProjectBase } from "@/api/project/project"
+  import EditTaskInfoDialog from "../myflow/components/dialog/editTaskInfoDialog.vue";
 
 export default {
   name: "ProjectBase",
-  components: { Myflow },
+  components: { Myflow ,EditTaskInfoDialog},
   data() {
     return {
       // 遮罩层
@@ -102,6 +105,7 @@ export default {
       //流程图是否可见
       liuChengTuGraphVisible:false,
       parentCellsJsonStr:"",
+      parentCellsObjectList:null,
       curRowCanEditProjectDeptList:[],
       //当前最大目录数
       maxContentsNum:0,
@@ -118,6 +122,32 @@ export default {
 
   },
   methods: {
+    //打开子任务节点的编辑页面
+    openTaskItemEditPage(node){
+      this.$refs.editTaskInfoDialog.visible=true;
+      this.$refs.editTaskInfoDialog.init({ type: "node", item: node,"projectCanEditProjectDeptList":this.curRowCanEditProjectDeptList });
+    },
+
+    saveFromEditTaskInfoDialog(tempObj){
+      let curObj=this;
+      let node=tempObj["item"];
+      for(let i=0;i<this.parentCellsObjectList.length;i++){
+        if(this.parentCellsObjectList[i]["id"]==node.id){
+          this.parentCellsObjectList[i]=node;
+        }
+      }
+      let param={
+        "projectBaseId":this.queryParams.projectBaseId,
+        "currentCellsJsonStr":JSON.stringify(this.parentCellsObjectList)
+      }
+      insertLiuChengTuDataLog(param).then(response => {
+        curObj.$message({
+          message: "上传成功",
+          type: "success"
+        });
+      })
+    },
+
     openLiuChengTuGraph(){
       this.liuChengTuGraphVisible=true;
     },
@@ -158,6 +188,7 @@ export default {
             //获取节点信息
             let cellsJsonStr=tempObj["cellsJsonStr"];
             this.parentCellsJsonStr=cellsJsonStr;
+            this.parentCellsObjectList=JSON.parse(cellsJsonStr);
             this.curRowCanEditProjectDeptList=tempObj["canEditProjectDeptList"]
 
             //对节点进行排序
@@ -208,7 +239,6 @@ export default {
         let chargeDeptIdList=tempObj["chargeDeptIdList"];
         if(typeof chargeDeptIdList!='undefined' && chargeDeptIdList.length>0){
           for(let j=0;j<chargeDeptIdList.length;j++){
-            console.log(JSON.stringify(this.allDeptMap))
             if(typeof this.sortedNodeTableData[i]["data"]["allChargeDeptNameStr"]=='undefined'){
               this.sortedNodeTableData[i]["data"]["allChargeDeptNameStr"]="";
             }

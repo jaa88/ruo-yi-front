@@ -87,7 +87,7 @@
         <div id="draw-cot" />
       </div>
     </section>
-    <EditTaskInfoDialog ref="editTaskInfoDialog"></EditTaskInfoDialog>
+    <EditTaskInfoDialog ref="editTaskInfoDialog" whereComeFrom="flow"></EditTaskInfoDialog>
   </div>
 </template>
 

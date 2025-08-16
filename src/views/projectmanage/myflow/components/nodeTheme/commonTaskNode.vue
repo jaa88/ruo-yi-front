@@ -6,7 +6,7 @@
         width="400"
         trigger="hover">
         <div>
-          shoaghaoghahgo
+          待完善，悬浮显示详情
         </div>
         <span slot="reference" class="label" :style="{'text-decoration':status =='4'?'line-through':''}">{{ taskName }}</span>
       </el-popover>
