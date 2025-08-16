@@ -6,6 +6,14 @@
     <top-nav v-if="topNav" id="topmenu-container" class="topmenu-container" />
 
     <div class="right-menu">
+      <template v-if="device!=='mobile'">
+        <el-tooltip :content="noticeContent" effect="dark" placement="bottom">
+          <el-badge :value="noticeCount" class="right-menu-item hover-effect" :class="{'badge-custom':noticeCount>0}" >
+            <i class="el-icon-message-solid" @click="toNoticePage"></i>
+          </el-badge>
+        </el-tooltip>
+      </template>
+
       <el-dropdown class="avatar-container right-menu-item hover-effect" trigger="hover">
         <div class="avatar-wrapper">
           <img :src="avatar" class="user-avatar">
@@ -38,6 +46,7 @@ import SizeSelect from '@/components/SizeSelect'
 import Search from '@/components/HeaderSearch'
 import RuoYiGit from '@/components/RuoYi/Git'
 import RuoYiDoc from '@/components/RuoYi/Doc'
+import { listNotice } from "@/api/system/notice";
 
 export default {
   emits: ['setLayout'],
@@ -69,6 +78,28 @@ export default {
       }
     }
   },
+
+
+  created(){
+    this.poll();
+  },
+  mounted() {
+    // 启动轮询
+    this.startPolling();
+  },
+  beforeDestroy() {
+    // 在组件销毁之前清除定时器，防止内存泄漏
+    this.stopPolling();
+  },
+
+  data(){
+    return{
+      noticeContent:'',//通知内容
+      noticeCount:0,//通知数量
+      intervalId: null
+    }
+  },
+
   methods: {
     toggleSideBar() {
       this.$store.dispatch('app/toggleSideBar')
@@ -86,6 +117,29 @@ export default {
           location.href = process.env.NODE_ENV === "production" ?'/jiaoyun':'/index'
         })
       }).catch(() => {})
+    },
+
+
+    toNoticePage(){
+      //前往通知公告管理页面
+      this.$router.push("/system/notice");
+    },
+    startPolling() {
+      // 每隔一定时间执行轮询任务
+      this.intervalId = setInterval(() => {
+        this.poll();
+      }, 5000); // 5秒钟轮询一次，根据需要调整间隔时间
+    },
+    stopPolling() {
+      // 清除定时器，停止轮询任务    ！！！！重要，防止内存泄露
+      clearInterval(this.intervalId);
+    },
+    poll() {
+      // 在这里执行轮询的任务，可以是发送请求或执行其他操作
+      listNotice().then(response => {
+        this.noticeCount=response.total;//获取信息条数
+        this.noticeContent="您有"+this.noticeCount+"条未读的信息";//定制内容
+      });
     }
   }
 
@@ -185,6 +239,21 @@ export default {
         }
       }
     }
+
+    ::v-deep .el-badge__content {
+      margin-top: 9px;/* 调整一下上下左右你喜欢的位置 */
+      margin-right: 7px;
+    }
+
+    .badge-custom {
+      animation: blink-animation 0.5s infinite alternate; /* 设置闪烁动画 */
+    }
+
+    @keyframes blink-animation {
+      0% { opacity: 1; } /* 定义动画起始状态 */
+      100% { opacity: 0.1; } /* 定义动画结束状态 */
+    }
   }
 }
 </style>
+
