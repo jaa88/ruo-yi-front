@@ -89,3 +89,14 @@ export function deleteProjectTemplate(data) {
     data: data
   })
 }
+
+// 查询流程图节点信息
+export function queryProjectLiuChengTuNodeByParam(data) {
+  return request({
+    url: '/project/liuChengTu/queryProjectLiuChengTuNodeByParam',
+    method: 'post',
+    data: data
+  })
+}
+
+

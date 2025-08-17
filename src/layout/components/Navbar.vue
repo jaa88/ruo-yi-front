@@ -7,7 +7,16 @@
 
     <div class="right-menu">
       <template v-if="device!=='mobile'">
-        <el-tooltip :content="noticeContent" effect="dark" placement="bottom">
+        <el-tooltip v-if="noticeCount>0" effect="dark" placement="bottom">
+          <div slot="content">
+            <div>
+              <div>
+                <span>部门{{noticeCount}}条进行中任务</span>
+              </div>
+            </div>
+
+          </div>
+
           <el-badge :value="noticeCount" class="right-menu-item hover-effect" :class="{'badge-custom':noticeCount>0}" >
             <i class="el-icon-message-solid" @click="toNoticePage"></i>
           </el-badge>
@@ -47,6 +56,10 @@ import Search from '@/components/HeaderSearch'
 import RuoYiGit from '@/components/RuoYi/Git'
 import RuoYiDoc from '@/components/RuoYi/Doc'
 import { listNotice } from "@/api/system/notice";
+import {queryProjectLiuChengTuNodeByParam} from "@/api/project/project";
+import Cookies from 'js-cookie'
+import {getToken} from "../../utils/auth";
+import {formatTimeByPattern} from '@/utils'
 
 export default {
   emits: ['setLayout'],
@@ -65,7 +78,8 @@ export default {
       'sidebar',
       'avatar',
       'device',
-      'nickName'
+      'nickName',
+      'deptId'
     ]),
     setting: {
       get() {
@@ -85,18 +99,19 @@ export default {
   },
   mounted() {
     // 启动轮询
-    this.startPolling();
+    //this.startPolling();
   },
   beforeDestroy() {
     // 在组件销毁之前清除定时器，防止内存泄漏
-    this.stopPolling();
+    //this.stopPolling();
   },
 
   data(){
     return{
       noticeContent:'',//通知内容
       noticeCount:0,//通知数量
-      intervalId: null
+      intervalId: null,
+      doingProjectLiuChengTuNodeList:[],
     }
   },
 
@@ -122,7 +137,11 @@ export default {
 
     toNoticePage(){
       //前往通知公告管理页面
-      this.$router.push("/system/notice");
+      let curDay=formatTimeByPattern(new Date(),'yyyy-MM-dd');
+      Cookies.set("LastNoticeDay",curDay);
+      this.doingProjectLiuChengTuNodeList=[];
+      this.noticeCount=0;
+      this.$router.push("/projectManage/tasklist");
     },
     startPolling() {
       // 每隔一定时间执行轮询任务
@@ -135,11 +154,31 @@ export default {
       clearInterval(this.intervalId);
     },
     poll() {
+      let curObj=this;
       // 在这里执行轮询的任务，可以是发送请求或执行其他操作
-      listNotice().then(response => {
+      /*listNotice().then(response => {
         this.noticeCount=response.total;//获取信息条数
         this.noticeContent="您有"+this.noticeCount+"条未读的信息";//定制内容
-      });
+      });*/
+
+      //获取自己deptId 正在进行中的任务
+      let param={
+        "pageNum":1,
+        "pageSize":1000,
+        "chargeDeptId":this.deptId,
+        "status":1
+      }
+      queryProjectLiuChengTuNodeByParam(param).then(response =>{
+        //如果上次提醒时的token与现在的token不同，则需要重新提醒
+        let curDay=formatTimeByPattern(new Date(),'yyyy-MM-dd');
+        let lastNoticeDay=Cookies.get("LastNoticeDay");
+        if(typeof lastNoticeDay=='undefined' || lastNoticeDay==null || curDay!=lastNoticeDay){
+          curObj.doingProjectLiuChengTuNodeList=response.data;
+          curObj.noticeCount=curObj.doingProjectLiuChengTuNodeList.length;
+        }else{
+          console.log("今天已经提醒过了，不再提醒")
+        }
+      })
     }
   }
 

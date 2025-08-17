@@ -10,6 +10,7 @@ const getters = {
   id: state => state.user.id,
   name: state => state.user.name,
   nickName: state => state.user.nickName,
+  deptId:state => state.user.deptId,
   introduction: state => state.user.introduction,
   roles: state => state.user.roles,
   permissions: state => state.user.permissions,
