@@ -1,50 +1,86 @@
 <template>
   <div class="app-container home">
-    <el-row :gutter="20">
-      <el-col :span="12">
-        <el-card class="update-log">
-          <div slot="header" class="clearfix">
-            <span>节点预警（已过期）</span>
-          </div>
-          <div>
-            <div v-if="nodeList.length === 0">暂无预警节点</div>
+    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" label-width="68px">
+      <el-form-item label="项目名称" prop="noticeTitle">
+        <el-input
+          v-model="queryParams.projectName"
+          placeholder="任务名称"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
 
-            <el-table v-else :data="nodeList"  class="custom-class" stripe>
-              <el-table-column  label="序号" min-width="60px" align="center">
-                <template slot-scope="scope"> {{scope.$index+1}} </template>
-              </el-table-column>
+      <el-form-item label="附件名" prop="noticeTitle">
+        <el-input
+          v-model="queryParams.jianSheXingZhi"
+          placeholder="任务名称"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
 
-              <el-table-column  label="项目名称" align="center" min-width="120px" :show-overflow-tooltip="true">
-                <template slot-scope="scope">
-                  <span>{{scope.row.projectName}}</span>
-                </template>
-              </el-table-column>
+      <el-form-item label="任务状态" prop="noticeTitle">
+        <el-select style="width:150px" v-model="queryParams.status" placeholder="任务状态" @change="handleQuery">
+          <el-option label="未开始" value="1" />
+          <el-option label="进行中" value="2" />
+          <el-option label="完成" value="3" />
+          <el-option label="不再关注" value="4" />
+          <el-option label="部分完成" value="5" />
+        </el-select>
+      </el-form-item>
 
-              <el-table-column  label="预期结束时间" align="center" min-width="120px" :show-overflow-tooltip="true">
-                <template slot-scope="scope">
-                  <span>{{parseTime(scope.row.expectedEndTime, '{y}-{m}-{d}')}}</span>
-                </template>
-              </el-table-column>
+      <el-form-item>
+        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
+      </el-form-item>
+    </el-form>
 
-              <el-table-column  label="任务名称" align="center" min-width="120px" :show-overflow-tooltip="true">
-                <template slot-scope="scope">
-                  <span>{{ scope.row.taskName }}</span>
-                </template>
-              </el-table-column>
-            </el-table>
+    <div>
+      <el-row :gutter="20">
+        <el-col
+          v-for="(item, index) in tableData"
+          :key="index"
+          :span="6"
+          style="margin-bottom:20px"
+        >
+          <el-card shadow="hover">
+            <div slot="header" class="clearfix">
+              <a style="font-weight: bold" @click="openProjectDetailPage(item)">{{item.projectName}}</a>
+            </div>
 
-          </div>
+            <div>
+              <div>
+                <el-progress :text-inside="true" :stroke-width="26" :percentage="item.percentage"></el-progress>
+              </div>
 
-        </el-card>
-      </el-col>
-      <el-col :span="12">
-        <el-card class="update-log">
-          <div slot="header" class="clearfix">
-            <span>跟进动态</span>
-          </div>
-        </el-card>
-      </el-col>
-    </el-row>
+              <div>
+                <span>建设性质：</span>
+                <span>{{item.jianSheXingZhi?item.jianSheXingZhi:'--'}}</span>
+              </div>
+
+              <div>
+                <span>共</span>
+                <span style="color: #409EFF">{{item.allPayAttentionNodeCount}}</span>
+                <span>个阶段，已完成</span>
+                <span style="color: #409EFF">{{item.allDoneNodeCount}}</span>
+                <span>个阶段,进行中</span>
+                <span style="color: #F56C6C">{{item.allDoingNodeCount}}</span>
+                <span>个阶段</span>
+              </div>
+            </div>
+          </el-card>
+        </el-col>
+      </el-row>
+
+    </div>
+
+    <pagination
+      v-show="total>0"
+      :total="total"
+      :page.sync="queryParams.pageNum"
+      :page-sizes="[16, 24,36]"
+      :limit.sync="queryParams.pageSize"
+      @pagination="getList"
+    />
   </div>
 </template>
 
@@ -54,12 +90,25 @@
   import Cookies from 'js-cookie'
   import {getToken} from "../utils/auth";
   import {formatTimeByPattern} from '@/utils'
+  import { selectProjectBaseList,selectProjectLiuChengTuTemplateList, selectProjectLiuChengTuDataLogList,insertLiuChengTuDataLog,insertProjectBase,updateProjectBase,deleteProjectBase } from "@/api/project/project"
 
 export default {
   name: "Index",
   data() {
     return {
-      nodeList:[],
+      // 遮罩层
+      loading: true,
+      // 总条数
+      total: 0,
+      // 查询参数
+      tableData:[],
+      queryParams: {
+        pageNum: 1,
+        pageSize: 16,
+        projectName:"",
+        jianSheXingZhi:"",
+        status:"",
+      },
     }
   },
 
@@ -70,42 +119,58 @@ export default {
     ]),
   },
 
-  created(){
-    this.queryProjectLiuChengTuNodeByParam();
+  mounted(){
+    this.getList();
   },
 
   methods: {
-    queryProjectLiuChengTuNodeByParam() {
-      let curObj=this;
-      //获取自己deptId 正在进行中的任务
-      let param={
-        "pageNum":1,
-        "pageSize":1000,
-        "chargeDeptId":this.deptId,
-        "statusList":[1,2,5]
-      }
-      //判断是否是管理员 ,如果是管理员则查询所有的
-      if(this.roles!=null && this.roles.length){
-        for(let i=0;i<this.roles.length;i++){
-          if(this.roles[i]=='admin'){
-            param.chargeDeptId="";
-          }
-        }
-      }
-      queryProjectLiuChengTuNodeByParam(param).then(response =>{
-        let nodeList=response.data;
-        nodeList.sort((a, b) => {
-          return new Date(a.expectedEndTime) - new Date(b.expectedEndTime);
-        });
+    /** 搜索按钮操作 */
+    handleQuery() {
+      this.queryParams.pageNum = 1
+      this.getList()
+    },
 
-        for(let i=nodeList.length-1;i>=0;i--){
-          if(new Date(nodeList[i]["expectedEndTime"])-new Date()>0 || nodeList[i]["expectedEndTime"]==null || nodeList[i]["expectedEndTime"]==0){
-            nodeList.splice(i,1);
-          }
+    /** 查询列表数据 */
+    getList() {
+      this.loading = true
+      selectProjectBaseList(this.queryParams).then(response => {
+        //补充现在的进度
+        let tableData=response.data;
+        for(let i=0;i<tableData.length;i++){
+          let row=tableData[i];
+          let allPayAttentionNodeCount=0;
+          let allDoneNodeCount=0;
+          let allDoingNodeCount=0;
+          if(row.cellsJsonStr!=null && row.cellsJsonStr.length>10){
+            JSON.parse(row.cellsJsonStr).forEach(item => {
+              //1 未开始 2 进行中 3 完成 4 不再关注 5 部分完成
+              if (item.shape == 'dag-commonTaskNode' && item.data?.status != 4) {
+                allPayAttentionNodeCount+=1;
+                if(item.data?.status == 3){
+                  allDoneNodeCount+=1;
+                }
+                if(item.data?.status ==2){
+                  allDoingNodeCount+=1;
+                }
+              }
+            });
+            tableData[i]["allPayAttentionNodeCount"]=allPayAttentionNodeCount;
+            tableData[i]["allDoneNodeCount"]=allDoneNodeCount;
+            tableData[i]["allDoingNodeCount"]=allDoingNodeCount;
+            tableData[i]["percentage"]=allPayAttentionNodeCount!==0?Math.floor((allDoneNodeCount / allPayAttentionNodeCount) * 100):0;
+          }else{
+            tableData[i]["allPayAttentionNodeCount"]=0;
+            tableData[i]["allDoneNodeCount"]=0;          }
         }
-        curObj.nodeList=nodeList;
+        this.tableData = response.data;
+        this.total = response.total
+        this.loading = false
       })
-    }
+    },
+
+    openProjectDetailPage(row){
+      this.$tab.openPage(row.projectName, '/projectmanage/projectdetail/index/' +row.id, row)
+    },
   }
 }
 </script>
