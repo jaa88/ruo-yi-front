@@ -10,6 +10,15 @@
         />
       </el-form-item>
 
+      <el-form-item label="附件名" prop="noticeTitle">
+        <el-input
+          v-model="queryParams.fileName"
+          placeholder="任务名称"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+
       <el-form-item label="任务状态" prop="noticeTitle">
         <el-select style="width:150px" v-model="queryParams.status" placeholder="任务状态" @change="handleQuery">
           <el-option label="未开始" value="1" />
@@ -43,31 +52,45 @@
           </template>
         </el-table-column>
 
-        <el-table-column  label="负责部门" align="center" min-width="120px" :show-overflow-tooltip="true">
+        <el-table-column  label="负责部门" align="center" min-width="90px" :show-overflow-tooltip="true">
           <template slot-scope="scope">
             {{scope.row.deptName!=null ?scope.row.deptName:'--'}}
           </template>
         </el-table-column>
 
-        <el-table-column  label="状态" align="center" min-width="120px" :show-overflow-tooltip="true">
+        <el-table-column  label="状态" align="center" min-width="60px" :show-overflow-tooltip="true">
           <template slot-scope="scope">
             <el-tag :color="scope.row.status==1?'#5f95ff':scope.row.status==2?'#FF3333':scope.row.status==3?'#7FFF00':scope.row.status==4?'#878787':scope.row.status==5?'#C9DD23':''">{{getStatusName(scope.row.status)}}</el-tag>
           </template>
         </el-table-column>
 
-        <el-table-column  label="开始时间" align="center" min-width="120px" :show-overflow-tooltip="true">
+        <el-table-column  label="开始时间" align="center" min-width="80px" :show-overflow-tooltip="true">
           <template slot-scope="scope">
             {{ scope.row.startTime!=null?parseTime(scope.row.startTime, '{y}-{m}-{d}'):'--' }}
           </template>
         </el-table-column>
 
-        <el-table-column  label="预期结束时间" align="center" min-width="120px" :show-overflow-tooltip="true">
+        <el-table-column  label="预期结束时间" align="center" min-width="80px" :show-overflow-tooltip="true">
           <template slot-scope="scope">
             {{ scope.row.expectedEndTime!=null?parseTime(scope.row.expectedEndTime, '{y}-{m}-{d}'):'--' }}
           </template>
         </el-table-column>
 
-        <el-table-column  label="上次更新时间" align="center" min-width="120px" :show-overflow-tooltip="true">
+        <el-table-column  label="附件" align="center" min-width="140px" :show-overflow-tooltip="true">
+          <template slot-scope="scope">
+            <div v-if="typeof scope.row.originFileNameList !='undefined' && scope.row.originFileNameList.length>0" style="text-align: left">
+              <div v-for="(item,index) in scope.row.originFileNameList">
+                <a style="color:#1890ff" @click="openDownloadFile(scope.row.curFilePathAndNameList[index])">{{(index+1)+"."+item}}</a>
+              </div>
+            </div>
+
+            <div v-else>
+              --
+            </div>
+          </template>
+        </el-table-column>
+
+        <el-table-column  label="上次更新时间" align="center" min-width="80px" :show-overflow-tooltip="true">
           <template slot-scope="scope">
             {{ scope.row.updateTime!=null?parseTime(scope.row.updateTime, '{y}-{m}-{d}'):'--' }}
           </template>
@@ -110,6 +133,7 @@ export default {
         pageSize: 10,
         taskName: "",
         status:"",
+        fileName:""
       },
     }
   },
@@ -129,13 +153,25 @@ export default {
     this.selectAllDeptList();
   },
   methods: {
+    openDownloadFile(url){
+      window.open(process.env.VUE_APP_BASE_API+url, '_blank');
+    },
+
     openProjectDetailPage(row){
       this.$tab.openPage(row.projectName, '/projectmanage/projectdetail/index/' +row.projectBaseId, row)
     },
 
     /** 查询列表数据 */
     getList() {
+      //如果输入了附件名，至少2个字符
+      if(this.queryParams.fileName!=null && this.queryParams.fileName!=''){
+        if(this.queryParams.fileName.trim().length<2){
+          alert("文件名至少输入2个字")
+          return;
+        }
+      }
       this.loading = true;
+
       this.queryParams.chargeDeptId=this.deptId;
       //判断是否是管理员 ,如果是管理员则查询所有的
       if(this.roles!=null && this.roles.length){
@@ -147,7 +183,14 @@ export default {
       }
       queryProjectLiuChengTuNodeByParam(this.queryParams).then(response => {
         //补充现在的进度
-        this.tableData=response.data;
+        let arr=response.data;
+        for(let i=0;i<arr.length;i++){
+          if(arr[i]["originFileNameListStr"]!=null){
+            arr[i]["originFileNameList"]=arr[i]["originFileNameListStr"].split("*@*");
+            arr[i]["curFilePathAndNameList"]=arr[i]["curFilePathAndNameListStr"].split("*@*");
+          }
+        }
+        this.tableData=arr;
         this.total = response.total
         this.loading = false
       })

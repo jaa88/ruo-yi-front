@@ -1,21 +1,43 @@
 <template>
   <div class="app-container home">
     <el-row :gutter="20">
-      <el-col :xs="24" :sm="24" :md="12" :lg="8">
+      <el-col :span="12">
         <el-card class="update-log">
           <div slot="header" class="clearfix">
-            <span>关注项目</span>
+            <span>节点预警（已过期）</span>
           </div>
+          <div>
+            <div v-if="nodeList.length === 0">暂无预警节点</div>
+
+            <el-table v-else :data="nodeList"  class="custom-class" stripe>
+              <el-table-column  label="序号" min-width="60px" align="center">
+                <template slot-scope="scope"> {{scope.$index+1}} </template>
+              </el-table-column>
+
+              <el-table-column  label="项目名称" align="center" min-width="120px" :show-overflow-tooltip="true">
+                <template slot-scope="scope">
+                  <span>{{scope.row.projectName}}</span>
+                </template>
+              </el-table-column>
+
+              <el-table-column  label="预期结束时间" align="center" min-width="120px" :show-overflow-tooltip="true">
+                <template slot-scope="scope">
+                  <span>{{parseTime(scope.row.expectedEndTime, '{y}-{m}-{d}')}}</span>
+                </template>
+              </el-table-column>
+
+              <el-table-column  label="任务名称" align="center" min-width="120px" :show-overflow-tooltip="true">
+                <template slot-scope="scope">
+                  <span>{{ scope.row.taskName }}</span>
+                </template>
+              </el-table-column>
+            </el-table>
+
+          </div>
+
         </el-card>
       </el-col>
-      <el-col :xs="24" :sm="24" :md="12" :lg="8">
-        <el-card class="update-log">
-          <div slot="header" class="clearfix">
-            <span>节点预警</span>
-          </div>
-        </el-card>
-      </el-col>
-      <el-col :xs="24" :sm="24" :md="12" :lg="8">
+      <el-col :span="12">
         <el-card class="update-log">
           <div slot="header" class="clearfix">
             <span>跟进动态</span>
@@ -27,83 +49,69 @@
 </template>
 
 <script>
+  import { mapGetters } from 'vuex'
+  import {queryProjectLiuChengTuNodeByParam} from "@/api/project/project";
+  import Cookies from 'js-cookie'
+  import {getToken} from "../utils/auth";
+  import {formatTimeByPattern} from '@/utils'
+
 export default {
   name: "Index",
   data() {
     return {
-      // 版本号
-      version: "3.9.0"
+      nodeList:[],
     }
   },
+
+  computed: {
+    ...mapGetters([
+      'roles',
+      'deptId'
+    ]),
+  },
+
+  created(){
+    this.queryProjectLiuChengTuNodeByParam();
+  },
+
   methods: {
-    goTarget(href) {
-      window.open(href, "_blank")
+    queryProjectLiuChengTuNodeByParam() {
+      let curObj=this;
+      //获取自己deptId 正在进行中的任务
+      let param={
+        "pageNum":1,
+        "pageSize":1000,
+        "chargeDeptId":this.deptId,
+        "statusList":[1,2,5]
+      }
+      //判断是否是管理员 ,如果是管理员则查询所有的
+      if(this.roles!=null && this.roles.length){
+        for(let i=0;i<this.roles.length;i++){
+          if(this.roles[i]=='admin'){
+            param.chargeDeptId="";
+          }
+        }
+      }
+      queryProjectLiuChengTuNodeByParam(param).then(response =>{
+        let nodeList=response.data;
+        nodeList.sort((a, b) => {
+          return new Date(a.expectedEndTime) - new Date(b.expectedEndTime);
+        });
+
+        for(let i=nodeList.length-1;i>=0;i--){
+          if(new Date(nodeList[i]["expectedEndTime"])-new Date()>0 || nodeList[i]["expectedEndTime"]==null || nodeList[i]["expectedEndTime"]==0){
+            nodeList.splice(i,1);
+          }
+        }
+        curObj.nodeList=nodeList;
+      })
     }
   }
 }
 </script>
 
 <style scoped lang="scss">
-.home {
-  blockquote {
-    padding: 10px 20px;
-    margin: 0 0 20px;
-    font-size: 17.5px;
-    border-left: 5px solid #eee;
-  }
-  hr {
-    margin-top: 20px;
-    margin-bottom: 20px;
-    border: 0;
-    border-top: 1px solid #eee;
-  }
-  .col-item {
-    margin-bottom: 20px;
-  }
 
-  ul {
-    padding: 0;
-    margin: 0;
-  }
 
-  font-family: "open sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 13px;
-  color: #676a6c;
-  overflow-x: hidden;
-
-  ul {
-    list-style-type: none;
-  }
-
-  h4 {
-    margin-top: 0px;
-  }
-
-  h2 {
-    margin-top: 10px;
-    font-size: 26px;
-    font-weight: 100;
-  }
-
-  p {
-    margin-top: 10px;
-
-    b {
-      font-weight: 700;
-    }
-  }
-
-  .update-log {
-    ol {
-      display: block;
-      list-style-type: decimal;
-      margin-block-start: 1em;
-      margin-block-end: 1em;
-      margin-inline-start: 0;
-      margin-inline-end: 0;
-      padding-inline-start: 40px;
-    }
-  }
-}
 </style>
 

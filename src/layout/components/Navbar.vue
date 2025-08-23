@@ -155,30 +155,26 @@ export default {
     },
     poll() {
       let curObj=this;
-      // 在这里执行轮询的任务，可以是发送请求或执行其他操作
-      /*listNotice().then(response => {
-        this.noticeCount=response.total;//获取信息条数
-        this.noticeContent="您有"+this.noticeCount+"条未读的信息";//定制内容
-      });*/
-
-      //获取自己deptId 正在进行中的任务
-      let param={
-        "pageNum":1,
-        "pageSize":1000,
-        "chargeDeptId":this.deptId,
-        "status":1
-      }
-      queryProjectLiuChengTuNodeByParam(param).then(response =>{
-        //如果上次提醒时的token与现在的token不同，则需要重新提醒
-        let curDay=formatTimeByPattern(new Date(),'yyyy-MM-dd');
-        let lastNoticeDay=Cookies.get("LastNoticeDay");
-        if(typeof lastNoticeDay=='undefined' || lastNoticeDay==null || curDay!=lastNoticeDay){
-          curObj.doingProjectLiuChengTuNodeList=response.data;
-          curObj.noticeCount=curObj.doingProjectLiuChengTuNodeList.length;
-        }else{
-          console.log("今天已经提醒过了，不再提醒")
+      setTimeout(()=>{
+        //获取自己deptId 正在进行中的任务
+        let param={
+          "pageNum":1,
+          "pageSize":1000,
+          "chargeDeptId":this.deptId,
+          "status":1
         }
-      })
+        queryProjectLiuChengTuNodeByParam(param).then(response =>{
+          //如果上次提醒时的token与现在的token不同，则需要重新提醒
+          let curDay=formatTimeByPattern(new Date(),'yyyy-MM-dd');
+          let lastNoticeDay=Cookies.get("LastNoticeDay");
+          if(typeof lastNoticeDay=='undefined' || lastNoticeDay==null || curDay!=lastNoticeDay){
+            curObj.doingProjectLiuChengTuNodeList=response.data;
+            curObj.noticeCount=curObj.doingProjectLiuChengTuNodeList.length;
+          }else{
+            console.log("今天已经提醒过了，不再提醒")
+          }
+        })
+      },2000)
     }
   }
 
