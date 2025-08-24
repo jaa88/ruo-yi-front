@@ -4,28 +4,36 @@
       <el-form-item label="项目名称" prop="noticeTitle">
         <el-input
           v-model="queryParams.projectName"
-          placeholder="任务名称"
+          placeholder="项目名称"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
 
-      <el-form-item label="附件名" prop="noticeTitle">
-        <el-input
-          v-model="queryParams.jianSheXingZhi"
-          placeholder="任务名称"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-
-      <el-form-item label="任务状态" prop="noticeTitle">
-        <el-select style="width:150px" v-model="queryParams.status" placeholder="任务状态" @change="handleQuery">
-          <el-option label="未开始" value="1" />
-          <el-option label="进行中" value="2" />
-          <el-option label="完成" value="3" />
+      <el-form-item label="目前阶段" prop="noticeTitle">
+        <el-select style="width:150px" v-model="queryParams.muQianJieDuan" @change="handleQuery" clearable placeholder="目前阶段" >
+          <el-option label="前期" value="1" />
+          <el-option label="施工" value="2" />
+          <el-option label="试运营" value="3" />
           <el-option label="不再关注" value="4" />
-          <el-option label="部分完成" value="5" />
+        </el-select>
+      </el-form-item>
+
+      <el-form-item label="项目类型" prop="noticeTitle">
+        <el-select style="width:150px" v-model="queryParams.xiangMuLeiXing" @change="handleQuery"  clearable placeholder="项目类型">
+          <el-option label="类型1" value="1" />
+          <el-option label="类型2" value="2" />
+          <el-option label="类型3" value="3" />
+          <el-option label="类型4" value="4" />
+        </el-select>
+      </el-form-item>
+
+      <el-form-item label="建设性质" prop="noticeTitle">
+        <el-select style="width:150px" v-model="queryParams.jianSheXingZhi" @change="handleQuery" clearable  placeholder="建设性质">
+          <el-option label="建设性质1" value="1" />
+          <el-option label="建设性质2" value="2" />
+          <el-option label="建设性质3" value="3" />
+          <el-option label="建设性质4" value="4" />
         </el-select>
       </el-form-item>
 

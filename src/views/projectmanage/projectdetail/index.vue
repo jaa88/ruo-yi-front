@@ -2,67 +2,137 @@
   <div class="app-container">
 
     <div style="text-align: right;margin-bottom: 20px">
-      <el-button type="primary"  @click="openLiuChengTuGraph">打开流程图</el-button>
+      <el-button type="primary" v-if="curPageName==='detail-1'"  @click="changePage('detail-2')">切换至任务页</el-button>
+
+      <el-button type="primary"  v-if="curPageName==='detail-2'"   @click="changePage('detail-1')">切换至详情页</el-button>
+
+      <el-button type="primary"  v-if="curPageName==='detail-2'"   @click="openLiuChengTuGraph">打开流程图</el-button>
     </div>
 
     <div id="nodeTableDiv">
-      <el-table v-loading="loading" :data="sortedNodeTableData"  class="custom-class" :span-method="objectSpanMethod"  border>
+      <!--详情页-->
+      <div v-if="curPageName==='detail-1'" style="height: 720px">
+        <el-row :gutter="20">
+          <el-col :span="8">
+            <div style="box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);width: 100%;height: 720px;padding: 5px 0 0 10px">
+              <div>
+                <span style="font-size: 18px;font-weight: bold">项目推进情况：</span>
+              </div>
 
-        <el-table-column v-for="item in maxContentsNum-1" :key="item"   label="" align="center" min-width="100px" :show-overflow-tooltip="true">
-          <template slot-scope="scope">
-            <div v-if="item==1" style="font-size:24px;font-weight: bold" >{{scope.row.data["contentsTableColumn"+(item-1)]}}</div>
-            <div v-else style="font-size:18px;font-weight: bold" >{{scope.row.data["contentsTableColumn"+(item-1)]}}</div>
-          </template>
-        </el-table-column>
-
-
-        <el-table-column label="任务名称" align="center" prop="createTime" min-width="120px"  :show-overflow-tooltip="true">
-          <template slot-scope="scope">
-            <span style="color: #36a3f7;cursor:pointer" @click="openTaskItemEditPage(scope.row)">{{ scope.row.data.taskName }}</span>
-          </template>
-        </el-table-column>
-
-        <!--1 未开始 2 进行中 3 完成 4 不再关注 5 部分完成-->
-        <el-table-column label="完成情况" align="center"  min-width="70px">
-          <template slot-scope="scope">
-            <el-tag :color="scope.row.data.status==1?'#5f95ff':scope.row.data.status==2?'#FF3333':scope.row.data.status==3?'#7FFF00':scope.row.data.status==4?'#878787':scope.row.data.status==5?'#C9DD23':''">{{getStatusName(scope.row)}}</el-tag>
-          </template>
-        </el-table-column>
-
-        <el-table-column label="负责部门" align="left" prop="createTime" min-width="90px"  :show-overflow-tooltip="true">
-          <template slot-scope="scope">
-            <div>
-              <span >{{ scope.row.data.allChargeDeptNameStr }}</span>
+              <div>
+                这儿的数据来源？？？？
+              </div>
             </div>
-          </template>
-        </el-table-column>
 
-        <el-table-column label="任务开始时间" align="center" prop="startTime" min-width="90px">
-          <template slot-scope="scope">
-            <span>{{ parseTime(scope.row.data.startTime, '{y}-{m}-{d}') }}</span>
-          </template>
-        </el-table-column>
+          </el-col>
 
-        <el-table-column label="预期结束时间" align="center" prop="expectedEndTime" min-width="90px">
-          <template slot-scope="scope">
-            <span>{{ parseTime(scope.row.data.expectedEndTime, '{y}-{m}-{d}') }}</span>
-          </template>
-        </el-table-column>
+          <el-col :span="8">
+            <div>
 
-        <el-table-column label="备注" align="center" min-width="150px" class-name="small-padding fixed-width">
-          <template slot-scope="scope">
-            <span >{{ scope.row.data.remark }}</span>
-          </template>
-        </el-table-column>
-      </el-table>
+            </div>
+            <div style="width: 100%;height: 300px;">
+              <div style="padding-top: 5px;padding-bottom: 5px">
+                <span style="font-size: 18px;font-weight: bold;">项目概况：</span>
+              </div>
+              <div>
+                <el-descriptions :column="3" border >
+                  <el-descriptions-item label="项目类型">{{getXiangMuLeiXingName(curPageProjectBaseInfo.xiangMuLeiXing)}}</el-descriptions-item>
+                  <el-descriptions-item label="建设性质">{{getJianSheXingZhiName(curPageProjectBaseInfo.jianSheXingZhi)}}</el-descriptions-item>
+                  <el-descriptions-item label="投资（万）">{{curPageProjectBaseInfo.zongTouZi?curPageProjectBaseInfo.zongTouZi:'--'}}</el-descriptions-item>
 
-      <div v-if="liuChengTuGraphVisible">
-        <el-dialog title="流程图" :visible.sync="liuChengTuGraphVisible" width="1400px" top="5vh" append-to-body :close-on-click-modal="false">
-          <myflow :parentCellsJsonStr="parentCellsJsonStr" :projectCanEditProjectDeptList="allDeptList"  @saveFromMyflow="saveFromMyflow" @closeMyflowDialog="closeMyflowDialog"></myflow>
-        </el-dialog>
+                  <el-descriptions-item label="目前阶段">{{getMuQianJieDuanName(curPageProjectBaseInfo.muQianJianDuan)}}</el-descriptions-item>
+                  <el-descriptions-item label="拟开工">{{curPageProjectBaseInfo.niKaiGongRiQi?parseTime(curPageProjectBaseInfo.niKaiGongRiQi, '{y}-{m}-{d}'):'--'}}</el-descriptions-item>
+                  <el-descriptions-item label="拟完工">{{curPageProjectBaseInfo.niWanGongRiQi?parseTime(curPageProjectBaseInfo.niWanGongRiQi, '{y}-{m}-{d}'):'--'}}</el-descriptions-item>
+
+                  <el-descriptions-item :span="3" label="项目地址" :contentStyle="{'text-align': 'left'}">{{curPageProjectBaseInfo.xiangMuDiZhi?curPageProjectBaseInfo.xiangMuDiZhi:'--'}}</el-descriptions-item>
+                  <el-descriptions-item :span="3" label="建设单位" :contentStyle="{'text-align': 'left'}">{{curPageProjectBaseInfo.jianSheDanWei?curPageProjectBaseInfo.jianSheDanWei:'--'}}</el-descriptions-item>
+
+                  <el-descriptions-item label="负责人">{{curPageProjectBaseInfo.xiangMuFuZeRen?curPageProjectBaseInfo.xiangMuFuZeRen:'--'}}</el-descriptions-item>
+                  <el-descriptions-item :span="2" label="联系方式">{{curPageProjectBaseInfo.lianXiFangShi?curPageProjectBaseInfo.lianXiFangShi:'--'}}</el-descriptions-item>
+
+                  <el-descriptions-item label="预留"></el-descriptions-item>
+                  <el-descriptions-item label="预留"></el-descriptions-item>
+                  <el-descriptions-item label="预留"></el-descriptions-item>
+                </el-descriptions>
+              </div>
+            </div>
+
+            <div style="margin-top:20px;box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);width: 100%;height: 400px;padding: 5px 0 0 10px">
+              这儿是图片
+            </div>
+          </el-col>
+
+          <el-col :span="8">
+            <div style="box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);width: 100%;height: 720px;padding: 5px 0 0 10px">
+              <div>
+                <span style="font-size: 18px;font-weight: bold">需协调解决事项：</span>
+              </div>
+              这儿的数据来源
+            </div>
+          </el-col>
+        </el-row>
       </div>
 
-      <EditTaskInfoDialog ref="editTaskInfoDialog" whereComeFrom="projectDetail"></EditTaskInfoDialog>
+      <!--表格流程图-->
+      <div v-if="curPageName==='detail-2'">
+        <el-table v-loading="loading" :data="sortedNodeTableData"  class="custom-class" :span-method="objectSpanMethod"  border>
+
+          <el-table-column v-for="item in maxContentsNum-1" :key="item"   label="" align="center" min-width="100px" :show-overflow-tooltip="true">
+            <template slot-scope="scope">
+              <div v-if="item==1" style="font-size:24px;font-weight: bold" >{{scope.row.data["contentsTableColumn"+(item-1)]}}</div>
+              <div v-else style="font-size:18px;font-weight: bold" >{{scope.row.data["contentsTableColumn"+(item-1)]}}</div>
+            </template>
+          </el-table-column>
+
+
+          <el-table-column label="任务名称" align="center" prop="createTime" min-width="120px"  :show-overflow-tooltip="true">
+            <template slot-scope="scope">
+              <span style="color: #36a3f7;cursor:pointer" @click="openTaskItemEditPage(scope.row)">{{ scope.row.data.taskName }}</span>
+            </template>
+          </el-table-column>
+
+          <!--1 未开始 2 进行中 3 完成 4 不再关注 5 部分完成-->
+          <el-table-column label="完成情况" align="center"  min-width="70px">
+            <template slot-scope="scope">
+              <el-tag :color="scope.row.data.status==1?'#5f95ff':scope.row.data.status==2?'#FF3333':scope.row.data.status==3?'#7FFF00':scope.row.data.status==4?'#878787':scope.row.data.status==5?'#C9DD23':''">{{getStatusName(scope.row)}}</el-tag>
+            </template>
+          </el-table-column>
+
+          <el-table-column label="负责部门" align="left" prop="createTime" min-width="90px"  :show-overflow-tooltip="true">
+            <template slot-scope="scope">
+              <div>
+                <span >{{ scope.row.data.allChargeDeptNameStr }}</span>
+              </div>
+            </template>
+          </el-table-column>
+
+          <el-table-column label="任务开始时间" align="center" prop="startTime" min-width="90px">
+            <template slot-scope="scope">
+              <span>{{ parseTime(scope.row.data.startTime, '{y}-{m}-{d}') }}</span>
+            </template>
+          </el-table-column>
+
+          <el-table-column label="预期结束时间" align="center" prop="expectedEndTime" min-width="90px">
+            <template slot-scope="scope">
+              <span>{{ parseTime(scope.row.data.expectedEndTime, '{y}-{m}-{d}') }}</span>
+            </template>
+          </el-table-column>
+
+          <el-table-column label="备注" align="center" min-width="150px" class-name="small-padding fixed-width">
+            <template slot-scope="scope">
+              <span >{{ scope.row.data.remark }}</span>
+            </template>
+          </el-table-column>
+        </el-table>
+
+        <div v-if="liuChengTuGraphVisible">
+          <el-dialog title="流程图" :visible.sync="liuChengTuGraphVisible" width="1400px" top="5vh" append-to-body :close-on-click-modal="false">
+            <myflow :parentCellsJsonStr="parentCellsJsonStr" :projectCanEditProjectDeptList="allDeptList"  @saveFromMyflow="saveFromMyflow" @closeMyflowDialog="closeMyflowDialog"></myflow>
+          </el-dialog>
+        </div>
+
+        <EditTaskInfoDialog ref="editTaskInfoDialog" whereComeFrom="projectDetail"></EditTaskInfoDialog>
+      </div>
     </div>
   </div>
 </template>
@@ -78,6 +148,10 @@ export default {
   components: { Myflow ,EditTaskInfoDialog},
   data() {
     return {
+      //当前页名 detail-1 详情页 detail-2 表格、流程图
+      curPageName:"detail-1",
+      curPageProjectBaseInfo:{},
+
       // 遮罩层
       loading: true,
       // 总条数
@@ -122,6 +196,10 @@ export default {
 
   },
   methods: {
+    changePage(name){
+      this.curPageName=name;
+    },
+
     //打开子任务节点的编辑页面
     openTaskItemEditPage(node){
       this.$refs.editTaskInfoDialog.visible=true;
@@ -184,6 +262,7 @@ export default {
           curObj.loading=false;
           let tempList=response.data;
           if(tempList.length==1){
+            curObj.curPageProjectBaseInfo=tempList[0];
             let tempObj=tempList[0];
             //获取节点信息
             let cellsJsonStr=tempObj["cellsJsonStr"];
@@ -396,6 +475,63 @@ export default {
 
     closeMyflowDialog(){
       this.liuChengTuGraphVisible=false;
+    },
+
+    //目前阶段翻译
+    getMuQianJieDuanName(code){
+      if(code==null || code==''){
+        return "--";
+      }
+      if(code==1){
+        return "前期";
+      }
+      if(code==2){
+        return "施工";
+      }
+      if(code==3){
+        return "试运营";
+      }
+      if(code==4){
+        return "不再关注";
+      }
+    },
+
+    //项目类型翻译
+    getXiangMuLeiXingName(code){
+      if(code==null || code==''){
+        return "--";
+      }
+      if(code==1){
+        return "类型1";
+      }
+      if(code==2){
+        return "类型2";
+      }
+      if(code==3){
+        return "类型3";
+      }
+      if(code==4){
+        return "类型4";
+      }
+    },
+
+    //建设性质翻译
+    getJianSheXingZhiName(code){
+      if(code==null || code==''){
+        return "--";
+      }
+      if(code==1){
+        return "性质1";
+      }
+      if(code==2){
+        return "性质2";
+      }
+      if(code==3){
+        return "性质3";
+      }
+      if(code==4){
+        return "性质4";
+      }
     },
   }
 }
