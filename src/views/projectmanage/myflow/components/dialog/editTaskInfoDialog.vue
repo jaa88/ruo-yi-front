@@ -36,10 +36,10 @@
             </el-select>
           </el-form-item>
 
-          <el-form-item label="负责部门" >
+          <el-form-item label="负责部门2" >
             <el-select v-model="chargeDeptIdList" filterable multiple placeholder="请选择">
               <el-option
-                v-for="item in projectCanEditProjectDeptList"
+                v-for="item in allDeptList"
                 :key="item.deptId"
                 :label="item.deptName"
                 :value="item.deptId">
@@ -88,6 +88,7 @@
 <script>
   import { getToken } from "@/utils/auth"
   import {deleteAndInsertFunctionAndUploadFileRelation} from "@/api/common"
+  import {selectAllDeptList} from  "@/api/system/dept"
 export default {
   name: "dialogMysql",
 
@@ -113,7 +114,7 @@ export default {
       remark:"",//备注
       startTime:"",// 开始时间
       status:"1",//任务状态
-      projectCanEditProjectDeptList:[],//项目能编辑的人员，
+      allDeptList:[],//项目能编辑的部门，
       contentsNumStr:"",//有小数点
       expectedEndTime:"",//预计结束时间
       //文件上传
@@ -125,8 +126,8 @@ export default {
     };
   },
 
-  mounted() {
-
+  created() {
+    this.selectAllDeptList();
   },
 
   methods: {
@@ -143,7 +144,6 @@ export default {
       if(typeof this.status ==='undefined' || this.status==null){
         this.status="1";
       }
-      this.projectCanEditProjectDeptList=item.projectCanEditProjectDeptList;
       this.contentsNumStr=item.item.data.contentsNumStr;
       //补充文件相关
       this.originFileNameListStr=item.item.data.originFileNameListStr;
@@ -199,7 +199,6 @@ export default {
             });
         this.$parent.saveFromEditTaskInfoDialog(this.node)
       }
-      console.log("fileList:"+this.fileList)
       this.visible = false;
     },
 
@@ -252,7 +251,6 @@ export default {
     getOriginFileNameListStr(){
       let returnStr="";
       let originFileNameList=this.originFileNameList;
-      console.log("originFileNameList"+originFileNameList)
       if(typeof originFileNameList!='undefined' && originFileNameList.length>0){
         for(let i=0;i<originFileNameList.length;i++){
           returnStr+=originFileNameList[i];
@@ -261,7 +259,6 @@ export default {
           }
         }
       }
-      console.log(returnStr)
       return returnStr;
     },
 
@@ -304,6 +301,15 @@ export default {
 
     handlePreview(file){
       window.open(file.url, '_blank');
+    },
+
+    //所有的deptList
+    selectAllDeptList(){
+      let curObj=this;
+      selectAllDeptList().then(response=>{
+          curObj.allDeptList=response.data;
+        }
+      )
     },
   },
 };

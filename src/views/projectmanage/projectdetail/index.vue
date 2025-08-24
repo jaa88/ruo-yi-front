@@ -5,7 +5,7 @@
       <el-button type="primary"  @click="openLiuChengTuGraph">打开流程图</el-button>
     </div>
 
-    <div id="testJi">
+    <div id="nodeTableDiv">
       <el-table v-loading="loading" :data="sortedNodeTableData"  class="custom-class" :span-method="objectSpanMethod"  border>
 
         <el-table-column v-for="item in maxContentsNum-1" :key="item"   label="" align="center" min-width="100px" :show-overflow-tooltip="true">
@@ -58,7 +58,7 @@
 
       <div v-if="liuChengTuGraphVisible">
         <el-dialog title="流程图" :visible.sync="liuChengTuGraphVisible" width="1400px" top="5vh" append-to-body :close-on-click-modal="false">
-          <myflow :parentCellsJsonStr="parentCellsJsonStr" :projectCanEditProjectDeptList="curRowCanEditProjectDeptList"  @saveFromMyflow="saveFromMyflow" @closeMyflowDialog="closeMyflowDialog"></myflow>
+          <myflow :parentCellsJsonStr="parentCellsJsonStr" :projectCanEditProjectDeptList="allDeptList"  @saveFromMyflow="saveFromMyflow" @closeMyflowDialog="closeMyflowDialog"></myflow>
         </el-dialog>
       </div>
 
@@ -189,11 +189,8 @@ export default {
             let cellsJsonStr=tempObj["cellsJsonStr"];
             this.parentCellsJsonStr=cellsJsonStr;
             this.parentCellsObjectList=JSON.parse(cellsJsonStr);
-            this.curRowCanEditProjectDeptList=tempObj["canEditProjectDeptList"]
-
             //对节点进行排序
             curObj.sortedNodeTableData=curObj.getNodeDataAndSort(cellsJsonStr);
-
             //根据配置好的目录，生成对象（其实非map）
             curObj.generateContentsSetMap(tempObj["contentsSetStr"]);
             //补充所有目录单元格
@@ -233,20 +230,22 @@ export default {
     },
 
     //补充部门名字
-    supplyNodeChargeDeptName(){
-      for(let i=0;i<this.sortedNodeTableData.length;i++){
-        let tempObj=this.sortedNodeTableData[i]["data"];
-        let chargeDeptIdList=tempObj["chargeDeptIdList"];
-        if(typeof chargeDeptIdList!='undefined' && chargeDeptIdList.length>0){
-          for(let j=0;j<chargeDeptIdList.length;j++){
-            if(typeof this.sortedNodeTableData[i]["data"]["allChargeDeptNameStr"]=='undefined'){
-              this.sortedNodeTableData[i]["data"]["allChargeDeptNameStr"]="";
-            }
-            this.sortedNodeTableData[i]["data"]["allChargeDeptNameStr"]+=this.allDeptMap[chargeDeptIdList[j]]+";";
-          }
-        }
+    supplyNodeChargeDeptName() {
+      if (!this.allDeptMap) {
+        return
       }
+      this.sortedNodeTableData.forEach(item => {
+        const { data } = item
+        const chargeDeptIdList = data.chargeDeptIdList || []
+
+        if (chargeDeptIdList.length > 0) {
+          data.allChargeDeptNameStr = chargeDeptIdList
+            .map(id => this.allDeptMap[id] || "未知部门")
+            .join(";")
+        }
+      })
     },
+
 
     //生成目录配置
     generateContentsSetMap(contentsSetStr){
@@ -403,7 +402,7 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-  #testJi .el-tag {
+  #nodeTableDiv .el-tag {
     color:white !important;
   }
 

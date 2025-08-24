@@ -10,6 +10,33 @@
         />
       </el-form-item>
 
+      <el-form-item label="目前阶段" prop="noticeTitle">
+        <el-select style="width:150px" v-model="queryParams.muQianJieDuan" @change="handleQuery" clearable placeholder="目前阶段" >
+          <el-option label="前期" value="1" />
+          <el-option label="施工" value="2" />
+          <el-option label="试运营" value="3" />
+          <el-option label="不再关注" value="4" />
+        </el-select>
+      </el-form-item>
+
+      <el-form-item label="项目类型" prop="noticeTitle">
+        <el-select style="width:150px" v-model="queryParams.xiangMuLeiXing" @change="handleQuery"  clearable placeholder="项目类型">
+          <el-option label="类型1" value="1" />
+          <el-option label="类型2" value="2" />
+          <el-option label="类型3" value="3" />
+          <el-option label="类型4" value="4" />
+        </el-select>
+      </el-form-item>
+
+      <el-form-item label="建设性质" prop="noticeTitle">
+        <el-select style="width:150px" v-model="queryParams.jianSheXingZhi" @change="handleQuery" clearable  placeholder="建设性质">
+          <el-option label="建设性质1" value="1" />
+          <el-option label="建设性质2" value="2" />
+          <el-option label="建设性质3" value="3" />
+          <el-option label="建设性质4" value="4" />
+        </el-select>
+      </el-form-item>
+
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleAdd">新增</el-button>
@@ -28,27 +55,28 @@
           </template>
         </el-table-column>
 
-        <el-table-column  label="项目图" align="center" min-width="120px" :show-overflow-tooltip="true">
+        <el-table-column  label="目前阶段" align="center" min-width="120px" :show-overflow-tooltip="true">
           <template slot-scope="scope">
-            <div v-if="scope.row.projectMainImagePathAndName!=null && scope.row.projectMainImagePathAndName!='' ">
-              <el-image
-                style="width: 100px; height: 100px"
-                :src="uploadUrlPrefix+scope.row.projectMainImagePathAndName"
-                :preview-src-list="[uploadUrlPrefix+scope.row.projectMainImagePathAndName]"
-              >
-              </el-image>
-            </div>
+            <span>{{getMuQianJieDuanName(scope.row.muQianJieDuan)}}</span>
           </template>
         </el-table-column>
 
-        <el-table-column label="负责部门" align="center" prop="createTime" min-width="120px"  :show-overflow-tooltip="true">
+        <el-table-column  label="建设单位" align="center" min-width="120px" :show-overflow-tooltip="true">
           <template slot-scope="scope">
-            <span v-for="item in scope.row.canEditProjectDeptList">{{ item.deptName+";" }}</span>
+            <span>{{scope.row.jianSheDanWei}}</span>
           </template>
         </el-table-column>
 
-        <el-table-column  label="备注" min-width="120px" align="center" :show-overflow-tooltip="true">
-          <template slot-scope="scope"> {{scope.row.remark}} </template>
+        <el-table-column  label="总投资（万元）" align="center" min-width="120px" :show-overflow-tooltip="true">
+          <template slot-scope="scope">
+            <span>{{scope.row.zongTouZi}}</span>
+          </template>
+        </el-table-column>
+
+        <el-table-column label="责任部门" align="center" prop="createTime" min-width="120px"  :show-overflow-tooltip="true">
+          <template slot-scope="scope">
+            <span v-for="item in scope.row.deptList">{{ item.deptName+";" }}</span>
+          </template>
         </el-table-column>
 
         <el-table-column label="任务进度" align="center"  min-width="120px">
@@ -68,12 +96,19 @@
           </template>
         </el-table-column>
 
+        <el-table-column  label="近期完成任务" min-width="120px" align="center" :show-overflow-tooltip="true">
+          <template slot-scope="scope"> 具体实现逻辑还需考虑 </template>
+        </el-table-column>
 
-        <el-table-column label="更新时间" align="center" prop="createTime" width="100">
+        <el-table-column  label="备注" min-width="120px" align="center">
+          <template slot-scope="scope"> {{scope.row.remark}} </template>
+        </el-table-column>
+
+        <!--<el-table-column label="更新时间" align="center" prop="createTime" width="100">
           <template slot-scope="scope">
             <span>{{ parseTime(scope.row.updateTime, '{y}-{m}-{d}') }}</span>
           </template>
-        </el-table-column>
+        </el-table-column>-->
 
         <el-table-column label="操作" align="center" min-width="150px" class-name="small-padding fixed-width">
           <template slot-scope="scope">
@@ -111,7 +146,7 @@
 
     <div v-if="liuChengTuGraphVisible">
       <el-dialog title="流程图" :visible.sync="liuChengTuGraphVisible" width="1400px" top="5vh" append-to-body :close-on-click-modal="false">
-        <myflow :parentCellsJsonStr="parentCellsJsonStr" :projectCanEditProjectDeptList="curRowCanEditProjectDeptList"  @saveFromMyflow="saveFromMyflow" @closeMyflowDialog="closeMyflowDialog"></myflow>
+        <myflow :parentCellsJsonStr="parentCellsJsonStr" :projectCanEditProjectDeptList="allDeptList"  @saveFromMyflow="saveFromMyflow" @closeMyflowDialog="closeMyflowDialog"></myflow>
       </el-dialog>
     </div>
 
@@ -130,14 +165,12 @@
                   <el-input v-model="addOrUpdateProjectBaseForm.xiangMuDaiMa" placeholder="项目投资代码" />
                 </el-form-item>
 
-                <el-form-item label="相关部门" prop="projectName">
-                  <el-select v-model="addOrUpdateProjectBaseForm.canEditProjectDeptIdList" filterable multiple placeholder="请选择">
-                    <el-option
-                      v-for="item in allDeptList"
-                      :key="item.deptId"
-                      :label="item.deptName"
-                      :value="item.deptId">
-                    </el-option>
+                <el-form-item label="目前阶段" prop="muQianJieDuan">
+                  <el-select style="width:150px" v-model="addOrUpdateProjectBaseForm.muQianJieDuan" placeholder="目前阶段">
+                    <el-option label="前期" value="1" />
+                    <el-option label="施工" value="2" />
+                    <el-option label="试运营" value="3" />
+                    <el-option label="不再关注" value="4" />
                   </el-select>
                 </el-form-item>
 
@@ -149,8 +182,6 @@
                              :action="uploadUrl" :headers="headers" accept=".jpg,.jpeg,.png"
                              :on-preview="handlePictureCardPreview"
                   >
-
-
                        <el-button size="small" type="primary">导入</el-button>
                   </el-upload>
                 </el-form-item>
@@ -164,11 +195,21 @@
             <el-col :span="12">
               <div style="padding-right: 20px">
                 <el-form-item label="项目类型" prop="xiangMuLeiXing">
-                  <el-input v-model="addOrUpdateProjectBaseForm.xiangMuLeiXing" placeholder="项目类型" />
+                  <el-select style="width:150px" v-model="addOrUpdateProjectBaseForm.xiangMuLeiXing" placeholder="项目类型">
+                    <el-option label="类型1" value="1" />
+                    <el-option label="类型2" value="2" />
+                    <el-option label="类型3" value="3" />
+                    <el-option label="类型4" value="4" />
+                  </el-select>
                 </el-form-item>
 
                 <el-form-item label="建设性质" prop="jianSheXingZhi">
-                  <el-input v-model="addOrUpdateProjectBaseForm.jianSheXingZhi" placeholder="建设性质" />
+                  <el-select style="width:150px" v-model="addOrUpdateProjectBaseForm.jianSheXingZhi" placeholder="建设性质">
+                    <el-option label="建设性质1" value="1" />
+                    <el-option label="建设性质2" value="2" />
+                    <el-option label="建设性质3" value="3" />
+                    <el-option label="建设性质4" value="4" />
+                  </el-select>
                 </el-form-item>
 
                 <el-form-item label="总投资" prop="zongTouZi">
@@ -176,11 +217,19 @@
                 </el-form-item>
 
                 <el-form-item label="拟开工日期" prop="zongTouZi">
-                  <el-input v-model="addOrUpdateProjectBaseForm.niKaiGongRiQi" placeholder="拟开工日期" />
+                  <el-date-picker
+                    v-model="addOrUpdateProjectBaseForm.niKaiGongRiQi"
+                    type="date"
+                    placeholder="拟开工日期">
+                  </el-date-picker>
                 </el-form-item>
 
-                <el-form-item label="拟完工日期" prop="zongTouZi">
-                  <el-input v-model="addOrUpdateProjectBaseForm.niWanGongRiQi" placeholder="拟完工日期" />
+                <el-form-item label="拟开工日期" prop="zongTouZi">
+                  <el-date-picker
+                    v-model="addOrUpdateProjectBaseForm.niWanGongRiQi"
+                    type="date"
+                    placeholder="拟完工日期">
+                  </el-date-picker>
                 </el-form-item>
 
                 <el-form-item label="建设单位" prop="projectName">
@@ -269,6 +318,9 @@ export default {
         pageNum: 1,
         pageSize: 10,
         projectName: "",
+        muQianJieDuan: "",
+        jianSheXingZhi: "",
+        xiangMuLeiXing: ""
       },
       // 表单参数
       addOrUpdateProjectBaseForm: {},
@@ -342,7 +394,6 @@ export default {
 
     //删除文件回调
     handleRemove(file,fileList){
-      console.log("file.name:"+file.name)
       for(let i=this.addOrUpdateProjectBaseForm.returnUploadFileList.length-1;i>0;i--){
         if(file.name===this.addOrUpdateProjectBaseForm.returnUploadFileList[i]["originalFilename"]){
           this.addOrUpdateProjectBaseForm.returnUploadFileList.slice(i,1);
@@ -445,7 +496,6 @@ export default {
       this.addOrUpdateProjectBaseForm={
         "projectName":row.projectName,
         "remark":row.remark,
-        "canEditProjectDeptIdList":row.canEditProjectDeptIdList,
         "contentsSetStr":row.contentsSetStr,
         "id":row.id,
         fileList:row.projectMainImagePathAndName!=null && row.projectMainImagePathAndName!=''?[{"projectMainImagePathAndName":row.projectMainImagePathAndName,"url":process.env.VUE_APP_BASE_API+row.projectMainImagePathAndName}]:[],
@@ -453,9 +503,10 @@ export default {
         returnUploadFileList:[],
         //补充
         xiangMuDaiMa:row.xiangMuDaiMa,
+        muQianJieDuan:row.muQianJieDuan+'',
         xiangMuDiZhi:row.xiangMuDiZhi,
-        xiangMuLeiXing:row.xiangMuLeiXing,
-        jianSheXingZhi:row.jianSheXingZhi,
+        xiangMuLeiXing:row.xiangMuLeiXing+'',
+        jianSheXingZhi:row.jianSheXingZhi+'',
         zongTouZi:row.zongTouZi,
         niKaiGongRiQi:row.niKaiGongRiQi,
         niWanGongRiQi:row.niWanGongRiQi,
@@ -510,8 +561,6 @@ export default {
     openLiuChengTuGraph(row){
       this.curRow=row;
       this.parentCellsJsonStr=row.cellsJsonStr;
-      this.curRowCanEditProjectDeptList=row.canEditProjectDeptList;
-      console.log("328:"+JSON.stringify(this.curRowCanEditProjectDeptList))
       this.liuChengTuGraphVisible=true;
     },
 
@@ -523,7 +572,64 @@ export default {
           curObj.allDeptList=response.data;
         }
       )
-    }
+    },
+
+    //目前阶段翻译
+    getMuQianJieDuanName(code){
+      if(code==null || code==''){
+        return "--";
+      }
+      if(code==1){
+        return "前期";
+      }
+      if(code==2){
+        return "施工";
+      }
+      if(code==3){
+        return "试运营";
+      }
+      if(code==4){
+        return "不再关注";
+      }
+    },
+
+    //项目类型翻译
+    getXiangMuLeiXingName(code){
+      if(code==null || code==''){
+        return "--";
+      }
+      if(code==1){
+        return "类型1";
+      }
+      if(code==2){
+        return "类型2";
+      }
+      if(code==3){
+        return "类型3";
+      }
+      if(code==4){
+        return "类型4";
+      }
+    },
+
+    //建设性质翻译
+    getJianSheXingZhiName(code){
+      if(code==null || code==''){
+        return "--";
+      }
+      if(code==1){
+        return "性质1";
+      }
+      if(code==2){
+        return "性质2";
+      }
+      if(code==3){
+        return "性质3";
+      }
+      if(code==4){
+        return "性质4";
+      }
+    },
   }
 }
 </script>

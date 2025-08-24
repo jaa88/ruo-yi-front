@@ -69,7 +69,7 @@
 
     <div v-if="liuChengTuGraphVisible">
       <el-dialog title="流程图" :visible.sync="liuChengTuGraphVisible" width="1400px" top="5vh" append-to-body :close-on-click-modal="false">
-        <myflow :parentCellsJsonStr="parentCellsJsonStr" :projectCanEditProjectDeptList="curRowCanEditProjectDeptList"  @saveFromMyflow="saveFromMyflow" @closeMyflowDialog="closeMyflowDialog"></myflow>
+        <myflow :parentCellsJsonStr="parentCellsJsonStr" :projectCanEditProjectDeptList="allDeptList"  @saveFromMyflow="saveFromMyflow" @closeMyflowDialog="closeMyflowDialog"></myflow>
       </el-dialog>
     </div>
 
@@ -94,6 +94,7 @@
 
 <script>
   import Myflow from "../myflow/index";
+  import {selectAllDeptList} from  "@/api/system/dept"
 import { selectProjectBaseList,selectProjectLiuChengTuTemplateList, selectProjectLiuChengTuDataLogList,insertLiuChengTuDataLog,insertProjectBase,deleteProjectTemplate} from "@/api/project/project"
   import {insertProjectTemplate} from "../../../api/project/project";
 
@@ -134,9 +135,12 @@ export default {
       parentCellsJsonStr:"",
       //能够操作项目的人员
       curRowCanEditProjectDeptList:[],
+      //所有部门
+      allDeptList:[]
     }
   },
   created() {
+    this.selectAllDeptList();
     this.getList()
   },
   methods: {
@@ -244,10 +248,17 @@ export default {
     openLiuChengTuGraph(row){
       this.curRow=row;
       this.parentCellsJsonStr=row.cellsJsonStr;
-      this.curRowCanEditProjectDeptList=row.canEditProjectDeptList;
-      console.log("228:"+JSON.stringify(this.curRowCanEditProjectDeptList))
       this.liuChengTuGraphVisible=true;
     },
+
+    //所有的deptList
+    selectAllDeptList(){
+      let curObj=this;
+      selectAllDeptList().then(response=>{
+          curObj.allDeptList=response.data;
+        }
+      )
+    }
   }
 }
 </script>
