@@ -1,19 +1,37 @@
 <template>
   <div class="app-container">
 
-    <div style="text-align: right;margin-bottom: 20px">
-      <el-button type="primary" v-if="curPageName==='detail-1'"  @click="changePage('detail-2')">切换至任务页</el-button>
+    <div>
+      <el-row :gutter="20">
+        <el-col :span="7">
+          <div class="sss">
 
-      <el-button type="primary"  v-if="curPageName==='detail-2'"   @click="changePage('detail-1')">切换至详情页</el-button>
+          </div>
+        </el-col>
+        <el-col :span="10">
+          <div style="text-align: center;width: 100%">
+            <span style="font-size: 24px;font-weight: bold;">{{curPageProjectBaseInfo.projectName}}</span>
+          </div>
+        </el-col>
+        <el-col :span="7">
+          <div  style="text-align: right;margin-bottom: 20px">
+            <el-button type="primary" v-if="curPageName==='detail-1'"  @click="openProjectBaseEditPage">修改</el-button>
 
-      <el-button type="primary"  v-if="curPageName==='detail-2'"   @click="openLiuChengTuGraph">打开流程图</el-button>
+            <el-button type="primary" v-if="curPageName==='detail-1'"  @click="changePage('detail-2')">切换至任务页</el-button>
+
+            <el-button type="primary"  v-if="curPageName==='detail-2'"   @click="changePage('detail-1')">切换至详情页</el-button>
+
+            <el-button type="primary"  v-if="curPageName==='detail-2'"   @click="openLiuChengTuGraph">打开流程图</el-button>
+          </div>
+        </el-col>
+      </el-row>
     </div>
 
     <div id="nodeTableDiv">
       <!--详情页-->
       <div v-if="curPageName==='detail-1'" style="height: 720px">
         <el-row :gutter="20">
-          <el-col :span="8">
+          <el-col :span="7">
             <div style="box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);width: 100%;height: 720px;padding: 5px 0 0 10px">
               <div>
                 <span style="font-size: 18px;font-weight: bold">项目推进情况：</span>
@@ -26,14 +44,11 @@
 
           </el-col>
 
-          <el-col :span="8">
+          <el-col :span="10">
             <div>
 
             </div>
             <div style="width: 100%;height: 300px;">
-              <div style="padding-top: 5px;padding-bottom: 5px">
-                <span style="font-size: 18px;font-weight: bold;">项目概况：</span>
-              </div>
               <div>
                 <el-descriptions :column="3" border >
                   <el-descriptions-item label="项目类型">{{getXiangMuLeiXingName(curPageProjectBaseInfo.xiangMuLeiXing)}}</el-descriptions-item>
@@ -53,6 +68,9 @@
                   <el-descriptions-item label="预留"></el-descriptions-item>
                   <el-descriptions-item label="预留"></el-descriptions-item>
                   <el-descriptions-item label="预留"></el-descriptions-item>
+
+                  <el-descriptions-item label="预留"></el-descriptions-item>
+                  <el-descriptions-item label="预留"></el-descriptions-item>
                 </el-descriptions>
               </div>
             </div>
@@ -62,7 +80,7 @@
             </div>
           </el-col>
 
-          <el-col :span="8">
+          <el-col :span="7">
             <div style="box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);width: 100%;height: 720px;padding: 5px 0 0 10px">
               <div>
                 <span style="font-size: 18px;font-weight: bold">需协调解决事项：</span>
@@ -134,6 +152,8 @@
         <EditTaskInfoDialog ref="editTaskInfoDialog" whereComeFrom="projectDetail"></EditTaskInfoDialog>
       </div>
     </div>
+
+    <EditProjectBaseDialog  ref="editProjectBaseDialog" addOrUpdateProjectBaseDialogTitle="修改项目"></EditProjectBaseDialog>
   </div>
 </template>
 
@@ -142,10 +162,11 @@
   import {selectAllDeptList} from  "@/api/system/dept"
   import { selectProjectBaseList,selectProjectLiuChengTuTemplateList, selectProjectLiuChengTuDataLogList,insertLiuChengTuDataLog,insertProjectBase,updateProjectBase,deleteProjectBase } from "@/api/project/project"
   import EditTaskInfoDialog from "../myflow/components/dialog/editTaskInfoDialog.vue";
+  import EditProjectBaseDialog from "../projectdetail/editProjectBaseDialog";
 
 export default {
   name: "ProjectBase",
-  components: { Myflow ,EditTaskInfoDialog},
+  components: { Myflow ,EditTaskInfoDialog,EditProjectBaseDialog},
   data() {
     return {
       //当前页名 detail-1 详情页 detail-2 表格、流程图
@@ -184,6 +205,7 @@ export default {
       //当前最大目录数
       maxContentsNum:0,
 
+
     }
   },
   created() {
@@ -198,6 +220,12 @@ export default {
   methods: {
     changePage(name){
       this.curPageName=name;
+    },
+
+    //打开编辑项目详情页
+    openProjectBaseEditPage(){
+      this.$refs.editProjectBaseDialog.visible=true;
+      this.$refs.editProjectBaseDialog.init(this.curPageProjectBaseInfo);
     },
 
     //打开子任务节点的编辑页面
@@ -324,7 +352,6 @@ export default {
         }
       })
     },
-
 
     //生成目录配置
     generateContentsSetMap(contentsSetStr){
@@ -473,6 +500,11 @@ export default {
       })
     },
 
+    //编辑项目详情 后的回调
+    fromEditProjectBaseDialog(){
+      window.location.reload()
+    },
+
     closeMyflowDialog(){
       this.liuChengTuGraphVisible=false;
     },
@@ -548,6 +580,13 @@ export default {
 
   .el-dialog__body{
     padding: 10px 20px !important;
+  }
+
+  .sss::before {
+    content: "";
+    display: block;
+    width: 100%; /* 占满整个宽度 */
+    height: 50px; /* 指定高度 */
   }
 </style>
 

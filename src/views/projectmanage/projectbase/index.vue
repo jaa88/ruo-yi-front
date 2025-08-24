@@ -150,7 +150,7 @@
       </el-dialog>
     </div>
 
-    <!-- 添加或修改岗位对话框 -->
+    <!-- 添加或修改项目详情页对话框 -->
     <el-dialog id="ffff" :title="addOrUpdateProjectBaseDialogTitle" :visible.sync="addOrUpdateProjectBaseVisible" width="1200px" append-to-body  @close="cancelAddOrUpdateProjectBase">
       <div style="padding-top: 20px">
         <el-form ref="addOrUpdateProjectBaseForm" :model="addOrUpdateProjectBaseForm" :rules="addOrUpdateProjectBaseFormRules" label-width="120px">
@@ -332,8 +332,6 @@ export default {
       },
       liuChengTuGraphVisible:false,
       curRow:null,
-      //能够操作项目的人员
-      curRowCanEditProjectDeptList:[],
       //打开新增模板dialog
       addOrUpdateProjectBaseDialogTitle:"",
       addOrUpdateProjectBaseVisible:false,
@@ -341,8 +339,7 @@ export default {
       //所有的dept
       allDeptList:[],
       allTemplateList:[],
-      //新增项目时选择的初始模板
-      choosedInitCellsJsonStr:"",
+
       dialogImageUrl: '',
       dialogVisible: false
     }
