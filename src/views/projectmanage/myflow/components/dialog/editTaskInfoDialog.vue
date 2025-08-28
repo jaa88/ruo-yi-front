@@ -64,7 +64,6 @@
                      :on-success="onSuccess" :on-error="onError" :on-remove="handleRemove" :on-preview="handlePreview"
                      :action="uploadUrl"
                      :data="baseDirObj"
-
                      :headers="headers" accept=".txt,.jpg,.jpeg,.png,.doc,.docx,.xls,.xlsx,.pdf"
           >
                <el-button size="small" type="primary">导入</el-button>
@@ -121,8 +120,6 @@ export default {
       fileList:[],//文件上传后的
       originFileNameList:[],//每一个上传的文件对的原始名字
       curFilePathAndNameList:[],//每一个上传文件的相对路径
-      uploadFileIdList:[],//上传的文件list
-      defaultFileList:[],
     };
   },
 

@@ -27,12 +27,14 @@
                 </el-select>
               </el-form-item>
 
-              <el-form-item label="项目主图" style="margin-bottom: 10px !important;margin-top: 30px !important;">
+              <el-form-item label="项目图片" style="margin-bottom: 10px !important;margin-top: 30px !important;">
                 <el-upload style="" list-type="picture-card"
                            :file-list="addOrUpdateProjectBaseForm.fileList"
-                           :limit="1"
+                           :limit="10"
                            :on-success="onSuccess" :on-error="onError" :on-remove="handleRemove"
-                           :action="uploadUrl" :headers="headers" accept=".jpg,.jpeg,.png"
+                           :action="uploadUrl"
+                           :data="baseDirObj"
+                           :headers="headers" accept=".jpg,.jpeg,.png"
                            :on-preview="handlePictureCardPreview"
                 >
                      <el-button size="small" type="primary">导入</el-button>
@@ -192,7 +194,6 @@ export default {
           "remark":"",
           "contentsSetStr":"",
           "id":"",
-          fileList:[],
           projectMainImagePathAndName:"",
           returnUploadFileList:[],
           //补充
@@ -209,6 +210,12 @@ export default {
           lianXiFangShi:"",
           zhuYaoJianSheNeiRong:"",
           niXinZenYongDiQingKuang:"",
+
+          //文件上传
+          fileList:[],//文件上传后的
+          originFileNameList:[],//每一个上传的文件对的原始名字
+          curFilePathAndNameList:[],//每一个上传文件的相对路径
+
         }
       }else {
         this.addOrUpdateProjectBaseForm={
@@ -216,9 +223,6 @@ export default {
           "remark":row.remark,
           "contentsSetStr":row.contentsSetStr,
           "id":row.id,
-          fileList:row.projectMainImagePathAndName!=null && row.projectMainImagePathAndName!=''?[{"projectMainImagePathAndName":row.projectMainImagePathAndName,"url":process.env.VUE_APP_BASE_API+row.projectMainImagePathAndName}]:[],
-          projectMainImagePathAndName:row.projectMainImagePathAndName,
-          returnUploadFileList:[],
           //补充
           xiangMuDaiMa:row.xiangMuDaiMa,
           muQianJieDuan:row.muQianJieDuan+'',
@@ -233,7 +237,15 @@ export default {
           lianXiFangShi:row.lianXiFangShi,
           zhuYaoJianSheNeiRong:row.zhuYaoJianSheNeiRong,
           niXinZenYongDiQingKuang:row.niXinZenYongDiQingKuang,
-        }
+          //文件上传
+          fileList:[],//文件上传后的
+          originFileNameList:[],//每一个上传的文件对的原始名字
+          curFilePathAndNameList:[],//每一个上传文件的相对路径
+        };
+        //补充文件相关
+        this.addOrUpdateProjectBaseForm.originFileNameListStr=row.originFileNameListStr;
+        this.addOrUpdateProjectBaseForm.curFilePathAndNameListStr=row.curFilePathAndNameListStr;
+        this.generateDefaultFileList();
       }
     },
 
@@ -242,6 +254,9 @@ export default {
       let curObj=this;
       curObj.$refs["addOrUpdateProjectBaseForm"].validate(valid => {
         if (valid) {
+          this.addOrUpdateProjectBaseForm.originFileNameListStr=this.getOriginFileNameListStr();
+          this.addOrUpdateProjectBaseForm.curFilePathAndNameListStr=this.getCurFilePathAndNameListStr();
+
           if (this.addOrUpdateProjectBaseDialogTitle==='修改项目') {
             updateProjectBase(this.addOrUpdateProjectBaseForm).then(response => {
               curObj.$modal.msgSuccess("修改成功")
@@ -257,6 +272,10 @@ export default {
           }
         }
       })
+    },
+
+    cancelAddOrUpdateProjectBase(){
+      this.addOrUpdateProjectBaseVisible=false;
     },
 
     /**
@@ -286,22 +305,74 @@ export default {
         type: "info"
       });
       let returnUploadFile=response;
-      this.addOrUpdateProjectBaseForm.returnUploadFileList.push(returnUploadFile);
-      this.addOrUpdateProjectBaseForm.projectMainImagePathAndName=returnUploadFile["fileName"];
+      this.addOrUpdateProjectBaseForm.curFilePathAndNameList.push(returnUploadFile["fileName"])
+      this.addOrUpdateProjectBaseForm.originFileNameList.push(returnUploadFile["originalFilename"])
     },
 
     //删除文件回调
     handleRemove(file,fileList){
-      for(let i=this.addOrUpdateProjectBaseForm.returnUploadFileList.length-1;i>0;i--){
-        if(file.name===this.addOrUpdateProjectBaseForm.returnUploadFileList[i]["originalFilename"]){
-          this.addOrUpdateProjectBaseForm.returnUploadFileList.slice(i,1);
+      let curFilePathAndNameList=this.addOrUpdateProjectBaseForm.curFilePathAndNameList;
+      let originFileNameList=this.addOrUpdateProjectBaseForm.originFileNameList;
+      for(let i=originFileNameList.length-1;i>=0;i--){
+        if(file.name==originFileNameList[i]){
+          curFilePathAndNameList.splice(i,1);
+          originFileNameList.splice(i,1);
           break;
         }
       }
+      this.addOrUpdateProjectBaseForm.curFilePathAndNameList=curFilePathAndNameList;
+      this.addOrUpdateProjectBaseForm.originFileNameList=originFileNameList;
     },
 
-    cancelAddOrUpdateProjectBase(){
-      this.addOrUpdateProjectBaseVisible=false;
+    getOriginFileNameListStr(){
+      let returnStr="";
+      let originFileNameList=this.addOrUpdateProjectBaseForm.originFileNameList;
+      if(typeof originFileNameList!='undefined' && originFileNameList.length>0){
+        for(let i=0;i<originFileNameList.length;i++){
+          returnStr+=originFileNameList[i];
+          if(i!=originFileNameList.length-1){
+            returnStr+="*@*";
+          }
+        }
+      }
+      return returnStr;
+    },
+
+    getCurFilePathAndNameListStr(){
+      let returnStr="";
+      let curFilePathAndNameList=this.addOrUpdateProjectBaseForm.curFilePathAndNameList;
+      if(typeof curFilePathAndNameList!='undefined' && curFilePathAndNameList.length>0){
+        for(let i=0;i<curFilePathAndNameList.length;i++){
+          returnStr+=curFilePathAndNameList[i];
+          if(i!=curFilePathAndNameList.length-1){
+            returnStr+="*@*";
+          }
+        }
+      }
+      return returnStr;
+    },
+
+    //从数据库中生成文件
+    generateDefaultFileList(){
+      let originFileNameListStr=this.addOrUpdateProjectBaseForm.originFileNameListStr;
+      let curFilePathAndNameListStr=this.addOrUpdateProjectBaseForm.curFilePathAndNameListStr;
+      if(typeof originFileNameListStr!='undefined' && originFileNameListStr!=null && originFileNameListStr!=''){
+        this.addOrUpdateProjectBaseForm.originFileNameList=originFileNameListStr.split("*@*");
+        this.addOrUpdateProjectBaseForm.curFilePathAndNameList=curFilePathAndNameListStr.split("*@*");
+        let returnArr=[];
+        if(this.addOrUpdateProjectBaseForm.originFileNameList.length>0){
+          for(let i=0;i<this.addOrUpdateProjectBaseForm.originFileNameList.length;i++){
+            let tempObj={
+              name:this.addOrUpdateProjectBaseForm.originFileNameList[i],
+              url:process.env.VUE_APP_BASE_API+this.addOrUpdateProjectBaseForm.curFilePathAndNameList[i]
+            }
+            returnArr.push(tempObj);
+          }
+        }
+        this.addOrUpdateProjectBaseForm.fileList=returnArr;
+      }else{
+        this.addOrUpdateProjectBaseForm.fileList=[]
+      }
     },
 
     handlePictureCardPreview(file){
@@ -314,6 +385,8 @@ export default {
         this.allTemplateList = response.data
       })
     },
+
+
   },
 };
 </script>
