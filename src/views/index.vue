@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container home">
+  <div class="app-container home" v-loading="loading">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" label-width="68px">
       <el-form-item label="项目名称" prop="noticeTitle">
         <el-input
@@ -105,7 +105,7 @@ export default {
   data() {
     return {
       // 遮罩层
-      loading: true,
+      loading: false,
       // 总条数
       total: 0,
       // 查询参数

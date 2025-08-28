@@ -224,7 +224,7 @@ export default {
 
     //打开编辑项目详情页
     openProjectBaseEditPage(){
-      this.$refs.editProjectBaseDialog.visible=true;
+      this.$refs.editProjectBaseDialog.addOrUpdateProjectBaseVisible=true;
       this.$refs.editProjectBaseDialog.init(this.curPageProjectBaseInfo);
     },
 

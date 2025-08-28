@@ -2,7 +2,7 @@
   <div style="padding-top: 20px">
     <el-dialog
       title="编辑任务"
-      :visible.sync="visible"
+      :visible.sync="addOrUpdateProjectBaseVisible"
       width="1000px"
       append-to-body
     >
@@ -153,7 +153,6 @@ export default {
 
   data() {
     return {
-      visible:false,
       //上传文件url
       uploadUrl:process.env.VUE_APP_BASE_API+"/common/upload",
       baseDirObj:{
@@ -182,33 +181,59 @@ export default {
   },
 
   created() {
-
+    this.selectAllTemplateList();
   },
 
   methods: {
     init(row) {
-      this.addOrUpdateProjectBaseForm={
-        "projectName":row.projectName,
-        "remark":row.remark,
-        "contentsSetStr":row.contentsSetStr,
-        "id":row.id,
-        fileList:row.projectMainImagePathAndName!=null && row.projectMainImagePathAndName!=''?[{"projectMainImagePathAndName":row.projectMainImagePathAndName,"url":process.env.VUE_APP_BASE_API+row.projectMainImagePathAndName}]:[],
-        projectMainImagePathAndName:row.projectMainImagePathAndName,
-        returnUploadFileList:[],
-        //补充
-        xiangMuDaiMa:row.xiangMuDaiMa,
-        muQianJieDuan:row.muQianJieDuan+'',
-        xiangMuDiZhi:row.xiangMuDiZhi,
-        xiangMuLeiXing:row.xiangMuLeiXing+'',
-        jianSheXingZhi:row.jianSheXingZhi+'',
-        zongTouZi:row.zongTouZi,
-        niKaiGongRiQi:row.niKaiGongRiQi,
-        niWanGongRiQi:row.niWanGongRiQi,
-        jianSheDanWei:row.jianSheDanWei,
-        xiangMuFuZeRen:row.xiangMuFuZeRen,
-        lianXiFangShi:row.lianXiFangShi,
-        zhuYaoJianSheNeiRong:row.zhuYaoJianSheNeiRong,
-        niXinZenYongDiQingKuang:row.niXinZenYongDiQingKuang,
+      if(row==null){
+        this.addOrUpdateProjectBaseForm={
+          "projectName":"",
+          "remark":"",
+          "contentsSetStr":"",
+          "id":"",
+          fileList:[],
+          projectMainImagePathAndName:"",
+          returnUploadFileList:[],
+          //补充
+          xiangMuDaiMa:"",
+          muQianJieDuan:"",
+          xiangMuDiZhi:"",
+          xiangMuLeiXing:"",
+          jianSheXingZhi:"",
+          zongTouZi:"",
+          niKaiGongRiQi:"",
+          niWanGongRiQi:"",
+          jianSheDanWei:"",
+          xiangMuFuZeRen:"",
+          lianXiFangShi:"",
+          zhuYaoJianSheNeiRong:"",
+          niXinZenYongDiQingKuang:"",
+        }
+      }else {
+        this.addOrUpdateProjectBaseForm={
+          "projectName":row.projectName,
+          "remark":row.remark,
+          "contentsSetStr":row.contentsSetStr,
+          "id":row.id,
+          fileList:row.projectMainImagePathAndName!=null && row.projectMainImagePathAndName!=''?[{"projectMainImagePathAndName":row.projectMainImagePathAndName,"url":process.env.VUE_APP_BASE_API+row.projectMainImagePathAndName}]:[],
+          projectMainImagePathAndName:row.projectMainImagePathAndName,
+          returnUploadFileList:[],
+          //补充
+          xiangMuDaiMa:row.xiangMuDaiMa,
+          muQianJieDuan:row.muQianJieDuan+'',
+          xiangMuDiZhi:row.xiangMuDiZhi,
+          xiangMuLeiXing:row.xiangMuLeiXing+'',
+          jianSheXingZhi:row.jianSheXingZhi+'',
+          zongTouZi:row.zongTouZi,
+          niKaiGongRiQi:row.niKaiGongRiQi,
+          niWanGongRiQi:row.niWanGongRiQi,
+          jianSheDanWei:row.jianSheDanWei,
+          xiangMuFuZeRen:row.xiangMuFuZeRen,
+          lianXiFangShi:row.lianXiFangShi,
+          zhuYaoJianSheNeiRong:row.zhuYaoJianSheNeiRong,
+          niXinZenYongDiQingKuang:row.niXinZenYongDiQingKuang,
+        }
       }
     },
 
@@ -217,20 +242,19 @@ export default {
       let curObj=this;
       curObj.$refs["addOrUpdateProjectBaseForm"].validate(valid => {
         if (valid) {
-          if (this.addOrUpdateProjectBaseForm.id != undefined) {
+          if (this.addOrUpdateProjectBaseDialogTitle==='修改项目') {
             updateProjectBase(this.addOrUpdateProjectBaseForm).then(response => {
               curObj.$modal.msgSuccess("修改成功")
               curObj.addOrUpdateProjectBaseVisible = false
-              curObj.getList()
+              curObj.$parent.fromEditProjectBaseDialog();
             })
           } else {
             insertProjectBase(this.addOrUpdateProjectBaseForm).then(response => {
               curObj.$modal.msgSuccess("新增成功")
               curObj.addOrUpdateProjectBaseVisible = false
-              curObj.getList()
+              curObj.$parent.fromEditProjectBaseDialog();
             })
           }
-          curObj.$parent.fromEditProjectBaseDialog();
         }
       })
     },
@@ -277,12 +301,18 @@ export default {
     },
 
     cancelAddOrUpdateProjectBase(){
-      this.visible=false;
+      this.addOrUpdateProjectBaseVisible=false;
     },
 
     handlePictureCardPreview(file){
       this.dialogImageUrl = file.url;
       this.dialogVisible = true;
+    },
+
+    selectAllTemplateList(){
+      selectProjectLiuChengTuTemplateList({"pageNum":1,"pageSize":1000}).then(response => {
+        this.allTemplateList = response.data
+      })
     },
   },
 };
