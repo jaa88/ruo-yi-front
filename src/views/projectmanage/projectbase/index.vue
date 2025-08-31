@@ -15,25 +15,27 @@
           <el-option label="前期" value="1" />
           <el-option label="施工" value="2" />
           <el-option label="试运营" value="3" />
-          <el-option label="不再关注" value="4" />
         </el-select>
       </el-form-item>
 
       <el-form-item label="项目类型" prop="noticeTitle">
         <el-select style="width:150px" v-model="queryParams.xiangMuLeiXing" @change="handleQuery"  clearable placeholder="项目类型">
-          <el-option label="类型1" value="1" />
-          <el-option label="类型2" value="2" />
-          <el-option label="类型3" value="3" />
-          <el-option label="类型4" value="4" />
+          <el-option label="公路" value="1" />
+          <el-option label="水运" value="2" />
+          <el-option label="铁路轨道" value="3" />
+          <el-option label="航空" value="4" />
+          <el-option label="其他" value="5" />
         </el-select>
       </el-form-item>
 
       <el-form-item label="建设性质" prop="noticeTitle">
         <el-select style="width:150px" v-model="queryParams.jianSheXingZhi" @change="handleQuery" clearable  placeholder="建设性质">
-          <el-option label="建设性质1" value="1" />
-          <el-option label="建设性质2" value="2" />
-          <el-option label="建设性质3" value="3" />
-          <el-option label="建设性质4" value="4" />
+          <el-option label="新建" value="1" />
+          <el-option label="改建" value="2" />
+          <el-option label="扩建" value="3" />
+          <el-option label="改扩建" value="4" />
+          <el-option label="维护养护" value="5" />
+          <el-option label="其他" value="6" />
         </el-select>
       </el-form-item>
 
@@ -55,37 +57,52 @@
           </template>
         </el-table-column>
 
-        <el-table-column  label="目前阶段" align="center" min-width="120px" :show-overflow-tooltip="true">
+        <el-table-column  label="目前阶段" align="center" min-width="80px" :show-overflow-tooltip="true">
           <template slot-scope="scope">
             <span>{{getMuQianJieDuanName(scope.row.muQianJieDuan)}}</span>
           </template>
         </el-table-column>
 
-        <el-table-column  label="建设单位" align="center" min-width="120px" :show-overflow-tooltip="true">
+        <el-table-column  label="建设单位" align="center" min-width="160px">
           <template slot-scope="scope">
-            <span>{{scope.row.jianSheDanWei}}</span>
+            <div v-if="typeof scope.row.jianSheDanWei =='undefined' || scope.row.jianSheDanWei==null || scope.row.jianSheDanWei==''" style="white-space: pre-line;text-align: left"  >--</div>
+            <div v-else-if="scope.row.jianSheDanWei.length<=60" style="white-space: pre-line;text-align: left"  v-html="scope.row.jianSheDanWei" ></div>
+            <div v-else>
+              <el-popover
+                placement="top-start"
+                width="200"
+                trigger="hover"
+              >
+                <div style="white-space: pre-line;text-align: left" v-html="scope.row.jianSheDanWei">
+
+                </div>
+                <a style="color:#1890ff" slot="reference">{{scope.row.jianSheDanWei.slice(0,60)+'(...)'}}</a>
+              </el-popover>
+            </div>
           </template>
         </el-table-column>
 
-        <el-table-column  label="总投资（万元）" align="center" min-width="120px" :show-overflow-tooltip="true">
+        <el-table-column  label="总投资(万)" align="center" min-width="70px" :show-overflow-tooltip="true">
           <template slot-scope="scope">
             <span>{{scope.row.zongTouZi}}</span>
           </template>
         </el-table-column>
 
-        <el-table-column label="责任部门" align="center" prop="createTime" min-width="120px"  :show-overflow-tooltip="true">
+        <el-table-column label="责任部门" align="center" prop="createTime" min-width="80px"  :show-overflow-tooltip="true">
           <template slot-scope="scope">
-            <span v-for="item in scope.row.deptList">{{ item.deptName+";" }}</span>
+            <div>
+              <div v-for="item in scope.row.deptList">{{ item.deptName }}</div>
+            </div>
           </template>
         </el-table-column>
 
-        <el-table-column label="任务进度" align="center"  min-width="120px">
+        <el-table-column label="任务进度" align="center"  min-width="80px">
           <template slot-scope="scope">
             <el-tag>{{scope.row.allDoneNodeCount+'/'+scope.row.allPayAttentionNodeCount}}</el-tag>
           </template>
         </el-table-column>
 
-        <el-table-column label="进行中任务" align="left" prop="createTime" min-width="200px"  :show-overflow-tooltip="true">
+        <el-table-column label="进行中任务" align="left" prop="createTime" min-width="160px"  :show-overflow-tooltip="true">
           <template slot-scope="scope">
             <div v-if="hasValidTasks(scope.row.cellsJsonStr)">
               <div v-for="(task, idx) in getNumberedTasks(scope.row.cellsJsonStr)"
@@ -96,21 +113,46 @@
           </template>
         </el-table-column>
 
-        <el-table-column  label="近期完成任务" min-width="120px" align="center" :show-overflow-tooltip="true">
-          <template slot-scope="scope"> 具体实现逻辑还需考虑 </template>
-        </el-table-column>
-
-        <el-table-column  label="备注" min-width="120px" align="center">
-          <template slot-scope="scope"> {{scope.row.remark}} </template>
-        </el-table-column>
-
-        <!--<el-table-column label="更新时间" align="center" prop="createTime" width="100">
+        <el-table-column  label="近期完成任务" min-width="200px" align="left">
           <template slot-scope="scope">
-            <span>{{ parseTime(scope.row.updateTime, '{y}-{m}-{d}') }}</span>
-          </template>
-        </el-table-column>-->
+            <div v-if="scope.row.lastWanChengList.length==0">
+              --
+            </div>
 
-        <el-table-column label="操作" align="center" min-width="150px" class-name="small-padding fixed-width">
+            <div v-else>
+              <div v-for="(item,index) in scope.row.lastWanChengList" :key="'lastWanChengList'+index">
+                <div style="display: inline-block">
+                  {{parseTime(item.endTime, '{y}-{m}-{d}')}}
+                </div>
+
+                <div style="margin-left:2px;display: inline-block">
+                  {{item.taskName}}
+                </div>
+              </div>
+            </div>
+          </template>
+        </el-table-column>
+
+        <el-table-column  label="需协调解决事项" min-width="120px" align="center">
+          <template slot-scope="scope">
+            <div v-if="typeof scope.row.remark =='undefined' || scope.row.remark==null || scope.row.remark==''" style="white-space: pre-line;text-align: left"  >--</div>
+            <div v-else-if="scope.row.remark.length<=60" style="white-space: pre-line;text-align: left"  v-html="scope.row.remark" ></div>
+            <div v-else>
+              <el-popover
+                          placement="top-start"
+                          width="200"
+                          trigger="hover"
+                          >
+                <div style="white-space: pre-line;text-align: left" v-html="scope.row.remark">
+
+                </div>
+                <a style="color:#1890ff" slot="reference">{{scope.row.remark.slice(0,60)+'(...)'}}</a>
+              </el-popover>
+            </div>
+          </template>
+        </el-table-column>
+
+        <el-table-column label="操作" align="center" min-width="100px" class-name="small-padding fixed-width">
           <template slot-scope="scope">
             <el-button
               size="mini"
@@ -124,12 +166,6 @@
               icon="el-icon-delete"
               @click="handleDelete(scope.row)"
             >删除</el-button>
-            <!--<el-button
-              size="mini"
-              type="text"
-              icon="el-icon-delete"
-              @click="openLiuChengTuGraph(scope.row)"
-            >流程图</el-button>-->
           </template>
         </el-table-column>
       </el-table>
@@ -213,7 +249,6 @@ export default {
 
   mounted(){
     this.selectAllDeptList();
-    this.selectAllTemplateList();
   },
   methods: {
 
@@ -279,8 +314,9 @@ export default {
             tableData[i]["allDoneNodeCount"]=0;          }
         }
         this.tableData = response.data;
-        this.total = response.total
-        this.loading = false
+        this.total = response.total;
+        this.loading = false;
+        this.generateTableDataLastSeveralDayRenWuJieDian();
       })
     },
 
@@ -336,15 +372,12 @@ export default {
       }
       if(code==1){
         return "前期";
-      }
-      if(code==2){
+      }else if(code==2){
         return "施工";
-      }
-      if(code==3){
+      }else if(code==3){
         return "试运营";
-      }
-      if(code==4){
-        return "不再关注";
+      }else{
+        return "--"
       }
     },
 
@@ -352,18 +385,18 @@ export default {
     getXiangMuLeiXingName(code){
       if(code==null || code==''){
         return "--";
-      }
-      if(code==1){
-        return "类型1";
-      }
-      if(code==2){
-        return "类型2";
-      }
-      if(code==3){
-        return "类型3";
-      }
-      if(code==4){
-        return "类型4";
+      }else if(code==1){
+        return "公路";
+      }else if(code==2){
+        return "水运";
+      }else if(code==3){
+        return "铁路轨道";
+      }else if(code==4){
+        return "航空";
+      }else if(code==5){
+        return "其他";
+      }else{
+        return "--"
       }
     },
 
@@ -371,20 +404,53 @@ export default {
     getJianSheXingZhiName(code){
       if(code==null || code==''){
         return "--";
-      }
-      if(code==1){
-        return "性质1";
-      }
-      if(code==2){
-        return "性质2";
-      }
-      if(code==3){
-        return "性质3";
-      }
-      if(code==4){
-        return "性质4";
+      }else if(code==1){
+        return "新建";
+      }else if(code==2){
+        return "改建";
+      }else if(code==3){
+        return "扩建";
+      }else if(code==4){
+        return "改扩建";
+      }else if(code==5){
+        return "维护养护";
+      }else if(code==6){
+        return "其他";
+      }else{
+        return "--"
       }
     },
+
+    //根据需要产生最近一些天的任务情况
+    generateTableDataLastSeveralDayRenWuJieDian() {
+      for(let k=0;k<this.tableData.length;k++){
+        let relationList = this.tableData[k]['relationList'];
+        if (typeof relationList != 'undefined' && relationList!=null && relationList.length > 0) {
+          //先获取所有的事完成的，且有完成时间的任务
+          let wanChengList = [];
+          for (let i = 0; i < relationList.length; i++) {
+            let tempRelation = relationList[i];
+            if (typeof tempRelation['status'] != 'undefined' && typeof tempRelation['endTime'] != 'undefined' && tempRelation['status'] == 3 && tempRelation['endTime'] != null) {
+              wanChengList.push(tempRelation)
+            }
+          }
+          //再排个序
+          wanChengList.sort((a, b) => {
+            const valA = new Date(a.endTime).getTime() || 0;
+            const valB = new Date(b.endTime).getTime() || 0;
+            if (valA !== valB) {
+              return valB - valA;
+            }
+            return 0;
+          });
+          this.tableData[k]['lastWanChengList'] = wanChengList.slice(0, 5)
+        }else{
+          this.tableData[k]['lastWanChengList']=[];
+        }
+        console.log(this.tableData[k]['lastWanChengList'])
+      }
+
+    }
   }
 }
 </script>

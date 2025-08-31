@@ -70,6 +70,18 @@
           </template>
         </el-table-column>
 
+        <el-table-column  label="结束时间" align="center" min-width="80px" :show-overflow-tooltip="true">
+          <template slot-scope="scope">
+            {{ scope.row.endTime!=null?parseTime(scope.row.endTime, '{y}-{m}-{d}'):'--' }}
+          </template>
+        </el-table-column>
+
+        <el-table-column  label="预期开始时间" align="center" min-width="80px" :show-overflow-tooltip="true">
+          <template slot-scope="scope">
+            {{ scope.row.expectedStartTime!=null?parseTime(scope.row.expectedStartTime, '{y}-{m}-{d}'):'--' }}
+          </template>
+        </el-table-column>
+
         <el-table-column  label="预期结束时间" align="center" min-width="80px" :show-overflow-tooltip="true">
           <template slot-scope="scope">
             {{ scope.row.expectedEndTime!=null?parseTime(scope.row.expectedEndTime, '{y}-{m}-{d}'):'--' }}
@@ -90,11 +102,11 @@
           </template>
         </el-table-column>
 
-        <el-table-column  label="上次更新时间" align="center" min-width="80px" :show-overflow-tooltip="true">
+       <!-- <el-table-column  label="上次更新时间" align="center" min-width="80px" :show-overflow-tooltip="true">
           <template slot-scope="scope">
-            {{ scope.row.updateTime!=null?parseTime(scope.row.updateTime, '{y}-{m}-{d}'):'--' }}
+            {{ scope.row.updateTime!=null?parseTime(scope.row.updateTime, '{y}-{m}-{d}'):'&#45;&#45;' }}
           </template>
-        </el-table-column>
+        </el-table-column>-->
       </el-table>
     </div>
 

@@ -1,136 +1,148 @@
 <template>
-  <div style="padding-top: 20px">
-    <el-dialog
+  <div style="padding-top: 20px;">
+    <el-dialog :close-on-click-modal="false"
       title="编辑任务"
       :visible.sync="addOrUpdateProjectBaseVisible"
       width="1000px"
-      append-to-body
+      style=""
     >
-      <el-form ref="addOrUpdateProjectBaseForm" :model="addOrUpdateProjectBaseForm" :rules="addOrUpdateProjectBaseFormRules" label-width="120px">
-        <el-row>
-          <el-col :span="12">
-            <div style="padding-right: 20px">
-              <el-form-item label="项目名称" prop="projectName">
-                <el-input v-model="addOrUpdateProjectBaseForm.projectName" placeholder="项目名称" />
-              </el-form-item>
+      <div style="height: 650px;overflow-y: auto">
+        <el-form ref="addOrUpdateProjectBaseForm" :model="addOrUpdateProjectBaseForm" :rules="addOrUpdateProjectBaseFormRules" label-width="120px">
+          <el-row>
+            <el-col :span="12">
+              <div style="padding-right: 20px">
+                <el-form-item label="项目名称" prop="projectName">
+                  <el-input style="width: 300px" v-model="addOrUpdateProjectBaseForm.projectName" placeholder="项目名称" />
+                </el-form-item>
 
-              <el-form-item label="项目代码" prop="xiangMuDaiMa">
-                <el-input v-model="addOrUpdateProjectBaseForm.xiangMuDaiMa" placeholder="项目投资代码" />
-              </el-form-item>
+                <el-form-item label="项目代码" prop="xiangMuDaiMa">
+                  <el-input style="width: 300px"  v-model="addOrUpdateProjectBaseForm.xiangMuDaiMa" placeholder="项目投资代码" />
+                </el-form-item>
 
-              <el-form-item label="目前阶段" prop="muQianJieDuan">
-                <el-select style="width:150px" v-model="addOrUpdateProjectBaseForm.muQianJieDuan" placeholder="目前阶段">
-                  <el-option label="前期" value="1" />
-                  <el-option label="施工" value="2" />
-                  <el-option label="试运营" value="3" />
-                  <el-option label="不再关注" value="4" />
-                </el-select>
-              </el-form-item>
+                <el-form-item label="目前阶段" prop="muQianJieDuan">
+                  <el-select style="width:300px" v-model="addOrUpdateProjectBaseForm.muQianJieDuan" placeholder="目前阶段">
+                    <el-option label="前期" value="1" />
+                    <el-option label="施工" value="2" />
+                    <el-option label="试运营" value="3" />
+                  </el-select>
+                </el-form-item>
 
-              <el-form-item label="项目图片" style="margin-bottom: 10px !important;margin-top: 30px !important;">
-                <el-upload style="" list-type="picture-card"
-                           :file-list="addOrUpdateProjectBaseForm.fileList"
-                           :limit="10"
-                           :on-success="onSuccess" :on-error="onError" :on-remove="handleRemove"
-                           :action="uploadUrl"
-                           :data="baseDirObj"
-                           :headers="headers" accept=".jpg,.jpeg,.png"
-                           :on-preview="handlePictureCardPreview"
-                >
-                     <el-button size="small" type="primary">导入</el-button>
-                </el-upload>
-              </el-form-item>
+                <el-form-item label="拟开工日期" prop="zongTouZi">
+                  <el-date-picker  style="width: 300px"
+                                   v-model="addOrUpdateProjectBaseForm.niKaiGongRiQi"
+                                   type="date"
+                                   placeholder="拟开工日期">
+                  </el-date-picker>
+                </el-form-item>
+              </div>
+            </el-col>
 
-              <el-form-item label="项目地址" prop="zongTouZi">
-                <el-input type="textarea" :rows="3" v-model="addOrUpdateProjectBaseForm.xiangMuDiZhi" placeholder="项目地址" />
-              </el-form-item>
-            </div>
-          </el-col>
+            <el-col :span="12">
+              <div style="padding-right: 20px">
+                <el-form-item label="项目类型" prop="xiangMuLeiXing">
+                  <el-select style="width:300px" v-model="addOrUpdateProjectBaseForm.xiangMuLeiXing" placeholder="项目类型">
+                    <el-option label="公路" value="1" />
+                    <el-option label="水运" value="2" />
+                    <el-option label="铁路轨道" value="3" />
+                    <el-option label="航空" value="4" />
+                    <el-option label="其他" value="5" />
+                  </el-select>
+                </el-form-item>
 
-          <el-col :span="12">
-            <div style="padding-right: 20px">
-              <el-form-item label="项目类型" prop="xiangMuLeiXing">
-                <el-select style="width:150px" v-model="addOrUpdateProjectBaseForm.xiangMuLeiXing" placeholder="项目类型">
-                  <el-option label="类型1" value="1" />
-                  <el-option label="类型2" value="2" />
-                  <el-option label="类型3" value="3" />
-                  <el-option label="类型4" value="4" />
-                </el-select>
-              </el-form-item>
+                <el-form-item label="建设性质" prop="jianSheXingZhi">
+                  <el-select style="width:300px" v-model="addOrUpdateProjectBaseForm.jianSheXingZhi" placeholder="建设性质">
+                    <el-option label="新建" value="1" />
+                    <el-option label="改建" value="2" />
+                    <el-option label="扩建" value="3" />
+                    <el-option label="改扩建" value="4" />
+                    <el-option label="维护养护" value="5" />
+                    <el-option label="其他" value="6" />
+                  </el-select>
+                </el-form-item>
 
-              <el-form-item label="建设性质" prop="jianSheXingZhi">
-                <el-select style="width:150px" v-model="addOrUpdateProjectBaseForm.jianSheXingZhi" placeholder="建设性质">
-                  <el-option label="建设性质1" value="1" />
-                  <el-option label="建设性质2" value="2" />
-                  <el-option label="建设性质3" value="3" />
-                  <el-option label="建设性质4" value="4" />
-                </el-select>
-              </el-form-item>
+                <el-form-item label="总投资(万)" prop="zongTouZi">
+                  <el-input  style="width: 300px"  v-model="addOrUpdateProjectBaseForm.zongTouZi" placeholder="总投资" />
+                </el-form-item>
 
-              <el-form-item label="总投资" prop="zongTouZi">
-                <el-input v-model="addOrUpdateProjectBaseForm.zongTouZi" placeholder="总投资" />
-              </el-form-item>
+                <el-form-item label="拟开工日期" prop="zongTouZi">
+                  <el-date-picker  style="width: 300px"
+                                   v-model="addOrUpdateProjectBaseForm.niWanGongRiQi"
+                    type="date"
+                    placeholder="拟完工日期">
+                  </el-date-picker>
+                </el-form-item>
+              </div>
+            </el-col>
+          </el-row>
 
-              <el-form-item label="拟开工日期" prop="zongTouZi">
-                <el-date-picker
-                  v-model="addOrUpdateProjectBaseForm.niKaiGongRiQi"
-                  type="date"
-                  placeholder="拟开工日期">
-                </el-date-picker>
-              </el-form-item>
+          <el-form-item label="项目地址" prop="zongTouZi">
+            <el-input  style="width: calc(100% - 50px)"  type="textarea" :rows="3" v-model="addOrUpdateProjectBaseForm.xiangMuDiZhi" placeholder="项目地址" />
+          </el-form-item>
 
-              <el-form-item label="拟开工日期" prop="zongTouZi">
-                <el-date-picker
-                  v-model="addOrUpdateProjectBaseForm.niWanGongRiQi"
-                  type="date"
-                  placeholder="拟完工日期">
-                </el-date-picker>
-              </el-form-item>
+          <el-form-item label="设计单位" prop="sheJiDanWei">
+            <el-input style="width: calc(100% - 50px)" type="textarea" :rows="3" v-model="addOrUpdateProjectBaseForm.sheJiDanWei" placeholder="设计单位" />
+          </el-form-item>
 
-              <el-form-item label="建设单位" prop="projectName">
-                <el-input v-model="addOrUpdateProjectBaseForm.jianSheDanWei" placeholder="建设单位" />
-              </el-form-item>
+          <el-form-item label="监理单位" prop="jianLiDanWei">
+            <el-input style="width: calc(100% - 50px)" type="textarea" :rows="3" v-model="addOrUpdateProjectBaseForm.jianLiDanWei" placeholder="监理单位" />
+          </el-form-item>
 
-              <el-form-item label="项目负责人" prop="projectName">
-                <el-input v-model="addOrUpdateProjectBaseForm.xiangMuFuZeRen" placeholder="项目负责人" />
-              </el-form-item>
+          <el-form-item label="接养单位" prop="jieYangDanWei">
+            <el-input style="width: calc(100% - 50px)" type="textarea" :rows="3" v-model="addOrUpdateProjectBaseForm.jieYangDanWei" placeholder="接养单位" />
+          </el-form-item>
 
-              <el-form-item label="联系方式" prop="projectName">
-                <el-input v-model="addOrUpdateProjectBaseForm.lianXiFangShi" placeholder="联系方式" />
-              </el-form-item>
+          <el-form-item label="施工单位" prop="shiGongDanWei">
+            <el-input style="width: calc(100% - 50px)" type="textarea" :rows="3" v-model="addOrUpdateProjectBaseForm.shiGongDanWei" placeholder="施工单位" />
+          </el-form-item>
 
-            </div>
-          </el-col>
-        </el-row>
+          <el-form-item label="建设单位" prop="projectName">
+            <el-input style="width: calc(100% - 50px)" type="textarea" :rows="3" v-model="addOrUpdateProjectBaseForm.jianSheDanWei" placeholder="建设单位" />
+          </el-form-item>
 
-        <el-form-item label="主要建设内容" prop="zongTouZi">
-          <el-input type="textarea" :rows="3" v-model="addOrUpdateProjectBaseForm.zhuYaoJianSheNeiRong" placeholder="主要建设内容" />
-        </el-form-item>
+          <el-form-item label="主要建设内容" prop="zongTouZi">
+            <el-input style="width: calc(100% - 50px)"  type="textarea" :rows="3" v-model="addOrUpdateProjectBaseForm.zhuYaoJianSheNeiRong" placeholder="主要建设内容" />
+          </el-form-item>
 
-        <el-form-item label="拟新增用地情况" prop="zongTouZi">
-          <el-input type="textarea" :rows="3"  v-model="addOrUpdateProjectBaseForm.niXinZenYongDiQingKuang" placeholder="拟新增用地情况" />
-        </el-form-item>
+          <el-form-item label="拟新增用地" prop="zongTouZi">
+            <el-input style="width: calc(100% - 50px)"  type="textarea" :rows="3"  v-model="addOrUpdateProjectBaseForm.niXinZenYongDiQingKuang" placeholder="拟新增用地情况" />
+          </el-form-item>
 
-        <el-form-item label="备注" prop="remark">
-          <el-input type="textarea" :rows="3"  v-model="addOrUpdateProjectBaseForm.remark" placeholder="备注" />
-        </el-form-item>
+          <el-form-item label="需协调解决事项" prop="remark">
+            <el-input style="width: calc(100% - 50px)"  type="textarea" :rows="3"  v-model="addOrUpdateProjectBaseForm.remark" placeholder="需协调解决事项" />
+          </el-form-item>
 
-        <el-form-item label="目录配置" prop="remark">
-          <el-input type="textarea" :rows="3"  v-model="addOrUpdateProjectBaseForm.contentsSetStr" placeholder="类似如下“1:前期,2:中期,3:后期”，英文符号" />
-        </el-form-item>
+          <el-form-item label="目录配置" prop="remark">
+            <el-input style="width: calc(100% - 50px)"  type="textarea" :rows="3"  v-model="addOrUpdateProjectBaseForm.contentsSetStr" placeholder="类似如下“1:前期,2:中期,3:后期”，英文符号" />
+          </el-form-item>
 
-        <el-form-item v-if="addOrUpdateProjectBaseDialogTitle=='新增项目'" label="初始模板" prop="projectName">
-          <el-select v-model="addOrUpdateProjectBaseForm.cellsJsonStr" filterable placeholder="请选择">
-            <el-option
-              v-for="item in allTemplateList"
-              :key="item.id"
-              :label="item.templateName"
-              :value="item.cellsJsonStr">
-            </el-option>
-          </el-select>
-        </el-form-item>
+          <el-form-item v-if="addOrUpdateProjectBaseDialogTitle=='新增项目'" label="初始模板" prop="projectName">
+            <el-select style="width: calc(100% - 50px)"  v-model="addOrUpdateProjectBaseForm.cellsJsonStr" filterable placeholder="请选择">
+              <el-option
+                v-for="item in allTemplateList"
+                :key="item.id"
+                :label="item.templateName"
+                :value="item.cellsJsonStr">
+              </el-option>
+            </el-select>
+          </el-form-item>
 
-      </el-form>
+          <el-form-item label="项目图片" style="margin-bottom: 10px !important;margin-top: 30px !important;">
+            <el-upload style="" list-type="picture-card"
+                       :file-list="addOrUpdateProjectBaseForm.fileList"
+                       :limit="10"
+                       :on-success="onSuccess" :on-error="onError" :on-remove="handleRemove"
+                       :action="uploadUrl"
+                       :data="baseDirObj"
+                       :headers="headers" accept=".jpg,.jpeg,.png"
+                       :on-preview="handlePictureCardPreview"
+            >
+                 <el-button size="small" type="primary">导入</el-button>
+            </el-upload>
+          </el-form-item>
+
+        </el-form>
+      </div>
+
       <div slot="footer" class="dialog-footer" style="text-align: right">
         <el-button type="primary" @click="submitForm">确 定</el-button>
         <el-button @click="cancelAddOrUpdateProjectBase">取 消</el-button>
@@ -210,6 +222,11 @@ export default {
           lianXiFangShi:"",
           zhuYaoJianSheNeiRong:"",
           niXinZenYongDiQingKuang:"",
+          //增加设计单位、监理单位、接养单位
+          sheJiDanWei:"",
+          jianLiDanWei:"",
+          jieYangDanWei:"",
+          shiGongDanWei:"",
 
           //文件上传
           fileList:[],//文件上传后的
@@ -237,6 +254,12 @@ export default {
           lianXiFangShi:row.lianXiFangShi,
           zhuYaoJianSheNeiRong:row.zhuYaoJianSheNeiRong,
           niXinZenYongDiQingKuang:row.niXinZenYongDiQingKuang,
+          //增加设计单位、监理单位、接养单位
+          sheJiDanWei:row.sheJiDanWei,
+          jianLiDanWei:row.jianLiDanWei,
+          jieYangDanWei:row.jieYangDanWei,
+          shiGongDanWei:row.shiGongDanWei,
+
           //文件上传
           fileList:[],//文件上传后的
           originFileNameList:[],//每一个上传的文件对的原始名字

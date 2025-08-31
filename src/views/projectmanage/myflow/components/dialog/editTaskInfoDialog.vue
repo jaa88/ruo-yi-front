@@ -16,6 +16,14 @@
             <el-input v-model="contentsNumStr" placeholder="目录序号，有小数点"></el-input>
           </el-form-item>
 
+          <el-form-item label="预计开始时间">
+            <el-date-picker
+              v-model="expectedStartTime"
+              type="date"
+              placeholder="选择日期">
+            </el-date-picker>
+          </el-form-item>
+
           <el-form-item label="任务开始时间">
             <el-date-picker
               v-model="startTime"
@@ -50,6 +58,14 @@
           <el-form-item label="预计完成时间">
             <el-date-picker
               v-model="expectedEndTime"
+              type="date"
+              placeholder="选择日期">
+            </el-date-picker>
+          </el-form-item>
+
+          <el-form-item label="任务结束时间">
+            <el-date-picker
+              v-model="endTime"
               type="date"
               placeholder="选择日期">
             </el-date-picker>
@@ -112,10 +128,12 @@ export default {
       chargeDeptIdList:"",//负责人
       remark:"",//备注
       startTime:"",// 开始时间
+      endTime:"",// 结束时间
       status:"1",//任务状态
       allDeptList:[],//项目能编辑的部门，
       contentsNumStr:"",//有小数点
       expectedEndTime:"",//预计结束时间
+      expectedStartTime:"",//预计结束时间
       //文件上传
       fileList:[],//文件上传后的
       originFileNameList:[],//每一个上传的文件对的原始名字
@@ -136,7 +154,9 @@ export default {
       this.chargeDeptIdList=item.item.data.chargeDeptIdList;
       this.remark=item.item.data.remark;
       this.startTime=item.item.data.startTime;
+      this.endTime=item.item.data.endTime;
       this.expectedEndTime=item.item.data.expectedEndTime;
+      this.expectedStartTime=item.item.data.expectedStartTime;
       this.status=item.item.data.status;
       if(typeof this.status ==='undefined' || this.status==null){
         this.status="1";
@@ -170,7 +190,9 @@ export default {
               chargeDeptIdList:this.chargeDeptIdList,
               remark:this.remark,
               startTime:this.startTime,
+              endTime:this.endTime,
               expectedEndTime:this.expectedEndTime,
+              expectedStartTime:this.expectedStartTime,
               status:this.status,
               contentsNumStr:this.contentsNumStr,
               originFileNameListStr:this.getOriginFileNameListStr(),
@@ -188,7 +210,9 @@ export default {
               chargeDeptIdList:this.chargeDeptIdList,
               remark:this.remark,
               startTime:this.startTime,
+              endTime:this.endTime,
               expectedEndTime:this.expectedEndTime,
+              expectedStartTime:this.expectedStartTime,
               status:this.status,
               contentsNumStr:this.contentsNumStr,
               originFileNameListStr:this.getOriginFileNameListStr(),

@@ -33,59 +33,257 @@
         <el-row :gutter="20">
           <el-col :span="7">
             <div style="box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);width: 100%;height: 720px;padding: 5px 0 0 10px">
-              <div>
-                <span style="font-size: 18px;font-weight: bold">项目推进情况：</span>
+              <div style="height: 400px">
+                <div>
+                  <span style="font-size: 18px;font-weight: bold">项目推进情况：</span>
+                </div>
+
+                <div style="height: 145px">
+                  <div style="font-size: 14px;font-weight: bold;margin-top: 5px">
+                    <el-row >
+                      <el-col :span="14">
+                        <div>
+                          <span>已完成任务</span>
+                        </div>
+                      </el-col>
+
+                      <el-col :span="10">
+                        <div>
+                          <span>完成时间</span>
+                        </div>
+                      </el-col>
+                    </el-row>
+                  </div>
+
+                  <div style="white-space: pre-line;font-size: 14px;line-height: 1.8">
+                    <div v-for="(item,index) in lastWanChengList" :key="'lastWanChengList'+index">
+                      <el-row>
+                        <el-col :span="14">
+                          <div style="">
+                            {{item.taskName}}
+                          </div>
+                        </el-col>
+
+                        <el-col :span="10">
+                          <div>
+                            {{parseTime(item.endTime, '{y}-{m}-{d}')}}
+                          </div>
+                        </el-col>
+                      </el-row>
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <div style="font-size: 14px;font-weight: bold;margin-top: 5px">
+                    <el-row >
+                      <el-col :span="14">
+                        <div>
+                          <span>进行中任务</span>
+                        </div>
+                      </el-col>
+
+                      <el-col :span="10">
+                        <div>
+                          <span>预计完成时间</span>
+                        </div>
+                      </el-col>
+                    </el-row>
+                  </div>
+
+
+                  <div style="white-space: pre-line;font-size: 14px;line-height: 1.8;overflow-y: scroll;height: 195px">
+                    <div v-for="(item,index) in doingList" :key="'doingList'+index">
+                      <el-row >
+                        <el-col :span="14">
+                          <div style="">
+                            {{item.taskName}}
+                          </div>
+                        </el-col>
+
+                        <el-col :span="10">
+                          <div style="padding-left: 3px">
+                            {{typeof item.expectedEndTime=='undefined' || item.expectedEndTime==null?'--':parseTime(item.expectedEndTime, '{y}-{m}-{d}')}}
+                          </div>
+                        </el-col>
+                      </el-row>
+                    </div>
+                  </div>
+                </div>
+
               </div>
 
-              <div>
-                这儿的数据来源？？？？
+
+              <div style="border-top: 1px solid #e7eaec;">
+                <div>
+                  <span style="font-size: 18px;font-weight: bold">需协调解决事项：</span>
+                </div>
+
+                <div style="white-space: pre-line;font-size: 14px;line-height: 1.8;overflow-y: auto;height: 270px" v-html="formatContent(curPageProjectBaseInfo.remark)">
+
+                </div>
               </div>
             </div>
 
           </el-col>
 
           <el-col :span="10">
-            <div>
-
-            </div>
-            <div style="width: 100%;height: 300px;">
+            <div style="width: 100%;height: 250px;">
               <div>
-                <el-descriptions :column="3" border >
-                  <el-descriptions-item label="项目类型">{{getXiangMuLeiXingName(curPageProjectBaseInfo.xiangMuLeiXing)}}</el-descriptions-item>
+                <el-descriptions :labelStyle="{'width' : '80px'}" :contentStyle="{'min-width': '120px','text-align': 'left'}" :column="3" border >
+                  <el-descriptions-item  label="项目类型">{{getXiangMuLeiXingName(curPageProjectBaseInfo.xiangMuLeiXing)}}</el-descriptions-item>
                   <el-descriptions-item label="建设性质">{{getJianSheXingZhiName(curPageProjectBaseInfo.jianSheXingZhi)}}</el-descriptions-item>
-                  <el-descriptions-item label="投资（万）">{{curPageProjectBaseInfo.zongTouZi?curPageProjectBaseInfo.zongTouZi:'--'}}</el-descriptions-item>
-
-                  <el-descriptions-item label="目前阶段">{{getMuQianJieDuanName(curPageProjectBaseInfo.muQianJianDuan)}}</el-descriptions-item>
+                  <el-descriptions-item label="投资(万)">{{curPageProjectBaseInfo.zongTouZi?curPageProjectBaseInfo.zongTouZi:'--'}}</el-descriptions-item>
+                  <el-descriptions-item label="目前阶段">{{getMuQianJieDuanName(curPageProjectBaseInfo.muQianJieDuan)}}</el-descriptions-item>
                   <el-descriptions-item label="拟开工">{{curPageProjectBaseInfo.niKaiGongRiQi?parseTime(curPageProjectBaseInfo.niKaiGongRiQi, '{y}-{m}-{d}'):'--'}}</el-descriptions-item>
                   <el-descriptions-item label="拟完工">{{curPageProjectBaseInfo.niWanGongRiQi?parseTime(curPageProjectBaseInfo.niWanGongRiQi, '{y}-{m}-{d}'):'--'}}</el-descriptions-item>
+                  <el-descriptions-item :span="3" label="项目地址" :contentStyle="{'text-align': 'left'}">
+                    <div v-if="checkHasHuanHangFu(curPageProjectBaseInfo.xiangMuDiZhi)|| (curPageProjectBaseInfo.xiangMuDiZhi!=null && curPageProjectBaseInfo.xiangMuDiZhi.length>20)">
+                      <el-popover
+                        placement="right"
+                        width="400"
+                        trigger="hover">
+                        <div style="white-space: pre-line" v-html="curPageProjectBaseInfo.xiangMuDiZhi">
+                        </div>
+                        <span slot="reference" style="color:#409EFF " >{{getFirstLineOrLimitNumStr(curPageProjectBaseInfo.xiangMuDiZhi,20)+'(...)'}}</span>
+                      </el-popover>
+                    </div>
 
-                  <el-descriptions-item :span="3" label="项目地址" :contentStyle="{'text-align': 'left'}">{{curPageProjectBaseInfo.xiangMuDiZhi?curPageProjectBaseInfo.xiangMuDiZhi:'--'}}</el-descriptions-item>
-                  <el-descriptions-item :span="3" label="建设单位" :contentStyle="{'text-align': 'left'}">{{curPageProjectBaseInfo.jianSheDanWei?curPageProjectBaseInfo.jianSheDanWei:'--'}}</el-descriptions-item>
+                    <div v-else>
+                      {{curPageProjectBaseInfo.xiangMuDiZhi}}
+                    </div>
+                  </el-descriptions-item>
+                  <el-descriptions-item :span="3" label="建设单位" :contentStyle="{'text-align': 'left'}">
+                    <div v-if="checkHasHuanHangFu(curPageProjectBaseInfo.jianSheDanWei)|| (curPageProjectBaseInfo.jianSheDanWei!=null && curPageProjectBaseInfo.jianSheDanWei.length>20)">
+                      <el-popover
+                        placement="right"
+                        width="400"
+                        trigger="hover">
+                        <div style="white-space: pre-line" v-html="curPageProjectBaseInfo.jianSheDanWei">
+                        </div>
+                        <span slot="reference" style="color:#409EFF " >{{getFirstLineOrLimitNumStr(curPageProjectBaseInfo.jianSheDanWei,20)+'(...)'}}</span>
+                      </el-popover>
+                    </div>
 
-                  <el-descriptions-item label="负责人">{{curPageProjectBaseInfo.xiangMuFuZeRen?curPageProjectBaseInfo.xiangMuFuZeRen:'--'}}</el-descriptions-item>
-                  <el-descriptions-item :span="2" label="联系方式">{{curPageProjectBaseInfo.lianXiFangShi?curPageProjectBaseInfo.lianXiFangShi:'--'}}</el-descriptions-item>
-
-                  <el-descriptions-item label="预留"></el-descriptions-item>
-                  <el-descriptions-item label="预留"></el-descriptions-item>
-                  <el-descriptions-item label="预留"></el-descriptions-item>
-
-                  <el-descriptions-item label="预留"></el-descriptions-item>
-                  <el-descriptions-item label="预留"></el-descriptions-item>
+                    <div v-else>
+                      {{curPageProjectBaseInfo.jianSheDanWei}}
+                    </div>
+                  </el-descriptions-item>
                 </el-descriptions>
+
+                <div class="extraDiv1">
+                  <el-descriptions  :labelStyle="{'width' : '80px'}" :contentStyle="{'min-width': '120px','text-align': 'left'}" :column="2" border >
+                    <el-descriptions-item label="设计单位">
+                      <div v-if="checkHasHuanHangFu(curPageProjectBaseInfo.sheJiDanWei)|| (curPageProjectBaseInfo.sheJiDanWei!=null && curPageProjectBaseInfo.sheJiDanWei.length>20)">
+                        <el-popover
+                          placement="right"
+                          width="400"
+                          trigger="hover">
+                          <div style="white-space: pre-line" v-html="curPageProjectBaseInfo.sheJiDanWei">
+                          </div>
+                          <span slot="reference" style="color:#409EFF " >{{getFirstLineOrLimitNumStr(curPageProjectBaseInfo.sheJiDanWei,20)+'(...)'}}</span>
+                        </el-popover>
+                      </div>
+
+                      <div v-else>
+                        {{curPageProjectBaseInfo.sheJiDanWei}}
+                      </div>
+                    </el-descriptions-item>
+                    
+                    <el-descriptions-item label="监理单位">
+                      <div v-if="checkHasHuanHangFu(curPageProjectBaseInfo.jianLiDanWei)|| (curPageProjectBaseInfo.jianLiDanWei!=null && curPageProjectBaseInfo.jianLiDanWei.length>20)">
+                        <el-popover
+                          placement="right"
+                          width="400"
+                          trigger="hover">
+                          <div style="white-space: pre-line" v-html="curPageProjectBaseInfo.jianLiDanWei">
+                          </div>
+                          <span slot="reference" style="color:#409EFF " >{{getFirstLineOrLimitNumStr(curPageProjectBaseInfo.jianLiDanWei,20)+'(...)'}}</span>
+                        </el-popover>
+                      </div>
+
+                      <div v-else>
+                        {{curPageProjectBaseInfo.jianLiDanWei}}
+                      </div>
+                    </el-descriptions-item>
+
+                    <el-descriptions-item label="施工单位">
+                      <div v-if="checkHasHuanHangFu(curPageProjectBaseInfo.shiGongDanWei)|| (curPageProjectBaseInfo.shiGongDanWei!=null && curPageProjectBaseInfo.shiGongDanWei.length>20)">
+                        <el-popover
+                          placement="right"
+                          width="400"
+                          trigger="hover">
+                          <div style="white-space: pre-line" v-html="curPageProjectBaseInfo.shiGongDanWei">
+                          </div>
+                          <span slot="reference" style="color:#409EFF " >{{getFirstLineOrLimitNumStr(curPageProjectBaseInfo.shiGongDanWei,20)+'(...)'}}</span>
+                        </el-popover>
+                      </div>
+
+                      <div v-else>
+                        {{curPageProjectBaseInfo.shiGongDanWei}}
+                      </div>
+                    </el-descriptions-item>
+
+                    <el-descriptions-item label="接养单位">
+                      <div v-if="checkHasHuanHangFu(curPageProjectBaseInfo.jieYangDanWei)|| (curPageProjectBaseInfo.jieYangDanWei!=null && curPageProjectBaseInfo.jieYangDanWei.length>20)">
+                        <el-popover
+                          placement="right"
+                          width="400"
+                          trigger="hover">
+                          <div style="white-space: pre-line" v-html="curPageProjectBaseInfo.jieYangDanWei">
+                          </div>
+                          <span slot="reference" style="color:#409EFF " >{{getFirstLineOrLimitNumStr(curPageProjectBaseInfo.jieYangDanWei,20)+'(...)'}}</span>
+                        </el-popover>
+                      </div>
+
+                      <div v-else>
+                        {{curPageProjectBaseInfo.jieYangDanWei}}
+                      </div>
+                    </el-descriptions-item>
+                  </el-descriptions>
+                </div>
+
               </div>
             </div>
 
-            <div style="margin-top:20px;box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);width: 100%;height: 400px;padding: 5px 0 0 10px">
-              这儿是图片
+            <div style="margin-top:20px;box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);width: 100%;height: 450px;padding: 5px 0 0 10px">
+              <div style="height: 100%" >
+                <el-carousel trigger="click" height="450px">
+                  <el-carousel-item v-for="item in fileList" :key="item.url">
+                    <el-image
+                      :src="item.url"
+                      fit="cover"
+                      style="width: 99%;height: 440px"
+                      :preview-src-list="fileUrlList"
+                    >
+                    </el-image>
+                  </el-carousel-item>
+                </el-carousel>
+              </div>
             </div>
           </el-col>
 
           <el-col :span="7">
             <div style="box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);width: 100%;height: 720px;padding: 5px 0 0 10px">
-              <div>
-                <span style="font-size: 18px;font-weight: bold">需协调解决事项：</span>
+              <div style="height: 400px">
+                <div>
+                  <span style="font-size: 18px;font-weight: bold">主要建设内容：</span>
+                </div>
+
+                <div style="white-space: pre-line;font-size: 14px;line-height: 1.8;overflow-y: auto;height: 365px" v-html="formatContent(curPageProjectBaseInfo.zhuYaoJianSheNeiRong)">
+
+                </div>
               </div>
-              这儿的数据来源
+
+              <div style="border-top: 1px solid #e7eaec;">
+                <div>
+                  <span style="font-size: 18px;font-weight: bold">拟新增用地情况：</span>
+                </div>
+
+                <div style="white-space: pre-line;font-size: 14px;line-height: 1.8;overflow-y: auto;height: 270px" v-html="formatContent(curPageProjectBaseInfo.niXinZenYongDiQingKuang)">
+
+                </div>
+              </div>
             </div>
           </el-col>
         </el-row>
@@ -127,6 +325,18 @@
           <el-table-column label="任务开始时间" align="center" prop="startTime" min-width="90px">
             <template slot-scope="scope">
               <span>{{ parseTime(scope.row.data.startTime, '{y}-{m}-{d}') }}</span>
+            </template>
+          </el-table-column>
+
+          <el-table-column label="任务结束时间" align="center" prop="endTime" min-width="90px">
+            <template slot-scope="scope">
+              <span>{{ parseTime(scope.row.data.endTime, '{y}-{m}-{d}') }}</span>
+            </template>
+          </el-table-column>
+
+          <el-table-column label="预期开始时间" align="center" prop="expectedStartTime" min-width="90px">
+            <template slot-scope="scope">
+              <span>{{ parseTime(scope.row.data.expectedStartTime, '{y}-{m}-{d}') }}</span>
             </template>
           </el-table-column>
 
@@ -204,6 +414,12 @@ export default {
       curRowCanEditProjectDeptList:[],
       //当前最大目录数
       maxContentsNum:0,
+      fileList:[],
+      fileUrlList:[],
+      //最新完成的任务
+      lastWanChengList:[],
+      //进行中任务
+      doingList:[],
 
 
     }
@@ -291,6 +507,8 @@ export default {
           let tempList=response.data;
           if(tempList.length==1){
             curObj.curPageProjectBaseInfo=tempList[0];
+            //生成文件列表
+            curObj.generateDefaultFileList();
             let tempObj=tempList[0];
             //获取节点信息
             let cellsJsonStr=tempObj["cellsJsonStr"];
@@ -306,6 +524,10 @@ export default {
             curObj.rowspan();
             //补充所有的部门信息
             curObj.supplyNodeChargeDeptName()
+            //获取最新完成任务
+            curObj.generateLastSeveralDayRenWuJieDian();
+            //获取正在进行中的任务
+            curObj.generateDoingRenWuJieDian();
           }
         }
       })
@@ -513,18 +735,14 @@ export default {
     getMuQianJieDuanName(code){
       if(code==null || code==''){
         return "--";
-      }
-      if(code==1){
+      }else if(code==1){
         return "前期";
-      }
-      if(code==2){
+      }else if(code==2){
         return "施工";
-      }
-      if(code==3){
+      }else if(code==3){
         return "试运营";
-      }
-      if(code==4){
-        return "不再关注";
+      }else{
+        return "--"
       }
     },
 
@@ -532,18 +750,18 @@ export default {
     getXiangMuLeiXingName(code){
       if(code==null || code==''){
         return "--";
-      }
-      if(code==1){
-        return "类型1";
-      }
-      if(code==2){
-        return "类型2";
-      }
-      if(code==3){
-        return "类型3";
-      }
-      if(code==4){
-        return "类型4";
+      }else if(code==1){
+        return "公路";
+      }else if(code==2){
+        return "水运";
+      }else if(code==3){
+        return "铁路轨道";
+      }else if(code==4){
+        return "航空";
+      }else if(code==5){
+        return "其他";
+      }else{
+        return "--"
       }
     },
 
@@ -551,22 +769,143 @@ export default {
     getJianSheXingZhiName(code){
       if(code==null || code==''){
         return "--";
-      }
-      if(code==1){
-        return "性质1";
-      }
-      if(code==2){
-        return "性质2";
-      }
-      if(code==3){
-        return "性质3";
-      }
-      if(code==4){
-        return "性质4";
+      }else if(code==1){
+        return "新建";
+      }else if(code==2){
+        return "改建";
+      }else if(code==3){
+        return "扩建";
+      }else if(code==4){
+        return "改扩建";
+      }else if(code==5){
+        return "维护养护";
+      }else if(code==6){
+        return "其他";
+      }else{
+        return "--"
       }
     },
+
+    /**
+     * 获取字符串第一行内容，并限制最大长度
+     * @param {string} str - 可能包含换行符的字符串
+     * @param {number} num - 最大允许字符数
+     * @returns {string} 处理后的字符串
+     */
+    getFirstLineOrLimitNumStr(str, num) {
+    if (!str || typeof str !== 'string') return '';
+
+    // 获取第一行内容（以换行符分割）
+    const firstLine = str.split(/\r?\n/)[0];
+
+    // 限制最大长度
+    return firstLine.length > num
+      ? firstLine.substring(0, num)
+      : firstLine;
+    },
+
+    checkHasHuanHangFu(str){
+      if(typeof str =='undefined' || str==null){
+        return false;
+      }
+      str+="";
+      return str.includes('\n') || str.includes('\r') || str.includes('\r\n');
+    },
+
+    //从数据库中生成文件
+    generateDefaultFileList(){
+      let originFileNameListStr=this.curPageProjectBaseInfo.originFileNameListStr;
+      let curFilePathAndNameListStr=this.curPageProjectBaseInfo.curFilePathAndNameListStr;
+      if(typeof originFileNameListStr!='undefined' && originFileNameListStr!=null && originFileNameListStr!=''){
+        this.curPageProjectBaseInfo.originFileNameList=originFileNameListStr.split("*@*");
+        this.curPageProjectBaseInfo.curFilePathAndNameList=curFilePathAndNameListStr.split("*@*");
+        let returnArr=[];
+        let fileUrlList=[];
+        if(this.curPageProjectBaseInfo.originFileNameList.length>0){
+          for(let i=0;i<this.curPageProjectBaseInfo.originFileNameList.length;i++){
+            let tempObj={
+              name:this.curPageProjectBaseInfo.originFileNameList[i],
+              url:process.env.VUE_APP_BASE_API+this.curPageProjectBaseInfo.curFilePathAndNameList[i]
+            }
+            returnArr.push(tempObj);
+            fileUrlList.push(tempObj['url']);
+          }
+        }
+        this.fileList=returnArr;
+        this.fileUrlList=fileUrlList;
+      }else{
+        this.fileList=[]
+        this.fileUrlList=[]
+      }
+    },
+
+    // 在组件methods或setup中添加：
+    formatContent(text) {
+      if(typeof text!='undefined'){
+        return text.replace(/ /g, '&nbsp;').replace(/\n/g, '<br/>')
+      }else {
+        return "--"
+      }
+    },
+
+    //根据需要产生最近一些天的任务情况
+    generateLastSeveralDayRenWuJieDian(){
+      let relationList=this.curPageProjectBaseInfo.relationList;
+      if(typeof relationList!='undefined' && relationList.length>0){
+        //先获取所有的事完成的，且有完成时间的任务
+        let wanChengList=[];
+        for(let i=0;i<relationList.length;i++){
+          let tempRelation=relationList[i];
+          if(typeof tempRelation['status'] !='undefined' &&  typeof tempRelation['endTime'] !='undefined' &&   tempRelation['status']==3 && tempRelation['endTime']!=null){
+            wanChengList.push(tempRelation)
+          }
+        }
+        //再排个序
+        wanChengList.sort((a, b) => {
+          const valA = new Date(a.endTime).getTime() || 0;
+          const valB = new Date(b.endTime).getTime() || 0;
+          if(valA !== valB) {
+            return valB-valA;
+          }
+          return 0;
+        });
+        this.lastWanChengList=wanChengList.slice(0,5)
+      }
+    },
+
+    generateDoingRenWuJieDian() {
+      let relationList = this.curPageProjectBaseInfo.relationList;
+
+      // 1. 过滤出状态为2的进行中任务
+      if (relationList?.length > 0) {
+        let doingList = relationList.filter(item =>
+          item.status === 2 && !item.completed
+        );
+
+        // 2. 改进排序逻辑（处理undefined/null/空字符串）
+        this.doingList = doingList.sort((a, b) => {
+          // 将无效日期统一转为最大时间戳
+          const timeA = getValidTime(a.expectedEndTime) || Infinity;
+          const timeB = getValidTime(b.expectedEndTime) || Infinity;
+
+          // 比较时间戳
+          return timeA - timeB;
+        });
+      } else {
+        this.doingList = [];
+      }
+    }
+
   }
 }
+
+  function getValidTime(time) {
+    if (!time) return null;
+
+    const date = new Date(time);
+    return isNaN(date) ? null : date.getTime();
+  }
+
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
@@ -587,6 +926,10 @@ export default {
     display: block;
     width: 100%; /* 占满整个宽度 */
     height: 50px; /* 指定高度 */
+  }
+
+  .extraDiv1 .el-descriptions .is-bordered .el-descriptions-item__cell{
+    border-top: 0px !important;
   }
 </style>
 

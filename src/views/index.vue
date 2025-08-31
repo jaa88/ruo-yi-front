@@ -15,7 +15,6 @@
           <el-option label="前期" value="1" />
           <el-option label="施工" value="2" />
           <el-option label="试运营" value="3" />
-          <el-option label="不再关注" value="4" />
         </el-select>
       </el-form-item>
 
@@ -61,8 +60,8 @@
               </div>
 
               <div>
-                <span>建设性质：</span>
-                <span>{{item.jianSheXingZhi?item.jianSheXingZhi:'--'}}</span>
+                <span>目前阶段：</span>
+                <span>{{getMuQianJieDuanName(item.muQianJieDuan)}}</span>
               </div>
 
               <div>
@@ -178,6 +177,22 @@ export default {
 
     openProjectDetailPage(row){
       this.$tab.openPage(row.projectName, '/projectmanage/projectdetail/index/' +row.id, row)
+    },
+
+    //目前阶段翻译
+    getMuQianJieDuanName(code){
+      if(code==null || code==''){
+        return "--";
+      }
+      if(code==1){
+        return "前期";
+      }else if(code==2){
+        return "施工";
+      }else if(code==3){
+        return "试运营";
+      }else{
+        return "--"
+      }
     },
   }
 }
